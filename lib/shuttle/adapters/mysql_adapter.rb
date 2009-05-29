@@ -1,6 +1,6 @@
 
 module Shuttle
-  module Adapters
+  module Adapters # :nodoc:
     class MysqlAdapter < Shuttle::Adapter
       
       on_install   :create_database

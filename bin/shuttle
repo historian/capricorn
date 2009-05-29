@@ -1,4 +1,18 @@
 #!/usr/bin/env ruby
-require File.dirname(__FILE__)+'/../lib/shuttle'
+begin
+  require File.dirname(__FILE__)+'/../lib/shuttle'
+rescue LoadError
+  require 'rubygems'
+  require 'shuttle'
+end
 
-Shuttle::App.start
+module Shuttle
+  BIN_PATH = File.expand_path(__FILE__)
+  ORIGINAL_ARGV = ARGV.dup
+end
+
+Shuttle::App
+Shuttle::AppRunner
+
+Shuttle::AppRunner.namespace = 'shuttle:app'
+Shuttle::AppRunner.start

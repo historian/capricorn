@@ -2,6 +2,16 @@
 module Shuttle
   class System
     
+    autoload :Shell,       File.dirname(__FILE__)+'/system/shell'
+    autoload :Macros,      File.dirname(__FILE__)+'/system/macros'
+    autoload :Options,     File.dirname(__FILE__)+'/system/options'
+    autoload :ProcessUser, File.dirname(__FILE__)+'/system/process_user'
+    
+    include Shuttle::System::Shell
+    include Shuttle::System::Macros
+    include Shuttle::System::Options
+    include Shuttle::System::ProcessUser
+    
     def self.shared
       self.load! unless @system
       @system
@@ -10,11 +20,12 @@ module Shuttle
     def self.load!
       system_file = Shuttle.config.path('system.rb')
       unless File.file? system_file
-        puts "No system file found (#{system_file})"
+        Shuttle.log "No system file found (#{system_file})"
         exit(1)
       end
       @system = new
       @system.instance_eval File.read(system_file)
+      @system.resolve_options!
     end
     
     def initialize
@@ -48,37 +59,22 @@ module Shuttle
       end
     end
     
-  private
-    
-    def use(adapter)
-      adapter_klass  = (Shuttle::Adapters.const_get(adapter) rescue nil)
-      raise "Adapter not found! (#{adapter})" unless adapter
+    def find_path(*paths)
+      options = paths.pop if Hash === paths.last
+      options ||= {}
+      search_paths = options.delete(:search) || '/'
+      search_paths = [search_paths].flatten.compact.uniq
       
-      adapter_macros = (adapter_klass.const_get('Macros') rescue nil)
-      extend adapter_macros if adapter_macros
+      paths = paths.flatten.compact.uniq
       
-      @adapters.push(adapter_klass)
-    end
-    
-    def option(name, proc, &handler)
-      if proc
-        @option_descriptors.push({
-          :name => name.to_sym,
-          :proc => proc,
-          :handler => handler
-        })
-      else
-        @options[name.to_sym]
+      search_paths.each do |search_path|
+        paths.each do |path|
+          results = Dir.glob(File.join(search_path, path))
+          return results.first if results.first
+        end
       end
-    end
-    
-    def resolve_options!(satellite)
-      @options = {}
-      @option_descriptors.each do |option|
-        value = option[:proc].call(satellite)
-        value = option[:handler].call(satellite, value) if option[:handler]
-        @options[option[:name]] = value
-      end
+      
+      return nil
     end
     
   end

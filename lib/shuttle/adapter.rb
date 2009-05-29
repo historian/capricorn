@@ -24,20 +24,6 @@ module Shuttle
       self.class.link_callbacks.each { |meth| send(meth) }
     end
     
-    def switch_to_user(username, group=nil)
-      old_uid, old_gid = Process.uid, Process.gid
-      old_euid, old_egid = Process.euid, Process.egid
-      Process.uid = Etc.getpwnam(username).uid
-      Process.gid = Etc.getgrnam(group).gid if group
-      Process.euid = Etc.getpwnam(username).uid
-      Process.egid = Etc.getgrnam(group).gid if group
-      yield
-      Process.uid = old_uid
-      Process.gid = old_gid if group
-      Process.euid = old_euid
-      Process.egid = old_egid if group
-    end
-    
     class << self
       
       def on_install(meth)

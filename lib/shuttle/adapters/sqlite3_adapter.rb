@@ -1,12 +1,12 @@
 
 module Shuttle
-  module Adapters
+  module Adapters # :nodoc:
     class Sqlite3Adapter < Shuttle::Adapter
       
       on_install   :write_config_file
       
       def write_config_file
-        switch_to_user(system.web_user, system.web_group) do
+        system.as_user(system.web_user, system.web_group) do
           
           config = %{# SQLite version 3.x
 #   gem install sqlite3-ruby (not necessary on OS X Leopard)

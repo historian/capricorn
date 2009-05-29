@@ -1,6 +1,6 @@
 
 module Shuttle
-  module Adapters
+  module Adapters # :nodoc:
     class ApacheAdapter < Shuttle::Adapter
       
       on_install   :write_config_file
@@ -10,7 +10,7 @@ module Shuttle
       on_uninstall :restart
       
       def restart
-        %x[#{system.apachectl_path} -k restart]
+        system.run "#{system.apachectl_path} -k restart"
       end
       
       def write_config_file
@@ -37,7 +37,7 @@ module Shuttle
       module Macros
         
         def apachectl_path(&block)
-          option(:apachectl_path, block)
+          option(:apachectl_path, block) { |s, v| v or find_bin('apache2ctl', 'apachectl') }
         end
         
         def apache_conf_path(&block)
