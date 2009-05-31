@@ -31,14 +31,14 @@ module Shuttle
         option(:use_ssl, nil)
       end
       
-      def use(adapter)
-        adapter_klass  = (Shuttle::Adapters.const_get(adapter) rescue nil)
-        raise "Adapter not found! (#{adapter})" unless adapter
+      def use(actor)
+        actor_klass  = (Shuttle::Actors.const_get(actor) rescue nil)
+        raise "Actor not found! (#{actor})" unless actor_klass
         
-        adapter_macros = (adapter_klass.const_get('Macros') rescue nil)
-        extend adapter_macros if adapter_macros
+        actor_macros = (actor_klass.const_get('Macros') rescue nil)
+        extend actor_macros if actor_macros
         
-        @adapters.push(adapter_klass)
+        @actors.push(actor_klass)
       end
       
     end

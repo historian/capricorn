@@ -1,12 +1,12 @@
 
 module Shuttle
-  module Adapters # :nodoc:
-    class PleskAdapter < Shuttle::Adapter
+  module Actors # :nodoc:
+    class PleskActor < Shuttle::Actor
       
-      on_install   :create_client
-      on_install   :create_domain
-      on_install   :create_database
-      on_uninstall :destroy_domain
+      before_install_satellite   :create_client
+      before_install_satellite   :create_domain
+      on_install_satellite       :create_database
+      after_uninstall_satellite  :destroy_domain
       
       def create_client
         # if ./client --info JDoe

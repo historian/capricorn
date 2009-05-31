@@ -1,38 +1,37 @@
+require 'drb'
+require 'drb/ssl'
+require 'uri'
 
 module Shuttle
   class Client
     
-    def self.parse_uri(uri='ssl+shuttle://localhost:5000')
+    autoload :AuthToken, File.dirname(__FILE__)+'/client/auth_token'
+    
+    def self.parse_uri(uri)
       uri     = URI.parse(uri)
       use_ssl = (uri.scheme == 'ssl+shuttle')
       uri.scheme = 'druby'
       return use_ssl, uri.to_s
     end
     
-    def self.shared
-      unless @client
-        
-        use_ssl, uri = self.parse_uri
-        
-        config = {}
-        
-        if use_ssl
-          keypair = Shuttle.config.path('client_cert', 'core', 'core_keypair.pem')
-          cert    = Shuttle.config.path('client_cert', 'core', 'cert_core.pem')
-          
-          config = {
-            :SSLVerifyMode => OpenSSL::SSL::VERIFY_PEER,
-            :SSLCACertificateFile => Shuttle.config.path('client_cert', 'CA', 'cacert.pem'),
-            :SSLPrivateKey => OpenSSL::PKey::RSA.new(File.read(keypair)),
-            :SSLCertificate => OpenSSL::X509::Certificate.new(File.read(cert))
-          }
+    def self.current(token='core.token')
+      [Shuttle::DEFAULT_ROOT_SYSTEM_DIR,
+       Shuttle::DEFAULT_USER_SYSTEM_DIR,
+       File.join(Shuttle::DEFAULT_USER_SYSTEM_DIR, 'tokens')].each do |path|
+        path = File.join(path, token)
+        if File.file? path
+          token = path
+          break
         end
-        
-        DRb.start_service nil, nil, config
-        @client = DRbObject.new nil, uri
-        
       end
+      
+      @client = connect(token) unless @client
       @client
+    end
+    
+    def self.connect(token)
+      token = Shuttle::Client::AuthToken.load_file(token) if String === token
+      token.connect
     end
     
   end

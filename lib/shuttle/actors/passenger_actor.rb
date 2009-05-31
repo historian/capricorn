@@ -1,10 +1,10 @@
 
 module Shuttle
-  module Adapters # :nodoc:
-    class PassengerAdapter < Shuttle::Adapter
+  module Actors # :nodoc:
+    class PassengerActor < Shuttle::Actor
       
-      on_install   :restart
-      on_link      :restart
+      after_install_satellite   :restart
+      after_link_satellite      :restart
       
       def restart
         system.as_user(system.web_user, system.web_group) do

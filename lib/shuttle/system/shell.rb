@@ -4,31 +4,39 @@ module Shuttle
     module Shell
       
       def run(cmd)
-        Shuttle.log "[#{get_user_name}]> "+cmd
-        cmd = "bash -l -c #{cmd.inspect}"
-        output = %x[#{cmd} 2>&1]
-        Shuttle.log output if Shuttle.system.development?
-        output
+        as_user 'root', 'wheel' do
+          Shuttle.log "[#{get_user_name}]> "+cmd
+          cmd = "bash -l -c #{cmd.inspect}"
+          output = %x[#{cmd} 2>&1]
+          Shuttle.log output if development?
+          output
+        end
       end
       
       def user_run(username, cmd)
-        Shuttle.log "[#{username}]> "+cmd
-        cmd = "su #{username} -l -c #{cmd.inspect}"
-        output = %x[#{cmd} 2>&1]
-        Shuttle.log output if Shuttle.system.development?
-        output
+        as_user 'root', 'wheel' do
+          Shuttle.log "[#{username}]> "+cmd
+          cmd = "su #{username} -l -c #{cmd.inspect}"
+          output = %x[#{cmd} 2>&1]
+          Shuttle.log output if development?
+          output
+        end
       end
       
       def popen(cmd, *args, &block)
-        Shuttle.log cmd
-        cmd = "bash -l -c #{cmd.inspect}"
-        IO.popen(cmd, *args, &block)
+        as_user 'root', 'wheel' do
+          Shuttle.log cmd
+          cmd = "bash -l -c #{cmd.inspect}"
+          IO.popen(cmd, *args, &block)
+        end
       end
       
       def user_popen(username, cmd, *args, &block)
-        Shuttle.log cmd
-        cmd = "su #{username} -l -c #{cmd.inspect}"
-        IO.popen(cmd, *args, &block)
+        as_user 'root', 'wheel' do
+          Shuttle.log cmd
+          cmd = "su #{username} -l -c #{cmd.inspect}"
+          IO.popen(cmd, *args, &block)
+        end
       end
       
       def find_bin(*names)

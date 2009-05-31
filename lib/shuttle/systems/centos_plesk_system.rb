@@ -1,5 +1,5 @@
-use :PassengerAdapter
-use :PleskAdapter
+use :PassengerActor
+use :PleskActor
 
 apachectl_path { '/opt/local/apache2/bin/apachectl' }
 ruby_path      { '/usr/bin/ruby' }

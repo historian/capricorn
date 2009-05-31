@@ -1,0 +1,1 @@
+require 'shuttle/rubygems_plugin'

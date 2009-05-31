@@ -1,27 +1,10 @@
+require 'thor'
 require File.dirname(__FILE__)+'/thor_extentions'
 
 module Shuttle
   
   # AppRunner allows us to have multiple apps in different namespaces
   class AppRunner < Thor
-    
-    method_options :config => :optional
-    def initialize(opts = {}, *args)
-      super
-      if opts[:config]
-        @root_path = opts[:config]
-      else
-        args.each_with_index do |arg, idx|
-          if arg =~ /^(-c|--config)$/
-            @root_path = args[idx+1]
-          elsif arg =~ /^(-c|--config)=(.+)$/
-            @root_path = $2
-          end
-        end
-      end
-      
-      Shuttle.config(@root_path || Shuttle::DEFAULT_CONFIG_DIR)
-    end
     
     # Override Thor#help so we can give info about not-yet-loaded tasks
     def help(task = nil)

@@ -1,9 +1,9 @@
 
 module Shuttle
-  module Adapters # :nodoc:
-    class Sqlite3Adapter < Shuttle::Adapter
+  module Actors # :nodoc:
+    class Sqlite3Actor < Shuttle::Actor
       
-      on_install   :write_config_file
+      after_install_satellite :write_config_file
       
       def write_config_file
         system.as_user(system.web_user, system.web_group) do

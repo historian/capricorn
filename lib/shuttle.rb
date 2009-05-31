@@ -1,37 +1,31 @@
 require 'rubygems'
-require 'rbconfig'
-require 'thor'
-require 'simple-daemon'
-require 'drb'
-require 'drb/ssl'
 
-autoload :URI, 'uri'
+require File.dirname(__FILE__)+'/shuttle/rubygems_plugin'
 
 module Shuttle
   base = File.expand_path(File.dirname(__FILE__))
   
   autoload :App,           (base+'/shuttle/app')
+  autoload :Actor,         (base+'/shuttle/actor')
   autoload :Server,        (base+'/shuttle/server')
-  autoload :Config,        (base+'/shuttle/config')
   autoload :Client,        (base+'/shuttle/client')
   autoload :System,        (base+'/shuttle/system')
-  autoload :Adapter,       (base+'/shuttle/adapter')
   autoload :Satellite,     (base+'/shuttle/satellite')
   autoload :AppRunner,     (base+'/shuttle/app_runner')
-  autoload :SystemProfile, (base+'/shuttle/system_profile')
   
-  module Adapters
+  module Actors
     base = File.expand_path(File.dirname(__FILE__))
     
-    autoload :BaseAdapter,      (base+'/shuttle/adapters/base_adapter')
-    autoload :MysqlAdapter,     (base+'/shuttle/adapters/mysql_adapter')
-    autoload :PleskAdapter,     (base+'/shuttle/adapters/plesk_adapter')
-    autoload :ApacheAdapter,    (base+'/shuttle/adapters/apache_adapter')
-    autoload :Sqlite3Adapter,   (base+'/shuttle/adapters/sqlite3_adapter')
-    autoload :PassengerAdapter, (base+'/shuttle/adapters/passenger_adapter')
+    autoload :BaseActor,      (base+'/shuttle/actors/base_actor')
+    autoload :MysqlActor,     (base+'/shuttle/actors/mysql_actor')
+    autoload :PleskActor,     (base+'/shuttle/actors/plesk_actor')
+    autoload :ApacheActor,    (base+'/shuttle/actors/apache_actor')
+    autoload :Sqlite3Actor,   (base+'/shuttle/actors/sqlite3_actor')
+    autoload :PassengerActor, (base+'/shuttle/actors/passenger_actor')
   end
   
-  DEFAULT_CONFIG_DIR = '/var/shuttle'
+  DEFAULT_ROOT_SYSTEM_DIR = '/var/shuttle'
+  DEFAULT_USER_SYSTEM_DIR = '~/.shuttle'
   STOP_STATUS    = 101
   RESTART_STATUS = 102
   RELOAD_STATUS  = 103
@@ -39,7 +33,7 @@ module Shuttle
   
   def self.client
     unless @client
-      @client = Shuttle::Client.shared
+      @client = Shuttle::Client.current
       unless @client
         puts "Failed to connect to the shuttle!"
         exit(1)
@@ -48,17 +42,8 @@ module Shuttle
     @client
   end
   
-  def self.config(dir=nil)
-    @config = Shuttle::Config.new(dir || Shuttle::DEFAULT_CONFIG_DIR) if dir
-    @config
-  end
-  
   def self.system
     @system ||= Shuttle::System.shared
-  end
-  
-  def self.system_profile
-    @active_profile ||= Shuttle::SystemProfile.active_profile
   end
   
   def self.log(*msgs)
@@ -77,6 +62,11 @@ module Shuttle
       end
     end
     @version
+  end
+  
+  def self.server?(value=nil)
+    @is_server = value unless value.nil?
+    @is_server
   end
   
 end
