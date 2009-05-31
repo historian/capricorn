@@ -24,7 +24,7 @@ module Shuttle
       def dump(io=nil)
         data = {}
         
-        private_vars = %w( needs_link needs_install needs_uninstall dependecies )
+        private_vars = []
         instance_variables.each do |ivar_name|
           ivar_name = ivar_name.to_s
           ivar_name =~ /^@(.+)$/
