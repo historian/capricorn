@@ -34,7 +34,7 @@ module Shuttle
         File.unlink(system.apache_conf_path) if File.exist? system.apache_conf_path
       end
       
-      module Macros
+      module Config
         
         def apachectl_path(&block)
           option(:apachectl_path, block) { |v| v or find_bin('apache2ctl', 'apachectl') }

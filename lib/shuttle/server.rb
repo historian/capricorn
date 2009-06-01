@@ -4,6 +4,7 @@ require 'simple-daemon'
 
 module Shuttle
   class Server < SimpleDaemon::Base
+    include DRbUndumped
     
     autoload :Proxy,    File.dirname(__FILE__)+'/server/proxy'
     autoload :Daemon,   File.dirname(__FILE__)+'/server/daemon'
@@ -87,6 +88,23 @@ module Shuttle
     
     def satellites
       Shuttle.system.satellites
+    end
+    
+    def queued_jobs
+      queued_jobs = []
+      Shuttle.system.queue.each do |job, canceled, immediated|
+        job_delay = job.delay
+        queued_jobs.push([job.object_id, job.name, canceled, immediated, job.running?, job.waiting?, job_delay])
+      end
+      queued_jobs
+    end
+    
+    def cancel_job(id)
+      Shuttle.system.queue.cancel(id)
+    end
+    
+    def immediate_job(id)
+      Shuttle.system.queue.immediate(id)
     end
     
   end

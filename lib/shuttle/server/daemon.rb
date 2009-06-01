@@ -58,12 +58,13 @@ module Shuttle
           Dir.chdir(Shuttle.system.root)
           
           Shuttle.log "Server started"
-          DRb.start_service 'druby://localhost:5000', self.proxy, self.options_for_server
-          Shuttle.log "listening at #{self.construct_uri(DRb.uri)}"
+          DRb.start_service "druby://localhost:5000", self.proxy, self.options_for_server
+          Shuttle.log "listening at #{self.construct_uri("druby://#{`hostname`.strip}:5000")}"
           make_client_cert_public!
           
           at_exit do
             unless $task_child
+              Shuttle.system.queue.stop!
               Shuttle.log "Server stopped"
             end
           end

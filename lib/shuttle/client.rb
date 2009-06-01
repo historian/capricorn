@@ -14,15 +14,22 @@ module Shuttle
       return use_ssl, uri.to_s
     end
     
-    def self.current(token='core.token')
+    def self.current(token=nil)
+      token ||= 'core.token'
+      
       [Shuttle::DEFAULT_ROOT_SYSTEM_DIR,
        Shuttle::DEFAULT_USER_SYSTEM_DIR,
-       File.join(Shuttle::DEFAULT_USER_SYSTEM_DIR, 'tokens')].each do |path|
-        path = File.join(path, token)
+       File.join(Shuttle::DEFAULT_USER_SYSTEM_DIR, 'tokens'),
+       '.'].each do |path|
+        path = File.expand_path(File.join(path, token))
         if File.file? path
           token = path
           break
         end
+      end
+      
+      unless File.file? token
+        raise "Unable to read the token at: #{token}"
       end
       
       @client = connect(token) unless @client

@@ -162,15 +162,7 @@ module Shuttle
         @unlinked_migrations ||= []
       end
       
-      module Macros
-        
-        def ruby_path(&block)
-          option(:ruby_path, block) { |s, v| v or find_bin('ruby', 'ruby1.8', 'ruby18') }
-        end
-        
-        def gem_bin_path(&block)
-          option(:gem_bin_path, block) { |s, v| v or find_bin('gem', 'gem1.8', 'gem18') }
-        end
+      module Helper
         
         def gem_install(name, options={})
           gem_cmd('install', name, options)
@@ -206,6 +198,18 @@ module Shuttle
             end
           end
           user_run(user, "gem #{cmd} #{args.join(' ')}")
+        end
+        
+      end
+      
+      module Config
+        
+        def ruby_path(&block)
+          option(:ruby_path, block) { |s, v| v or find_bin('ruby', 'ruby1.8', 'ruby18') }
+        end
+        
+        def gem_bin_path(&block)
+          option(:gem_bin_path, block) { |s, v| v or find_bin('gem', 'gem1.8', 'gem18') }
         end
         
         def rails_path(&block)

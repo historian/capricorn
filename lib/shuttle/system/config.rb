@@ -1,7 +1,7 @@
 
 module Shuttle
   class System
-    module Macros
+    module Config
       
       def use_development!
         environment { 'development' }
@@ -29,16 +29,6 @@ module Shuttle
       
       def use_ssl?
         option(:use_ssl, nil)
-      end
-      
-      def use(actor)
-        actor_klass  = (Shuttle::Actors.const_get(actor) rescue nil)
-        raise "Actor not found! (#{actor})" unless actor_klass
-        
-        actor_macros = (actor_klass.const_get('Macros') rescue nil)
-        extend actor_macros if actor_macros
-        
-        @actors.push(actor_klass)
       end
       
     end

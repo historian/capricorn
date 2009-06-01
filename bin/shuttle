@@ -11,8 +11,10 @@ module Shuttle
   ORIGINAL_ARGV = ARGV.dup
 end
 
-Shuttle::App
-Shuttle::AppRunner
-
-Shuttle::AppRunner.namespace = 'shuttle:app'
+Shuttle::AppRunner.use :Server
+Shuttle::AppRunner.use :Satellite
+Shuttle::AppRunner.use :Engines
+Shuttle::AppRunner.use :Jobs
+Shuttle::AppRunner.use :Dev
+Shuttle::AppRunner.namespace = 'shuttle:apps'
 Shuttle::AppRunner.start

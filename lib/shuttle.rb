@@ -1,15 +1,17 @@
 require 'rubygems'
 
-require File.dirname(__FILE__)+'/shuttle/rubygems_plugin'
+require File.dirname(__FILE__)+'/shuttle/extentions/rubygems_plugin'
+
+autoload :DRbUndumped, 'drb'
 
 module Shuttle
   base = File.expand_path(File.dirname(__FILE__))
   
-  autoload :App,           (base+'/shuttle/app')
   autoload :Actor,         (base+'/shuttle/actor')
   autoload :Server,        (base+'/shuttle/server')
   autoload :Client,        (base+'/shuttle/client')
   autoload :System,        (base+'/shuttle/system')
+  autoload :JobQueue,      (base+'/shuttle/job_queue')
   autoload :Satellite,     (base+'/shuttle/satellite')
   autoload :AppRunner,     (base+'/shuttle/app_runner')
   
@@ -24,6 +26,16 @@ module Shuttle
     autoload :PassengerActor, (base+'/shuttle/actors/passenger_actor')
   end
   
+  module Apps
+    base = File.expand_path(File.dirname(__FILE__))
+    
+    autoload :Dev,       (base+'/shuttle/apps/dev')
+    autoload :Jobs,      (base+'/shuttle/apps/jobs')
+    autoload :Server,    (base+'/shuttle/apps/server')
+    autoload :Engines,   (base+'/shuttle/apps/engines')
+    autoload :Satellite, (base+'/shuttle/apps/satellite')
+  end
+  
   DEFAULT_ROOT_SYSTEM_DIR = '/var/shuttle'
   DEFAULT_USER_SYSTEM_DIR = '~/.shuttle'
   STOP_STATUS    = 101
@@ -31,9 +43,9 @@ module Shuttle
   RELOAD_STATUS  = 103
   QUICK_CERT     = "http://segment7.net/projects/ruby/QuickCert/QuickCert-1.0.2.tar.gz"
   
-  def self.client
+  def self.client(token=nil)
     unless @client
-      @client = Shuttle::Client.current
+      @client = Shuttle::Client.current(token)
       unless @client
         puts "Failed to connect to the shuttle!"
         exit(1)

@@ -1,10 +1,14 @@
 require 'thor'
-require File.dirname(__FILE__)+'/thor_extentions'
+require File.dirname(__FILE__)+'/extentions/thor_extentions'
 
 module Shuttle
   
   # AppRunner allows us to have multiple apps in different namespaces
   class AppRunner < Thor
+    
+    def self.use(app)
+      Shuttle::Apps.const_get(app)
+    end
     
     # Override Thor#help so we can give info about not-yet-loaded tasks
     def help(task = nil)
@@ -28,8 +32,12 @@ module Shuttle
       meth = meth.to_s
       super(meth.to_sym, *args) unless meth.include?(?:)
       
-      task = Thor[meth]
-      task.parse(task.klass.new, ARGV[1..-1])
+      begin
+        task = Thor[meth]
+        task.parse(task.klass.new, ARGV[1..-1])
+      rescue => e
+        puts e.message
+      end
     end
     
     private
