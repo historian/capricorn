@@ -7,6 +7,7 @@ module Shuttle
     
     autoload :AuthToken, File.dirname(__FILE__)+'/client/auth_token'
     
+    # return a DRb uri for the given Shuttle uri.
     def self.parse_uri(uri)
       uri     = URI.parse(uri)
       use_ssl = (uri.scheme == 'ssl+shuttle')
@@ -14,7 +15,14 @@ module Shuttle
       return use_ssl, uri.to_s
     end
     
+    # return an potentialy initialize the client to the given token.
     def self.current(token=nil)
+      @client = connect(token) unless @client
+      @client
+    end
+    
+    # connect to the server referenced by the given token.
+    def self.connect(token=nil)
       token ||= 'core.token'
       
       [Shuttle::DEFAULT_ROOT_SYSTEM_DIR,
@@ -32,13 +40,8 @@ module Shuttle
         raise "Unable to read the token at: #{token}"
       end
       
-      @client = connect(token) unless @client
-      @client
-    end
-    
-    def self.connect(token)
       token = Shuttle::Client::AuthToken.load_file(token) if String === token
-      token.connect
+      token.connect if token
     end
     
   end

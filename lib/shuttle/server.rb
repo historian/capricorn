@@ -3,6 +3,8 @@ require 'drb/ssl'
 require 'simple-daemon'
 
 module Shuttle
+  
+  # the Server is supposed to be a simple DRb interface to the System.
   class Server < SimpleDaemon::Base
     include DRbUndumped
     

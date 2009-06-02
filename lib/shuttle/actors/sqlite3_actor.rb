@@ -5,6 +5,7 @@ module Shuttle
       
       after_install_satellite :write_config_file
       
+      # write the +database.yml+ config file.
       def write_config_file
         system.as_user(system.web_user, system.web_group) do
           

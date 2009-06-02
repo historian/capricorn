@@ -6,6 +6,7 @@ module Shuttle
   # AppRunner allows us to have multiple apps in different namespaces
   class AppRunner < Thor
     
+    # register a subapplication with the app runner.
     def self.use(app)
       Shuttle::Apps.const_get(app)
     end

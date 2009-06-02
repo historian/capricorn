@@ -4,6 +4,7 @@ module Shuttle
   class JobQueue
     include DRbUndumped
     
+    # create a new job queue
     def initialize
       @immediated_jobs = Array.new
       @canceled_jobs = Array.new
@@ -25,6 +26,7 @@ module Shuttle
       end
     end
     
+    # enqueue a new job with the given +name+, +options+ and +proc+
     def enqueue(name, options={}, &proc)
       @mutex.synchronize do
         job = Job.new(name, options, &proc)
@@ -34,6 +36,7 @@ module Shuttle
       end
     end
     
+    # dequeue the next job of the queue.
     def dequeue
       @mutex.synchronize do
         id = @job_queue.shift
@@ -41,6 +44,7 @@ module Shuttle
       end
     end
     
+    # delete the job associated with the given +id+.
     def delete(id)
       @mutex.synchronize do
         id = @job_queue.delete(id)
@@ -48,6 +52,7 @@ module Shuttle
       end
     end
     
+    # peek at the next job in the queue
     def peek
       job = nil
       @mutex.synchronize do
@@ -57,12 +62,14 @@ module Shuttle
       job
     end
     
+    # get the size of the job queue
     def size
       @mutex.synchronize do
         @job_queue.size
       end
     end
     
+    # cancel the job associated with the given +id+.
     def cancel(id)
       @mutex.synchronize do
         id = @job_queue.delete(id)
@@ -73,28 +80,33 @@ module Shuttle
       end
     end
     
+    # is the job associated with the given +id+ canceled.
     def canceled?(id)
       @mutex.synchronize do
         return !@canceled_jobs.delete(id).nil?
       end
     end
     
+    # run the job associated with the given +id+ immediately.
     def immediate(id)
       @mutex.synchronize do
         @immediated_jobs.push(id) if @jobs[id]
       end
     end
     
+    # should the job associated with the given +id+ be run immediately.
     def immediated?(id)
       @mutex.synchronize do
         return !@immediated_jobs.delete(id).nil?
       end
     end
     
+    # join the worker thread
     def join!
       @worker.join
     end
     
+    # wait until the queue is empty then stop the worker
     def stop!
       @mutex.synchronize do
         @stopped = true
@@ -102,16 +114,19 @@ module Shuttle
       join!
     end
     
+    # is the queue stopping or stopped?
     def stopped?
       @mutex.synchronize do
         return !!@stopped
       end
     end
     
+    # is the queue running
     def running?
       !stopped?
     end
     
+    # iterate through all the jobs on the queue
     def each
       @mutex.synchronize do
         @job_queue.each do |id|

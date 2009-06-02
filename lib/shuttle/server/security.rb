@@ -1,7 +1,7 @@
 
 module Shuttle
   class Server
-    module Security
+    module Security # :nodoc:
       
       def self.included(base)
         base.extend Shuttle::Server::Security::ClassMethods

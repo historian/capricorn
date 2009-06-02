@@ -92,7 +92,7 @@ module Shuttle
           :satellite => satellite, :name => name, :options => options) do |options|
           
           satellite, name, options = options[:satellite], options[:name], options[:options]
-          ensure_precense_of_gem(name, options)
+          ensure_presence_of_gem(name, options)
           if satellite.add_engine(name, options)
             run_action_on :install_engine, satellite
             run_action_on :link_satellite, satellite
@@ -111,7 +111,7 @@ module Shuttle
           :satellite => satellite, :name => name, :options => options) do |options|
           
           satellite, name, options = options[:satellite], options[:name], options[:options]
-          ensure_precense_of_gem(name, options)
+          ensure_presence_of_gem(name, options)
           if satellite.update_engine(name, options)
             run_action_on :update_engine, satellite
             run_action_on :link_satellite, satellite

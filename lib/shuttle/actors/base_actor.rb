@@ -7,6 +7,7 @@ module Shuttle
       on_link_satellite      :link_engines
       on_uninstall_satellite :destroy_rails_app
       
+      # create a new rails app for the current satellite
       def create_rails_app
         system.as_user(system.web_user, system.web_group) do
           FileUtils.mkdir_p(File.dirname(system.satellite_root), :verbose => true)
@@ -32,10 +33,12 @@ module Shuttle
         end
       end
       
+      # destroy the rails app for the current satellite
       def destroy_rails_app
         FileUtils.rm_rf system.satellite_root, :verbose => true
       end
       
+      # link the required engines for the current satellite
       def link_engines
         Dir.chdir(system.satellite_root) do
           system.as_user(system.web_user, system.web_group) do
@@ -164,25 +167,31 @@ module Shuttle
       
       module Helper
         
+        # install a gem.
         def gem_install(name, options={})
           gem_cmd('install', name, options)
         end
         
+        # check if a gem is installed
         def gem_installed(name, options)
           version = options[:version] || '0.0.0'
           options = { :version => version, :installed => true }
           (gem_cmd('list', name, options).strip == 'true')
         end
         
+        # update a gem
         def gem_update(name, options={})
           !(gem_cmd('update', name, options) =~ /Nothing to update/)
         end
         
-        def ensure_precense_of_gem(name, options={})
+        # ensure the presence of a gem
+        def ensure_presence_of_gem(name, options={})
           if !gem_installed(name, options)
             gem_install(name, options)
           end
         end
+        
+      private
         
         def gem_cmd(cmd, args, options={})
           user   = options.delete(:user)
@@ -204,14 +213,17 @@ module Shuttle
       
       module Config
         
+        # set the path to the ruby executable.
         def ruby_path(&block)
           option(:ruby_path, block) { |s, v| v or find_bin('ruby', 'ruby1.8', 'ruby18') }
         end
         
+        # set the path to the gem executable.
         def gem_bin_path(&block)
           option(:gem_bin_path, block) { |s, v| v or find_bin('gem', 'gem1.8', 'gem18') }
         end
         
+        # set the path to the rails executable.
         def rails_path(&block)
           option(:rails_path, block) do |v|
             user = (install_gems_with_web_user ?  web_user : system_user)
@@ -219,26 +231,32 @@ module Shuttle
           end
         end
         
+        # set the owner group of the current satellite.
         def web_group(&block)
           satellite_option(:web_group, block)
         end
         
+        # set the owner of the current satellite.
         def web_user(&block)
           satellite_option(:web_user, block)
         end
         
+        # set the system user (the user which runs the shuttle server).
         def system_user(&block)
           option(:system_user, block) { |v| v or 'root' }
         end
         
+        # set whether gems should be installed with the web user.
         def install_gems_with_web_user(&block)
           option(:install_gems_with_web_user, block)
         end
         
+        # set the path to the satellite's root path
         def satellite_root(&block)
           satellite_option(:satellite_root, block)
         end
         
+        # set the path to the satellite's shared path
         def shared_root(&block)
           satellite_option(:shared_root, block)
         end

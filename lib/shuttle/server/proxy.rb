@@ -1,6 +1,7 @@
 
 module Shuttle
   class Server
+    # the proxy object hides all the server internals from the clients.
     class Proxy
       
       def initialize(server)

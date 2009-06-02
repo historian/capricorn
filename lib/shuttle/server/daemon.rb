@@ -2,28 +2,34 @@ require 'uri'
 
 module Shuttle
   class Server
-    module Daemon
+    
+    module Daemon # :nodoc:
       
       def self.included(base)
         base.extend Shuttle::Server::Daemon::ClassMethods
       end
       
+      # all a daemon needs to run
       module ClassMethods
         
+        # construct a Shuttle uri from a DRb uri
         def construct_uri(uri)
           uri        = URI.parse(uri)
           uri.scheme = ( Shuttle.system.use_ssl? ? 'ssl+shuttle' : 'shuttle')
           uri.to_s
         end
         
+        # stop teh server
         def stop
           Shuttle.client.stop_server
         end
         
+        # start the server
         def start
           start_with_failsafe
         end
         
+        # start the failsafe runner.
         def start_with_failsafe
           stop_server = false
           wait_before_start = 0
@@ -54,6 +60,7 @@ module Shuttle
           File.unlink(path) if File.file?(path)
         end
         
+        # start the actual DRb server
         def run_server
           Dir.chdir(Shuttle.system.root)
           

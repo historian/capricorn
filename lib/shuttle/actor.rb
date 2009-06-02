@@ -1,5 +1,7 @@
 
 module Shuttle
+  
+  # The actor class provides the mechanisme for scheduling the execution of seperate tasks.
   class Actor
     
     autoload :Actions, File.dirname(__FILE__)+'/actor/actions'
@@ -11,6 +13,7 @@ module Shuttle
     action :install_satellite, :uninstall_satellite, :link_satellite
     action :install_engine,    :uninstall_engine,    :update_engine
     
+    # create a new actor for the provided system and satellite
     def initialize(system, satellite)
       @system    = system
       @satellite = satellite
