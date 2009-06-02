@@ -31,6 +31,19 @@ module Shuttle
         option(:use_ssl, nil)
       end
       
+      def bind(hostname=nil, port=nil)
+        server_hostname { hostname }
+        server_port     { port }
+      end
+      
+      def server_hostname(&block)
+        option(:server_hostname, block) { |v| v or 'localhost' }
+      end
+      
+      def server_port(&block)
+        option(:server_port, block) { |v| v or 5000 }
+      end
+      
     end
   end
 end

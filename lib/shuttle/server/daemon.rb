@@ -65,8 +65,9 @@ module Shuttle
           Dir.chdir(Shuttle.system.root)
           
           Shuttle.log "Server started"
-          DRb.start_service "druby://localhost:5000", self.proxy, self.options_for_server
-          Shuttle.log "listening at #{self.construct_uri("druby://#{`hostname`.strip}:5000")}"
+          uri = "druby://#{Shuttle.system.server_hostname}:#{Shuttle.system.server_port}"
+          DRb.start_service uri, self.proxy, self.options_for_server
+          Shuttle.log "listening at #{self.construct_uri(uri)}"
           make_client_cert_public!
           
           at_exit do
