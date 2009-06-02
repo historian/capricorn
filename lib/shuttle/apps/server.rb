@@ -15,12 +15,12 @@ module Shuttle
         begin
           FileUtils.mkdir_p(Shuttle.system.root)
         rescue Errno::EACCES
-          puts "must be executed as root"
+          Shuttle.logger.out.fatal "must be executed as root"
           exit(1)
         end
         
         unless Shuttle.system.is_user('root')
-          puts "must be executed as root"
+          Shuttle.logger.out.fatal "must be executed as root"
           exit(1)
         end
         

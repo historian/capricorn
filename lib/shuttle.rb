@@ -3,17 +3,19 @@ require 'rubygems'
 require File.dirname(__FILE__)+'/shuttle/extentions/rubygems_plugin'
 
 autoload :DRbUndumped, 'drb'
+autoload :FileUtils, 'fileutils'
 
 module Shuttle
   base = File.expand_path(File.dirname(__FILE__))
   
-  autoload :Actor,         (base+'/shuttle/actor')
-  autoload :Server,        (base+'/shuttle/server')
-  autoload :Client,        (base+'/shuttle/client')
-  autoload :System,        (base+'/shuttle/system')
-  autoload :JobQueue,      (base+'/shuttle/job_queue')
-  autoload :Satellite,     (base+'/shuttle/satellite')
-  autoload :AppRunner,     (base+'/shuttle/app_runner')
+  autoload :Actor,            (base+'/shuttle/actor')
+  autoload :Server,           (base+'/shuttle/server')
+  autoload :Client,           (base+'/shuttle/client')
+  autoload :System,           (base+'/shuttle/system')
+  autoload :JobQueue,         (base+'/shuttle/job_queue')
+  autoload :Satellite,        (base+'/shuttle/satellite')
+  autoload :AppRunner,        (base+'/shuttle/app_runner')
+  autoload :ExceptionHandler, (base+'/shuttle/exception_handler')
   
   module Actors
     base = File.expand_path(File.dirname(__FILE__))
@@ -43,6 +45,9 @@ module Shuttle
   RELOAD_STATUS  = 103
   QUICK_CERT     = "http://segment7.net/projects/ruby/QuickCert/QuickCert-1.0.2.tar.gz"
   
+  Shuttle::ExceptionHandler.setup
+  extend ExceptionHandler
+  
   def self.client(token=nil)
     unless @client
       @client = Shuttle::Client.current(token)
@@ -56,13 +61,6 @@ module Shuttle
   
   def self.system
     @system ||= Shuttle::System.shared
-  end
-  
-  def self.log(*msgs)
-    msgs.each do |msg|
-      puts msg
-    end
-    $stdout.flush
   end
   
   def self.version

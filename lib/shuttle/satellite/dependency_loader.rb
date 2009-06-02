@@ -16,13 +16,12 @@ module Shuttle
       end
       
       def initialize(engines)
-        p engines
         specs = engines.collect do |k,r|
           s = Gem.source_index.find_name(k, Gem::Requirement.new(r[:version] || ">= 0.0.0"))
           s.last
         end.compact
         
-        @names = specs.collect(&:name)
+        @names = specs.collect { |spec| spec.name }
         @specs = specs.inject({}) { |h, spec| h[spec.name] = spec ; h }
         @engines = engines
       end

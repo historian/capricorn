@@ -11,13 +11,14 @@ module Shuttle
       @job_queue = Array.new
       @jobs      = Hash.new
       @mutex     = Mutex.new
+      @next_id   = 1
       
       @worker    = Thread.new(self) do |job_queue|
         while job_queue.running? or job_queue.peek
           
           if job = job_queue.peek
             job.run(job_queue)
-            job_queue.delete(job.object_id)
+            job_queue.delete(job.id)
           else
             sleep(1)
           end
@@ -29,10 +30,11 @@ module Shuttle
     # enqueue a new job with the given +name+, +options+ and +proc+
     def enqueue(name, options={}, &proc)
       @mutex.synchronize do
-        job = Job.new(name, options, &proc)
-        @jobs[job.object_id] = job
-        @job_queue.push job.object_id
-        return job.object_id
+        job = Job.new(@next_id, name, options, &proc)
+        @next_id += 1
+        @jobs[job.id] = job
+        @job_queue.push job.id
+        return job.id
       end
     end
     
@@ -142,9 +144,10 @@ module Shuttle
     class Job
       include DRbUndumped
       
-      attr_accessor :name, :options, :proc
+      attr_accessor :id, :name, :options, :proc
       
-      def initialize(name, options={}, &proc)
+      def initialize(id, name, options={}, &proc)
+        @id = id.to_i
         @mutex = Mutex.new
         @name, @options, @proc = name, options, proc
         @run_at = Time.now + (options.delete(:delay) || 30)
@@ -171,20 +174,22 @@ module Shuttle
       end
       
       def run(job_queue)
-        @waiting = true
-        immediated = canceled = false
-        Shuttle.log "waiting #{@run_at - Time.now}s."
-        until immediated or canceled or @run_at <= Time.now
-          sleep(1)
-          canceled   = job_queue.canceled?(self.object_id)
-          immediated = job_queue.immediated?(self.object_id)
-        end
-        
-        unless canceled
-          @waiting = false
-          @running = true
-          Shuttle.log("[queue]> #{@name}")
-          @proc.call(@options)
+        Shuttle.report do
+          @waiting = true
+          immediated = canceled = false
+          Shuttle.log "waiting #{@run_at - Time.now}s."
+          until immediated or canceled or @run_at <= Time.now
+            sleep(1)
+            canceled   = job_queue.canceled?(self.id)
+            immediated = job_queue.immediated?(self.id)
+          end
+          
+          unless canceled
+            @waiting = false
+            @running = true
+            Shuttle.log("[queue]> #{@name}")
+            @proc.call(@options)
+          end
         end
       end
       

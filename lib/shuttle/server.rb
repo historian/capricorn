@@ -96,7 +96,7 @@ module Shuttle
       queued_jobs = []
       Shuttle.system.queue.each do |job, canceled, immediated|
         job_delay = job.delay
-        queued_jobs.push([job.object_id, job.name, canceled, immediated, job.running?, job.waiting?, job_delay])
+        queued_jobs.push([job.id, job.name, canceled, immediated, job.running?, job.waiting?, job_delay])
       end
       queued_jobs
     end

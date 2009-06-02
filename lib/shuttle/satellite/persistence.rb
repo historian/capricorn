@@ -24,7 +24,7 @@ module Shuttle
       def dump(io=nil)
         data = {}
         
-        private_vars = []
+        private_vars = %w( basedomain subdomain )
         instance_variables.each do |ivar_name|
           ivar_name = ivar_name.to_s
           ivar_name =~ /^@(.+)$/

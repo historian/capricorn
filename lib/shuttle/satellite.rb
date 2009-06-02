@@ -20,6 +20,29 @@ module Shuttle
         @domain = domain
         @engines = {}
       end
+      @domain.gsub! /^www\./, ''
+    end
+    
+    def basedomain
+      unless @basedomain
+        parts = self.domain.split('.')
+        parts = parts[-2..-1]
+        @basedomain = parts.join('.')
+      end
+      @basedomain
+    end
+    
+    def subdomain
+      unless @subdomain
+        parts = self.domain.split('.')
+        parts = parts[0..-3]
+        @subdomain = parts.join('.')
+      end
+      @subdomain unless @subdomain == ''
+    end
+    
+    def subdomain?
+      !self.subdomain.nil?
     end
     
   end

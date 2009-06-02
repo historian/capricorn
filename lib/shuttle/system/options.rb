@@ -33,6 +33,10 @@ module Shuttle
         end
       end
       
+      def set_satellite_option(name, value)
+        @satellite_options[name.to_sym] = value
+      end
+      
       def resolve_options_with(satellite)
         @current_satellite = satellite
         resolve_options!

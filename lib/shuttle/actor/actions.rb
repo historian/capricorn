@@ -10,9 +10,16 @@ module Shuttle
       # run the callbacks registerd to <tt>action</tt>. the will run the <tt>before</tt>, <tt>on</tt> and <tt>after</tt> fases.
       def run_callbacks!(action)
         action = action.to_sym
-        self.class.methods_for(action, :before).each { |meth| self.send(meth) }
-        self.class.methods_for(action, :on).each     { |meth| self.send(meth) }
-        self.class.methods_for(action, :after).each  { |meth| self.send(meth) }
+        run_callbacks_in_fase! action, :before
+        run_callbacks_in_fase! action, :on
+        run_callbacks_in_fase! action, :after
+      end
+      
+      # run the callbacks registerd to <tt>action</tt> in the +fase+
+      def run_callbacks_in_fase!(action, fase)
+        action = action.to_sym
+        fase   = fase.to_sym
+        self.class.methods_for(action, fase).each { |meth| self.send(meth) }
       end
       
       module ClassMethods

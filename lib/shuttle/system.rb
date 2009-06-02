@@ -38,7 +38,7 @@ module Shuttle
       end
       
       @root               = File.expand_path(root)
-      @actors           = []
+      @actors             = []
       @options            = {}
       @option_descriptors = []
       @satellite_options            = {}
@@ -49,6 +49,8 @@ module Shuttle
         Shuttle.log "No system file found (#{system_file})"
         exit(1)
       end
+      
+      Shuttle::ExceptionHandler.setup(self.path('ServerNormal.log'), self.path('ServerError.log'))
       
       use :BaseActor
       self.instance_eval File.read(system_file)
@@ -146,10 +148,10 @@ module Shuttle
     
     def run_action_on(action, satellite)
       resolve_options_with satellite do
-        @actors.each do |actor_klass|
-          actor = actor_klass.new(self, satellite)
-          actor.send "run_#{action}_callbacks!"
-        end
+        actors = @actors.collect { |actor_klass| actor_klass.new(self, satellite) }
+        actors.each { |actor| actor.run_callbacks_in_fase! action, :before }
+        actors.each { |actor| actor.run_callbacks_in_fase! action, :on     }
+        actors.each { |actor| actor.run_callbacks_in_fase! action, :after  }
       end
     end
     

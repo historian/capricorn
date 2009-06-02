@@ -1,1 +1,1 @@
-require 'shuttle/rubygems_plugin'
+require 'shuttle/extentions/rubygems_plugin'

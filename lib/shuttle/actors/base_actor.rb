@@ -15,14 +15,14 @@ module Shuttle
         end
         
         Dir.chdir(File.dirname(system.satellite_root)) do
-          system.user_run system.web_user, "rails --force #{File.basename(system.satellite_root)}"
+          system.user_run system.web_user, "rails --force #{system.satellite_root}"
         end
         
         system.as_user(system.web_user, system.web_group) do
           Dir.chdir(File.dirname(system.satellite_root)) do
             link(File.join(system.shared_root,    'public'),
                  File.join(system.satellite_root, 'public', 'system'))
-            link(File.join(system.shared_root,    'pivate'),
+            link(File.join(system.shared_root,    'private'),
                  File.join(system.satellite_root, 'db', 'system'))
             link(File.join(system.shared_root,    'log'),
                  File.join(system.satellite_root, 'log'))
@@ -48,9 +48,9 @@ module Shuttle
             @dependecies.reverse_each do |spec|
               link_engine(spec)
             end
-            run_migrations
             
           end
+          run_migrations
         end
       end
       
@@ -127,17 +127,18 @@ module Shuttle
         unused_migrations.each do |migration, target|
           unless unlinked_migration_targets.include? File.basename(migration)
             migration =~ /(\d+)_[^.]+\.rb/
-            system.user_run(system.web_user, "rake db:migrate:down VERSION=#{$1}")
+            system.user_run(system.web_user, "cd #{system.satellite_root} ; rake db:migrate:down RAILS_ENV=#{system.rails_environment} VERSION=#{$1}")
           end
           FileUtils.rm_rf(migration, :verbose => true)
         end
-        unlinked_migrations.each do |migration|
-          FileUtils.ln_s(migration, "db/migrate/#{File.basename(migration)}", :verbose => true)
+        system.as_user(system.web_user, system.web_group) do
+          unlinked_migrations.each do |migration|
+            FileUtils.ln_s(migration, "db/migrate/#{File.basename(migration)}", :verbose => true)
+          end
         end
         
         unless unlinked_migrations.empty?
-          Shuttle.log system.user_run(system.web_user, "pwd")
-          system.user_run(system.web_user, "rake db:migrate")
+          system.user_run(system.web_user, "cd #{system.satellite_root} ; rake db:migrate RAILS_ENV=#{system.rails_environment}")
         end
       end
       
@@ -259,6 +260,11 @@ module Shuttle
         # set the path to the satellite's shared path
         def shared_root(&block)
           satellite_option(:shared_root, block)
+        end
+        
+        # set the rails environment.
+        def rails_environment(&block)
+          satellite_option(:rails_environment, block) { |s,v| v or 'development' }
         end
         
       end
