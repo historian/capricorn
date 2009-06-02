@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: Shuttle::Actors::PleskActor::Config [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Module</span>
+          Shuttle::Actors::PleskActor::Config
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../../../files/lib/shuttle/actors/plesk_actor_rb.html">lib/shuttle/actors/plesk_actor.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000029">plesk_client</a></li>
+              <li><a href="#M000030">plesk_client_bin</a></li>
+              <li><a href="#M000033">plesk_database_bin</a></li>
+              <li><a href="#M000036">plesk_database_server</a></li>
+              <li><a href="#M000031">plesk_domain_bin</a></li>
+              <li><a href="#M000035">plesk_httpd_bin</a></li>
+              <li><a href="#M000032">plesk_subdomain_bin</a></li>
+              <li><a href="#M000034">plesk_websrvmng_bin</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000029'>
+                <a name='M000029'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>plesk_client</span>
+                  <span class='arguments'>(&amp;block)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  set the plesk client to be used for this satellite.
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000029-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000029-source'><span class="ruby-comment cmt"># File lib/shuttle/actors/plesk_actor.rb, line 167</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_client</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">satellite_option</span>(<span class="ruby-identifier">:plesk_client</span>, <span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000030'>
+                <a name='M000030'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>plesk_client_bin</span>
+                  <span class='arguments'>(&amp;block)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  path to the client tool.
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000030-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000030-source'><span class="ruby-comment cmt"># File lib/shuttle/actors/plesk_actor.rb, line 172</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_client_bin</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:plesk_client_bin</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value str">'/usr/local/psa/bin/client'</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000033'>
+                <a name='M000033'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>plesk_database_bin</span>
+                  <span class='arguments'>(&amp;block)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  path to the database tool.
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000033-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000033-source'><span class="ruby-comment cmt"># File lib/shuttle/actors/plesk_actor.rb, line 187</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_database_bin</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:plesk_database_bin</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value str">'/usr/local/psa/bin/database'</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000036'>
+                <a name='M000036'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>plesk_database_server</span>
+                  <span class='arguments'>(&amp;block)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  host and port of database server.
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000036-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000036-source'><span class="ruby-comment cmt"># File lib/shuttle/actors/plesk_actor.rb, line 202</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_database_server</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:plesk_database_server</span>, <span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000031'>
+                <a name='M000031'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>plesk_domain_bin</span>
+                  <span class='arguments'>(&amp;block)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  path to the domain tool.
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000031-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000031-source'><span class="ruby-comment cmt"># File lib/shuttle/actors/plesk_actor.rb, line 177</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_domain_bin</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:plesk_domain_bin</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value str">'/usr/local/psa/bin/domain'</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000035'>
+                <a name='M000035'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>plesk_httpd_bin</span>
+                  <span class='arguments'>(&amp;block)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  path to the httpd tool.
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000035-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000035-source'><span class="ruby-comment cmt"># File lib/shuttle/actors/plesk_actor.rb, line 197</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_httpd_bin</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:plesk_httpd_bin</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value str">'/etc/init.d/httpd'</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000032'>
+                <a name='M000032'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>plesk_subdomain_bin</span>
+                  <span class='arguments'>(&amp;block)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  path to the subdomain tool.
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000032-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000032-source'><span class="ruby-comment cmt"># File lib/shuttle/actors/plesk_actor.rb, line 182</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_subdomain_bin</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:plesk_subdomain_bin</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value str">'/usr/local/psa/bin/subdomain'</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000034'>
+                <a name='M000034'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>plesk_websrvmng_bin</span>
+                  <span class='arguments'>(&amp;block)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  path to the websrvmng tool.
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000034-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000034-source'><span class="ruby-comment cmt"># File lib/shuttle/actors/plesk_actor.rb, line 192</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_websrvmng_bin</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:plesk_websrvmng_bin</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value str">'/usr/local/psa/admin/sbin/websrvmng'</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

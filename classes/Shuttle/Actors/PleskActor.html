@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: Shuttle::Actors::PleskActor [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Class</span>
+          Shuttle::Actors::PleskActor
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../../files/lib/shuttle/actors/plesk_actor_rb.html">lib/shuttle/actors/plesk_actor.rb</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong><a href="../Actor.html">Shuttle::Actor</a></strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000022">create_client</a></li>
+              <li><a href="#M000027">create_database</a></li>
+              <li><a href="#M000023">create_domain</a></li>
+              <li><a href="#M000028">drop_databases</a></li>
+              <li><a href="#M000024">link_htdocs</a></li>
+              <li><a href="#M000025">reload_subdomains</a></li>
+              <li><a href="#M000026">restart_apache</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='class-list'>
+              <h2>Classes and Modules</h2>
+              Module <a href="PleskActor/Config.html" class="link">Shuttle::Actors::PleskActor::Config</a><br />
+              Module <a href="PleskActor/Helper.html" class="link">Shuttle::Actors::PleskActor::Helper</a><br />
+            </div>
+            <div id='methods'>
+              <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000022'>
+                <a name='M000022'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>create_client</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000022-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000022-source'><span class="ruby-comment cmt"># File lib/shuttle/actors/plesk_actor.rb, line 14</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_client</span>&#x000A;        <span class="ruby-comment cmt"># only do this if this is needed</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">false</span>&#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">system</span>.<span class="ruby-identifier">client?</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">plesk_client</span>)&#x000A;            <span class="ruby-identifier">system</span>.<span class="ruby-identifier">create_client</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">plesk_client</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">plesk_client</span>, <span class="ruby-value str">'mypwd'</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000027'>
+                <a name='M000027'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>create_database</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000027-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000027-source'><span class="ruby-comment cmt"># File lib/shuttle/actors/plesk_actor.rb, line 62</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_database</span>&#x000A;        <span class="ruby-identifier">db_name</span> = <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">domain</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/[^a-z]+/</span>, <span class="ruby-value str">'_'</span>)[<span class="ruby-value">0</span>,<span class="ruby-value">63</span>]&#x000A;        <span class="ruby-identifier">db_user</span> = <span class="ruby-identifier">db_name</span>[<span class="ruby-value">0</span>,<span class="ruby-value">13</span>]&#x000A;        <span class="ruby-identifier">db_pswd</span> = (<span class="ruby-identifier">rand</span>(<span class="ruby-value">1_000_000_000</span>) <span class="ruby-operator">+</span> <span class="ruby-value">10_000</span>).<span class="ruby-identifier">to_s</span>&#x000A;        &#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">create_database</span>(<span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">basedomain</span>, <span class="ruby-node">&quot;#{db_name}_d&quot;</span>, <span class="ruby-node">&quot;#{db_user}_ud&quot;</span>, <span class="ruby-identifier">db_pswd</span>)&#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">create_database</span>(<span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">basedomain</span>, <span class="ruby-node">&quot;#{db_name}_t&quot;</span>, <span class="ruby-node">&quot;#{db_user}_ut&quot;</span>, <span class="ruby-identifier">db_pswd</span>)&#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">create_database</span>(<span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">basedomain</span>, <span class="ruby-node">&quot;#{db_name}_p&quot;</span>, <span class="ruby-node">&quot;#{db_user}_up&quot;</span>, <span class="ruby-identifier">db_pswd</span>)&#x000A;        &#x000A;        &#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">as_user</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_user</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_group</span>) <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-identifier">config</span> = <span class="ruby-node">%{&#x000A;development:&#x000A;  adapter: mysql&#x000A;  database: #{db_name}_d&#x000A;  username: #{db_user}_ud&#x000A;  password: #{db_pswd}&#x000A;  host: localhost&#x000A;  encoding: utf8&#x000A;  socket: /var/lib/mysql/mysql.sock&#x000A;&#x000A;test:&#x000A;  adapter: mysql&#x000A;  database: #{db_name}_t&#x000A;  username: #{db_user}_ut&#x000A;  password: #{db_pswd}&#x000A;  host: localhost&#x000A;  encoding: utf8&#x000A;  socket: /var/lib/mysql/mysql.sock&#x000A;&#x000A;production:&#x000A;  adapter: mysql&#x000A;  database: #{db_name}_p&#x000A;  username: #{db_user}_up&#x000A;  password: #{db_pswd}&#x000A;  host: localhost&#x000A;  encoding: utf8&#x000A;  socket: /var/lib/mysql/mysql.sock&#x000A;}</span>&#x000A;          &#x000A;          <span class="ruby-identifier">db_file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">satellite_root</span>, <span class="ruby-value str">'config'</span>, <span class="ruby-value str">'database.yml'</span>)&#x000A;          <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">db_file</span>, <span class="ruby-value str">'w+'</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span> <span class="ruby-identifier">config</span> }&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000023'>
+                <a name='M000023'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>create_domain</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000023-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000023-source'><span class="ruby-comment cmt"># File lib/shuttle/actors/plesk_actor.rb, line 23</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_domain</span>&#x000A;        <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">system</span>.<span class="ruby-identifier">domain?</span>(<span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">basedomain</span>)&#x000A;          <span class="ruby-identifier">system</span>.<span class="ruby-identifier">create_domain</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">plesk_client</span>, <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">basedomain</span>,&#x000A;            <span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_user</span>[<span class="ruby-value">0</span>,<span class="ruby-value">20</span>], (<span class="ruby-identifier">rand</span>(<span class="ruby-value">1_000_000_000</span>) <span class="ruby-operator">+</span> <span class="ruby-value">10_000</span>).<span class="ruby-identifier">to_s</span>)&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">httpdocs_path</span> = <span class="ruby-node">&quot;/var/www/vhosts/#{satellite.basedomain}/httpdocs&quot;</span>&#x000A;          <span class="ruby-identifier">system</span>.<span class="ruby-identifier">set_satellite_option</span>(<span class="ruby-identifier">:web_user</span>,&#x000A;            <span class="ruby-identifier">system</span>.<span class="ruby-identifier">get_user_name</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">stat</span>(<span class="ruby-identifier">httpdocs_path</span>).<span class="ruby-identifier">uid</span>))&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;          &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">subdomain?</span> <span class="ruby-keyword kw">and</span> <span class="ruby-operator">!</span><span class="ruby-identifier">system</span>.<span class="ruby-identifier">subdomain?</span>(<span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">basedomain</span>, <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">subdomain</span>)&#x000A;          <span class="ruby-identifier">system</span>.<span class="ruby-identifier">create_subdomain</span>(<span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">basedomain</span>, <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">subdomain</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">satellite_root</span>)&#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">shared_root</span>)&#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">chown_R</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_user</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_group</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">satellite_root</span>)&#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">chown_R</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_user</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_group</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">shared_root</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000028'>
+                <a name='M000028'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>drop_databases</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000028-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000028-source'><span class="ruby-comment cmt"># File lib/shuttle/actors/plesk_actor.rb, line 107</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">drop_databases</span>&#x000A;        <span class="ruby-identifier">db_name</span> = <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">domain</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/[^a-z]+/</span>, <span class="ruby-value str">'_'</span>)[<span class="ruby-value">0</span>,<span class="ruby-value">63</span>]&#x000A;        &#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">drop_database</span>(<span class="ruby-node">&quot;#{db_name}_d&quot;</span>)&#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">drop_database</span>(<span class="ruby-node">&quot;#{db_name}_t&quot;</span>)&#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">drop_database</span>(<span class="ruby-node">&quot;#{db_name}_p&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000024'>
+                <a name='M000024'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>link_htdocs</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000024-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000024-source'><span class="ruby-comment cmt"># File lib/shuttle/actors/plesk_actor.rb, line 43</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">link_htdocs</span>&#x000A;        <span class="ruby-identifier">httpdocs_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">satellite_root</span>), <span class="ruby-value str">'httpdocs'</span>)&#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">rm_rf</span>(<span class="ruby-identifier">httpdocs_path</span>)&#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">ln_s</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">satellite_root</span>, <span class="ruby-identifier">httpdocs_path</span>)&#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">chown_R</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_user</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_group</span>, <span class="ruby-identifier">httpdocs_path</span>)&#x000A;        &#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">satellite_root</span>, <span class="ruby-value str">'../conf/vhost.conf'</span>), <span class="ruby-value str">'w+'</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">f</span>.<span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;DocumentRoot #{httpdocs_path}/public&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000025'>
+                <a name='M000025'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>reload_subdomains</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000025-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000025-source'><span class="ruby-comment cmt"># File lib/shuttle/actors/plesk_actor.rb, line 54</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reload_subdomains</span>&#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{system.plesk_websrvmng_bin} --reconfigure-vhost --vhost-name=#{satellite.basedomain}&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000026'>
+                <a name='M000026'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>restart_apache</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000026-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000026-source'><span class="ruby-comment cmt"># File lib/shuttle/actors/plesk_actor.rb, line 58</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">restart_apache</span>&#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{system.plesk_httpd_bin} restart&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>
