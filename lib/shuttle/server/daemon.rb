@@ -45,10 +45,13 @@ module Shuttle
             case $?.exitstatus
             when Shuttle::STOP_STATUS
               stop_server = true
+              retries     = 0
             when Shuttle::RESTART_STATUS
               wait_before_start = 2
+              retries     = 0
             when Shuttle::RELOAD_STATUS
               stop_server = true
+              retries     = 0
               Shuttle.system.run(%{sleep 2 ; #{Shuttle::BIN_PATH} #{ORIGINAL_ARGV.join(' ')}})
             else
               retries += 1
