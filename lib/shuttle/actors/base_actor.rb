@@ -207,7 +207,9 @@ module Shuttle
               "--#{k}=#{v.inspect}"
             end
           end
-          user_run(user, "gem #{cmd} #{args.join(' ')}")
+          output = user_run(user, "#{gem_bin_path} #{cmd} #{args.join(' ')}")
+          Gem.refresh
+          output
         end
         
       end
