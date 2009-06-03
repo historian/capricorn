@@ -8,7 +8,6 @@ module Shuttle
       desc "start", 'start the server'
       method_options :foreground => :boolean,  :config => :optional
       def start
-        Shuttle.runtime_gem('simple-daemon', Shuttle::SIMPLE_DEAMON_VERSION)
         Shuttle.server? true
         Shuttle::System.load!(options[:root_path])
         
@@ -24,11 +23,9 @@ module Shuttle
           exit(1)
         end
         
-        SimpleDaemon.const_set 'WORKING_DIRECTORY', Shuttle.system.root
         if options[:foreground]
           Shuttle::Server.start
         else
-          ARGV.clear and ARGV.concat(%w( start ))
           Shuttle::Server.daemonize
         end
       end

@@ -1,9 +1,8 @@
-Shuttle.runtime_gem('simple-daemon', Shuttle::SIMPLE_DEAMON_VERSION)
 
 module Shuttle
   
   # the Server is supposed to be a simple DRb interface to the System.
-  class Server < SimpleDaemon::Base
+  class Server < Shuttle::Daemon::Base
     include DRbUndumped
     
     autoload :Proxy,    File.dirname(__FILE__)+'/server/proxy'
@@ -23,17 +22,20 @@ module Shuttle
     
     def stop_server
       Shuttle.log "stopping the server..."
-      Thread.new { sleep(1) and exit(Shuttle::STOP_STATUS) }
+      $exitstatus = Shuttle::STOP_STATUS
+      DRb.stop_service
     end
     
     def restart_server
       Shuttle.log "restarting the server..."
-      Thread.new { sleep(1) and exit(Shuttle::RESTART_STATUS) }
+      $exitstatus = Shuttle::RESTART_STATUS
+      DRb.stop_service
     end
     
     def reload_server
       Shuttle.log "reloading the server..."
-      Thread.new { sleep(1) and exit(Shuttle::RELOAD_STATUS) }
+      $exitstatus = Shuttle::RELOAD_STATUS
+      DRb.stop_service
     end
     
     def server_version

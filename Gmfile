@@ -1,6 +1,6 @@
 specify do |s|
   s.name    = %q{shuttle}
-  s.version = "0.1.08"
+  s.version = "0.1.09"
   s.summary = %q{Manage satellites}
   s.homepage = %q{http://github.com/simonmenke/shuttle}
   

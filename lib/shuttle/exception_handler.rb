@@ -4,15 +4,21 @@ module Shuttle
     
     def self.setup(out=STDOUT, err=STDERR)
       if String === out
-        @out = Logger.new(out, 'daily')
+        @out    = Logger.new(out, 'daily')
+        @stdout = @out.instance_variable_get('@logdev').instance_variable_get('@dev')
       else
-        @out = Logger.new(out)
+        @out    = Logger.new(out)
+        @stdout = out
       end
+      
       if String === err
         @err = Logger.new(err, 'daily')
+        @stderr = @err.instance_variable_get('@logdev').instance_variable_get('@dev')
       else
-        @err = Logger.new(err)
+        @err    = Logger.new(err)
+        @stderr = err
       end
+      
       @out.level = Logger::DEBUG
       @err.level = Logger::DEBUG
     end
@@ -23,6 +29,26 @@ module Shuttle
     
     def self.out
       @out
+    end
+    
+    def self.stderr
+      @stderr
+    end
+    
+    def self.stdout
+      @stdout
+    end
+    
+    def self.redirect_std
+      if STDOUT != self.stdout
+        STDOUT.reopen self.stdout
+      end
+      
+      if STDERR != self.stderr
+        STDERR.reopen self.stderr
+      end
+      
+      STDIN.reopen "/dev/null"
     end
     
     def logger

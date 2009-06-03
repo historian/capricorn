@@ -1,4 +1,3 @@
-require 'uri'
 
 module Shuttle
   class Server
@@ -19,7 +18,7 @@ module Shuttle
           uri.to_s
         end
         
-        # stop teh server
+        # stop the server
         def stop
           Shuttle.client.stop_server
         end
@@ -31,6 +30,7 @@ module Shuttle
         
         # start the failsafe runner.
         def start_with_failsafe
+          $master = true
           stop_server = false
           wait_before_start = 0
           retries = 0
@@ -41,6 +41,7 @@ module Shuttle
             end
             
             pid = Process.fork { self.run_server }
+            return unless pid
             Process.waitpid(pid, 0)
             case $?.exitstatus
             when Shuttle::STOP_STATUS
@@ -52,19 +53,18 @@ module Shuttle
             when Shuttle::RELOAD_STATUS
               stop_server = true
               retries     = 0
-              Shuttle.system.run(%{sleep 2 ; #{Shuttle::BIN_PATH} #{ORIGINAL_ARGV.join(' ')}})
+              Shuttle::Daemon::PidFile.destroy
+              Shuttle.system.run %{#{Shuttle::BIN_PATH} #{ORIGINAL_ARGV.join(' ')}}
             else
               retries += 1
               stop_server = true if retries >= 3
             end
           end
-          
-          path = Shuttle.system.path('Server.pid')
-          File.unlink(path) if File.file?(path)
         end
         
         # start the actual DRb server
         def run_server
+          $master = false
           Dir.chdir(Shuttle.system.root)
           
           Shuttle.log "Server started"
@@ -74,13 +74,12 @@ module Shuttle
           make_client_cert_public!
           
           at_exit do
-            unless $task_child
-              Shuttle.system.queue.stop!
-              Shuttle.log "Server stopped"
-            end
+            Shuttle.system.queue.stop!
+            Shuttle.log "Server stopped"
           end
           
           DRb.thread.join
+          exit($exitstatus || Shuttle::STOP_STATUS)
         end
         
       end

@@ -1,5 +1,6 @@
 require 'rubygems'
 
+autoload :URI,         'uri'
 autoload :Etc,         'etc'
 autoload :DRb,         'drb'
 autoload :TSort,       'tsort'
@@ -15,6 +16,7 @@ module Shuttle
   autoload :Server,           (base+'/shuttle/server')
   autoload :Client,           (base+'/shuttle/client')
   autoload :System,           (base+'/shuttle/system')
+  autoload :Daemon,           (base+'/shuttle/daemon')
   autoload :JobQueue,         (base+'/shuttle/job_queue')
   autoload :Satellite,        (base+'/shuttle/satellite')
   autoload :AppRunner,        (base+'/shuttle/app_runner')
@@ -50,7 +52,6 @@ module Shuttle
   
   THOR_VERSION          = '>= 0.9.9'
   RUBIGEN_VERSION       = '>= 1.5.2'
-  SIMPLE_DEAMON_VERSION = '>= 0.1.2'
   
   Shuttle::ExceptionHandler.setup
   extend ExceptionHandler
