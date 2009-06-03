@@ -18,10 +18,6 @@ module Shuttle
         RubiGen::Base.use_application_sources!
         RubiGen::Scripts::Generate.new.run(["-f", name], :generator => 'engine')
       end
-      
-      desc "link", "link the current development app"
-      def link
-      end
     end
     
   end
