@@ -1,4 +1,4 @@
-require 'thor'
+Shuttle.runtime_gem('thor', Shuttle::THOR_VERSION)
 
 module Shuttle
   module Apps

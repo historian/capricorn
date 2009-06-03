@@ -1,5 +1,4 @@
-require 'thor'
-require 'simple-daemon'
+Shuttle.runtime_gem('thor', Shuttle::THOR_VERSION)
 
 module Shuttle
   module Apps
@@ -9,6 +8,7 @@ module Shuttle
       desc "start", 'start the server'
       method_options :foreground => :boolean,  :config => :optional
       def start
+        Shuttle.runtime_gem('simple-daemon', Shuttle::SIMPLE_DEAMON_VERSION)
         Shuttle.server? true
         Shuttle::System.load!(options[:root_path])
         

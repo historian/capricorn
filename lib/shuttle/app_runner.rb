@@ -1,4 +1,5 @@
-require 'thor'
+Shuttle.runtime_gem('thor', Shuttle::THOR_VERSION)
+
 require File.dirname(__FILE__)+'/extentions/thor_extentions'
 
 module Shuttle

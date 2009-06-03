@@ -1,4 +1,3 @@
-autoload :Logger, 'logger'
 
 module Shuttle
   module ExceptionHandler

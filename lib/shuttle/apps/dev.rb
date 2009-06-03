@@ -1,4 +1,4 @@
-require 'thor'
+Shuttle.runtime_gem('thor', Shuttle::THOR_VERSION)
 
 module Shuttle
   module Apps # :nodoc:
@@ -6,7 +6,8 @@ module Shuttle
     class Dev < Thor
       desc "create NAME", "create a new engine"
       def create(name)
-        require 'rubigen'
+        Shuttle.runtime_gem('rubigen', Shuttle::RUBIGEN_VERSION)
+        
         system("rails #{name}")
         
         FileUtils.rm_r("#{name}/doc", :verbose => true)

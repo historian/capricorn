@@ -1,5 +1,4 @@
 
-autoload :TSort, 'tsort'
 
 module Shuttle
   class Satellite

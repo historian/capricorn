@@ -1,6 +1,4 @@
-require 'drb'
-require 'drb/ssl'
-require 'simple-daemon'
+Shuttle.runtime_gem('simple-daemon', Shuttle::SIMPLE_DEAMON_VERSION)
 
 module Shuttle
   

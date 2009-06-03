@@ -10,7 +10,4 @@ specify do |s|
   s.include_files "lib/**/*.rb", "app_generators/**/*.rb"
   s.executables = %w( shuttle )
   
-  s.add_dependency 'thor', '>= 0.9.9'
-  s.add_dependency 'rubigen', '>= 1.5.2'
-  s.add_dependency 'simple-daemon', '>= 0.1.2'
 end

@@ -1,6 +1,4 @@
 
-autoload :Etc, 'etc'
-
 module Shuttle
   class System
     module ProcessUser
