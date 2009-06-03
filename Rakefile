@@ -2,7 +2,7 @@
 desc "build the docs"
 task :doc do
   FileUtils.rm_rf('doc')
-  system('hanna lib/**/*')
+  system('hanna --title="Shuttle" --main=README.rdoc lib/**/* README.rdoc')
 end
 
 namespace :doc do
