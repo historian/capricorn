@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Gem::Specification [RDoc Documentation]</title>
+    <title>: Gem::Specification [Capricorn]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -31,7 +31,7 @@
         </h1>
         <ol class='paths'>
           <li>
-            <a href="../../files/lib/shuttle/extentions/rubygems_plugin_rb.html">lib/shuttle/extentions/rubygems_plugin.rb</a>
+            <a href="../../files/lib/capricorn/extentions/rubygems_plugin_rb.html">lib/capricorn/extentions/rubygems_plugin.rb</a>
           </li>
         </ol>
         <div class='parent'>
@@ -78,7 +78,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000004-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000004-source'><span class="ruby-comment cmt"># File lib/shuttle/extentions/rubygems_plugin.rb, line 7</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_engine_dependency</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>={})&#x000A;      <span class="ruby-identifier">name</span> = <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_s</span>&#x000A;      <span class="ruby-identifier">add_runtime_dependency</span>(<span class="ruby-identifier">name</span>, <span class="ruby-operator">*</span>[<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:version</span>]].<span class="ruby-identifier">compact</span>)&#x000A;      <span class="ruby-ivar">@engine_dependencies</span> <span class="ruby-operator">||=</span> {}&#x000A;      <span class="ruby-ivar">@engine_dependencies</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">options</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000004-source'><span class="ruby-comment cmt"># File lib/capricorn/extentions/rubygems_plugin.rb, line 7</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_engine_dependency</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>={})&#x000A;      <span class="ruby-identifier">name</span> = <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_s</span>&#x000A;      <span class="ruby-identifier">add_runtime_dependency</span>(<span class="ruby-identifier">name</span>, <span class="ruby-operator">*</span>[<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:version</span>]].<span class="ruby-identifier">compact</span>)&#x000A;      <span class="ruby-ivar">@engine_dependencies</span> <span class="ruby-operator">||=</span> {}&#x000A;      <span class="ruby-ivar">@engine_dependencies</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">options</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

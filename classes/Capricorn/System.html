@@ -1,0 +1,279 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: Capricorn::System [Capricorn]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Class</span>
+          Capricorn::System
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../files/lib/capricorn/system/config_rb.html">lib/capricorn/system/config.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../../files/lib/capricorn/system/helper_rb.html">lib/capricorn/system/helper.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../../files/lib/capricorn/system/process_user_rb.html">lib/capricorn/system/process_user.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../../files/lib/capricorn/system/options_rb.html">lib/capricorn/system/options.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../../files/lib/capricorn/system/shell_rb.html">lib/capricorn/system/shell.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../../files/lib/capricorn/system/satellites_rb.html">lib/capricorn/system/satellites.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../../files/lib/capricorn/system_rb.html">lib/capricorn/system.rb</a>
+          </li>
+          <li>
+            <a class='show' href='#' onclick='this.parentNode.parentNode.className += " expanded"; this.parentNode.removeChild(this); return false'>show all</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong>Object</strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public class</h3>
+            <ol>
+              <li><a href="#M000148">load!</a></li>
+              <li><a href="#M000149">new</a></li>
+              <li><a href="#M000147">shared</a></li>
+            </ol>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000154">install_engine</a></li>
+              <li><a href="#M000152">install_satellite</a></li>
+              <li><a href="#M000151">path</a></li>
+              <li><a href="#M000150">queue</a></li>
+              <li><a href="#M000156">uninstall_engine</a></li>
+              <li><a href="#M000153">uninstall_satellite</a></li>
+              <li><a href="#M000155">update_engine</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+            <div id='includes'>
+              <h2>Included modules</h2>
+              <ol>
+                <li>DRbUndumped</li>
+                <li><a href="System/Shell.html">Capricorn::System::Shell</a></li>
+                <li><a href="System/Config.html">Capricorn::System::Config</a></li>
+                <li><a href="System/Helper.html">Capricorn::System::Helper</a></li>
+                <li><a href="System/Options.html">Capricorn::System::Options</a></li>
+                <li><a href="System/Satellites.html">Capricorn::System::Satellites</a></li>
+                <li><a href="System/ProcessUser.html">Capricorn::System::ProcessUser</a></li>
+              </ol>
+            </div>
+          </div>
+          <div id='section'>
+            <div id='class-list'>
+              <h2>Classes and Modules</h2>
+              Module <a href="System/Config.html" class="link">Capricorn::System::Config</a><br />
+              Module <a href="System/Helper.html" class="link">Capricorn::System::Helper</a><br />
+              Module <a href="System/Options.html" class="link">Capricorn::System::Options</a><br />
+              Module <a href="System/ProcessUser.html" class="link">Capricorn::System::ProcessUser</a><br />
+              Module <a href="System/Satellites.html" class="link">Capricorn::System::Satellites</a><br />
+              Module <a href="System/Shell.html" class="link">Capricorn::System::Shell</a><br />
+            </div>
+            <div id='attribute-list'>
+              <h2 class='section-bar'>Attributes</h2>
+              <div class='name-list'>
+                <table>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>current_satellite</td>
+                    <td class='context-item-value'>[RW]</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>root</td>
+                    <td class='context-item-value'>[RW]</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='methods'>
+              <h2>Public class methods</h2>
+              <div class='public-class method' id='method-M000148'>
+                <a name='M000148'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>load!</span>
+                  <span class='arguments'>(root=nil)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  load the shared system
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000148-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000148-source'><span class="ruby-comment cmt"># File lib/capricorn/system.rb, line 27</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">load!</span>(<span class="ruby-identifier">root</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-ivar">@system</span> = <span class="ruby-identifier">new</span>(<span class="ruby-identifier">root</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000149'>
+                <a name='M000149'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>new</span>
+                  <span class='arguments'>(root=nil)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000149-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000149-source'><span class="ruby-comment cmt"># File lib/capricorn/system.rb, line 31</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">root</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">root</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">get_user_name</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'root'</span>&#x000A;          <span class="ruby-identifier">root</span> = <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_ROOT_SYSTEM_DIR</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">root</span> = <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_USER_SYSTEM_DIR</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      &#x000A;      <span class="ruby-ivar">@root</span>               = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">root</span>)&#x000A;      <span class="ruby-ivar">@actors</span>             = []&#x000A;      <span class="ruby-ivar">@options</span>            = {}&#x000A;      <span class="ruby-ivar">@option_descriptors</span> = []&#x000A;      <span class="ruby-ivar">@satellite_options</span>            = {}&#x000A;      <span class="ruby-ivar">@satellite_option_descriptors</span> = []&#x000A;      &#x000A;      <span class="ruby-identifier">system_file</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'system.rb'</span>)&#x000A;      <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span> <span class="ruby-identifier">system_file</span>&#x000A;        <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">log</span> <span class="ruby-node">&quot;No system file found (#{system_file})&quot;</span>&#x000A;        <span class="ruby-identifier">exit</span>(<span class="ruby-value">1</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      &#x000A;      <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">ExceptionHandler</span>.<span class="ruby-identifier">setup</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'ServerNormal.log'</span>), <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'ServerError.log'</span>))&#x000A;      &#x000A;      <span class="ruby-identifier">use</span> <span class="ruby-identifier">:BaseActor</span>&#x000A;      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">instance_eval</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">system_file</span>)&#x000A;      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">resolve_options!</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000147'>
+                <a name='M000147'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>shared</span>
+                  <span class='arguments'>(system=nil)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  get the shared system. this will also set the shared system if you pass a
+                  new system as its argument.
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000147-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000147-source'><span class="ruby-comment cmt"># File lib/capricorn/system.rb, line 21</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">shared</span>(<span class="ruby-identifier">system</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-ivar">@system</span> = <span class="ruby-identifier">system</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">system</span>&#x000A;      <span class="ruby-ivar">@system</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000154'>
+                <a name='M000154'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>install_engine</span>
+                  <span class='arguments'>(satellite, name, options={})</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000154-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000154-source'><span class="ruby-comment cmt"># File lib/capricorn/system.rb, line 91</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">install_engine</span>(<span class="ruby-identifier">satellite</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>={})&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">satellite</span>&#x000A;        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">queue</span>.<span class="ruby-identifier">enqueue</span>(<span class="ruby-node">&quot;install #{satellite.domain}: #{name} #{options.inspect}&quot;</span>,&#x000A;          <span class="ruby-identifier">:satellite</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">satellite</span>, <span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">name</span>, <span class="ruby-identifier">:options</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">options</span><span class="ruby-operator">|</span>&#x000A;          &#x000A;          <span class="ruby-identifier">satellite</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:satellite</span>], <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:name</span>], <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:options</span>]&#x000A;          <span class="ruby-identifier">ensure_presence_of_gem</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>)&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">add_engine</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>)&#x000A;            <span class="ruby-identifier">run_action_on</span> <span class="ruby-identifier">:install_engine</span>, <span class="ruby-identifier">satellite</span>&#x000A;            <span class="ruby-identifier">run_action_on</span> <span class="ruby-identifier">:link_satellite</span>, <span class="ruby-identifier">satellite</span>&#x000A;            <span class="ruby-identifier">save_satellite!</span> <span class="ruby-identifier">satellite</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          &#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-keyword kw">false</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000152'>
+                <a name='M000152'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>install_satellite</span>
+                  <span class='arguments'>(domain)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000152-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000152-source'><span class="ruby-comment cmt"># File lib/capricorn/system.rb, line 70</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">install_satellite</span>(<span class="ruby-identifier">domain</span>)&#x000A;      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">queue</span>.<span class="ruby-identifier">enqueue</span>(<span class="ruby-node">&quot;install new satellite #{domain}&quot;</span>, <span class="ruby-identifier">:domain</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">domain</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">options</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">satellite</span> = <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">Satellite</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:domain</span>])&#x000A;        &#x000A;        <span class="ruby-identifier">run_action_on</span> <span class="ruby-identifier">:install_satellite</span>, <span class="ruby-identifier">satellite</span>&#x000A;        <span class="ruby-identifier">run_action_on</span> <span class="ruby-identifier">:link_satellite</span>, <span class="ruby-identifier">satellite</span>&#x000A;        <span class="ruby-identifier">save_satellite!</span> <span class="ruby-identifier">satellite</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000151'>
+                <a name='M000151'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>path</span>
+                  <span class='arguments'>(*args)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000151-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000151-source'><span class="ruby-comment cmt"># File lib/capricorn/system.rb, line 66</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">path</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;      <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-ivar">@root</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000150'>
+                <a name='M000150'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>queue</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000150-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000150-source'><span class="ruby-comment cmt"># File lib/capricorn/system.rb, line 62</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">queue</span>&#x000A;      <span class="ruby-ivar">@queue</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">JobQueue</span>.<span class="ruby-identifier">new</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000156'>
+                <a name='M000156'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>uninstall_engine</span>
+                  <span class='arguments'>(satellite, name)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000156-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000156-source'><span class="ruby-comment cmt"># File lib/capricorn/system.rb, line 129</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">uninstall_engine</span>(<span class="ruby-identifier">satellite</span>, <span class="ruby-identifier">name</span>)&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">satellite</span>&#x000A;        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">queue</span>.<span class="ruby-identifier">enqueue</span>(<span class="ruby-node">&quot;uninstall #{satellite.domain}: #{name}&quot;</span>,&#x000A;          <span class="ruby-identifier">:satellite</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">satellite</span>, <span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">name</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">options</span><span class="ruby-operator">|</span>&#x000A;          &#x000A;          <span class="ruby-identifier">satellite</span>, <span class="ruby-identifier">name</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:satellite</span>], <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:name</span>]&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">remove_engine</span>(<span class="ruby-identifier">name</span>)&#x000A;            <span class="ruby-identifier">run_action_on</span> <span class="ruby-identifier">:uninstall_engine</span>, <span class="ruby-identifier">satellite</span>&#x000A;            <span class="ruby-identifier">run_action_on</span> <span class="ruby-identifier">:link_satellite</span>, <span class="ruby-identifier">satellite</span>&#x000A;            <span class="ruby-identifier">save_satellite!</span> <span class="ruby-identifier">satellite</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          &#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-keyword kw">false</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000153'>
+                <a name='M000153'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>uninstall_satellite</span>
+                  <span class='arguments'>(satellite)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000153-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000153-source'><span class="ruby-comment cmt"># File lib/capricorn/system.rb, line 80</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">uninstall_satellite</span>(<span class="ruby-identifier">satellite</span>)&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">satellite</span>&#x000A;        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">queue</span>.<span class="ruby-identifier">enqueue</span>(<span class="ruby-node">&quot;uninstall #{satellite.domain}&quot;</span>, <span class="ruby-identifier">:satellite</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">satellite</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">options</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">run_action_on</span> <span class="ruby-identifier">:uninstall_satellite</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:satellite</span>]&#x000A;          <span class="ruby-identifier">destroy_satellite!</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:satellite</span>]&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-keyword kw">false</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000155'>
+                <a name='M000155'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>update_engine</span>
+                  <span class='arguments'>(satellite, name, options={})</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000155-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000155-source'><span class="ruby-comment cmt"># File lib/capricorn/system.rb, line 110</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_engine</span>(<span class="ruby-identifier">satellite</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>={})&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">satellite</span>&#x000A;        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">queue</span>.<span class="ruby-identifier">enqueue</span>(<span class="ruby-node">&quot;update #{satellite.domain}: #{name} #{options.inspect}&quot;</span>,&#x000A;          <span class="ruby-identifier">:satellite</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">satellite</span>, <span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">name</span>, <span class="ruby-identifier">:options</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">options</span><span class="ruby-operator">|</span>&#x000A;          &#x000A;          <span class="ruby-identifier">satellite</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:satellite</span>], <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:name</span>], <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:options</span>]&#x000A;          <span class="ruby-identifier">ensure_presence_of_gem</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>)&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">update_engine</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>)&#x000A;            <span class="ruby-identifier">run_action_on</span> <span class="ruby-identifier">:update_engine</span>, <span class="ruby-identifier">satellite</span>&#x000A;            <span class="ruby-identifier">run_action_on</span> <span class="ruby-identifier">:link_satellite</span>, <span class="ruby-identifier">satellite</span>&#x000A;            <span class="ruby-identifier">save_satellite!</span> <span class="ruby-identifier">satellite</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          &#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-keyword kw">false</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>
