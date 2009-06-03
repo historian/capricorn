@@ -1,6 +1,7 @@
 
 module Capricorn
   class Satellite
+    include DRbUndumped
     
     autoload :Actions,          File.dirname(__FILE__)+'/satellite/actions'
     autoload :Persistence,      File.dirname(__FILE__)+'/satellite/persistence'

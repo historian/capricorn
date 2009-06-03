@@ -7,7 +7,7 @@ specify do |s|
   s.author = "Simon Menke"
   s.email  = %q{simon.menke@gmail.com}
   
-  s.include_files "lib/**/*.rb", "app_generators/**/*.rb"
+  s.include_files "lib/**/*.rb", "app_generators/**/*"
   s.executables = %w( capricorn )
   
 end

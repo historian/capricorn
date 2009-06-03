@@ -14,7 +14,7 @@ module Capricorn
         end
       end
       
-      allow :stop_server, :restart_server, :reload_server, :server_version, :update_server, :install_satellite, :uninstall_satellite, :install_engine, :update_engine, :uninstall_engine, :satellites, :queued_jobs, :cancel_job, :immediate_job
+      allow :stop_server, :restart_server, :reload_server, :server_version, :update_server, :install_satellite, :uninstall_satellite, :install_engine, :update_engine, :uninstall_engine, :satellites, :queued_jobs, :cancel_job, :immediate_job, :make_development_satellite
       
       class << self
         undef_method :allow

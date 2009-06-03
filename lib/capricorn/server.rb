@@ -61,6 +61,15 @@ module Capricorn
       end
     end
     
+    def make_development_satellite(domain)
+      satellite = Capricorn.system.find_satellite(domain)
+      if satellite
+        Capricorn.system.make_development_satellite(satellite)
+      else
+        Capricorn.log "Satellite not found (#{domain})"
+      end
+    end
+    
     def install_engine(domain, name, options={})
       satellite = Capricorn.system.find_satellite(domain)
       if satellite
