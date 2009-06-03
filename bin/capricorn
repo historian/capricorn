@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+begin
+  require File.dirname(__FILE__)+'/../lib/capricorn'
+rescue LoadError
+  require 'rubygems'
+  require 'capricorn'
+end
+
+module Capricorn
+  BIN_PATH = File.expand_path($PROGRAM_NAME)
+  ORIGINAL_ARGV = ARGV.dup
+end
+
+Capricorn::AppRunner.use :Server
+Capricorn::AppRunner.use :Satellite
+Capricorn::AppRunner.use :Engines
+Capricorn::AppRunner.use :Jobs
+Capricorn::AppRunner.use :Dev
+Capricorn::AppRunner.namespace = 'capricorn:apps'
+Capricorn::AppRunner.start

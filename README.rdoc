@@ -1,8 +1,8 @@
-= Shuttle
+= Capricorn
 
-Shuttle is a system for building and managing composite Rails applications.
-Composite Rails applications are Rails applications which consist only of plugins (gems) and engines (also gems). Shuttle can compose an application for a given specification. It can also update composite applications.
+Capricorn is a system for building and managing composite Rails applications.
+Composite Rails applications are Rails applications which consist only of plugins (gems) and engines (also gems). Capricorn can compose an application for a given specification. It can also update composite applications.
 
-The main purpose of Shuttle is building and maintaining ready-made CMS systems but it can manage any kind of composite application.
+The main purpose of Capricorn is building and maintaining ready-made CMS systems but it can manage any kind of composite application.
 
-Shuttle can be configured to be accessible form an external machine/server through SSL. This makes it possible to manage many servers. This also makes it possible to write a Rails based frontend to the system.
+Capricorn can be configured to be accessible form an external machine/server through SSL. This makes it possible to manage many servers. This also makes it possible to write a Rails based frontend to the system.

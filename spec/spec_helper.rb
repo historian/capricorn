@@ -1,1 +1,1 @@
-require File.dirname(__FILE__)+'/../lib/shuttle'
+require File.dirname(__FILE__)+'/../lib/capricorn'

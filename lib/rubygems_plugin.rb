@@ -1,1 +1,1 @@
-require 'shuttle/extentions/rubygems_plugin'
+require 'capricorn/extentions/rubygems_plugin'

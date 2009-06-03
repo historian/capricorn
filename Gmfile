@@ -1,13 +1,13 @@
 specify do |s|
-  s.name    = %q{shuttle}
-  s.version = "0.1.09"
+  s.name    = %q{capricorn}
+  s.version = "0.2.00"
   s.summary = %q{Manage satellites}
-  s.homepage = %q{http://github.com/simonmenke/shuttle}
+  s.homepage = %q{http://github.com/simonmenke/capricorn}
   
   s.author = "Simon Menke"
   s.email  = %q{simon.menke@gmail.com}
   
   s.include_files "lib/**/*.rb", "app_generators/**/*.rb"
-  s.executables = %w( shuttle )
+  s.executables = %w( capricorn )
   
 end
