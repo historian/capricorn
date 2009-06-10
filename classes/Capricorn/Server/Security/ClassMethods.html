@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: Capricorn::Server::Security::ClassMethods [Capricorn]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Module</span>
+          Capricorn::Server::Security::ClassMethods
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../../../files/lib/capricorn/server/security_rb.html">lib/capricorn/server/security.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000212">dump_quick_cert_config!</a></li>
+              <li><a href="#M000211">install_quick_cert!</a></li>
+              <li><a href="#M000214">make_client_cert_public!</a></li>
+              <li><a href="#M000210">options_for_server</a></li>
+              <li><a href="#M000213">run_quick_cert!</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000212'>
+                <a name='M000212'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>dump_quick_cert_config!</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000212-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000212-source'><span class="ruby-comment cmt"># File lib/capricorn/server/security.rb, line 54</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dump_quick_cert_config!</span>&#x000A;          <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span> <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'quick_cert'</span>, <span class="ruby-value str">'qc_config'</span>)&#x000A;          &#x000A;          <span class="ruby-identifier">config</span> = <span class="ruby-node">%{&#x000A;full_hostname = `hostname`.strip&#x000A;domainname = full_hostname.split('.')[1..-1].join('.')&#x000A;hostname = full_hostname.split('.')[0]&#x000A;&#x000A;CA[:hostname] = hostname&#x000A;CA[:domainname] = domainname&#x000A;CA[:CA_dir] = File.join Dir.pwd, &quot;CA&quot;&#x000A;CA[:password] = '#{rand(100_000)}'&#x000A;&#x000A;CERTS &lt;&lt; {&#x000A;:type =&gt; 'server',&#x000A;:hostname =&gt; 'capricorn',&#x000A;# :password =&gt; '#{rand(100_000)}',&#x000A;}&#x000A;&#x000A;CERTS &lt;&lt; {&#x000A;:type =&gt; 'client',&#x000A;:user =&gt; 'core',&#x000A;:email =&gt; 'core@mrhenry.be',&#x000A;}&#x000A;}</span>&#x000A;          <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'quick_cert'</span>))&#x000A;          <span class="ruby-constant">File</span>.<span class="ruby-identifier">chmod</span>(<span class="ruby-value">0700</span>, <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'quick_cert'</span>))&#x000A;          <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'quick_cert'</span>, <span class="ruby-value str">'qc_config'</span>), <span class="ruby-value str">'w+'</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span> <span class="ruby-identifier">config</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000211'>
+                <a name='M000211'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>install_quick_cert!</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000211-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000211-source'><span class="ruby-comment cmt"># File lib/capricorn/server/security.rb, line 34</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">install_quick_cert!</span>&#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">find_bin</span>(<span class="ruby-value str">'QuickCert'</span>)&#x000A;            <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-value str">'/tmp/quick_cert'</span>)&#x000A;            <span class="ruby-constant">File</span>.<span class="ruby-identifier">chmod</span>(<span class="ruby-value">0700</span>, <span class="ruby-value str">'/tmp/quick_cert'</span>)&#x000A;            &#x000A;            <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">chdir</span>(<span class="ruby-value str">'/tmp/quick_cert'</span>) <span class="ruby-keyword kw">do</span>&#x000A;              <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">run</span> <span class="ruby-node">&quot;curl -O #{Capricorn::QUICK_CERT}&quot;</span>&#x000A;              <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">run</span> <span class="ruby-value str">&quot;tar xzf QuickCert-1.0.2.tar.gz&quot;</span>&#x000A;              &#x000A;              <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">chdir</span>(<span class="ruby-value str">'/tmp/quick_cert/QuickCert-1.0.2'</span>) <span class="ruby-keyword kw">do</span>&#x000A;                <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">run</span> <span class="ruby-node">&quot;#{Capricorn.system.ruby_path} ./setup.rb config&quot;</span>&#x000A;                <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">run</span> <span class="ruby-node">&quot;#{Capricorn.system.ruby_path} ./setup.rb setup&quot;</span>&#x000A;                <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">run</span> <span class="ruby-node">&quot;#{Capricorn.system.ruby_path} ./setup.rb install&quot;</span>&#x000A;              <span class="ruby-keyword kw">end</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;            &#x000A;            <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">rm_rf</span>(<span class="ruby-value str">'/tmp/quick_cert'</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000214'>
+                <a name='M000214'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>make_client_cert_public!</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000214-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000214-source'><span class="ruby-comment cmt"># File lib/capricorn/server/security.rb, line 92</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">make_client_cert_public!</span>&#x000A;          <span class="ruby-identifier">token</span> = <span class="ruby-keyword kw">nil</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">use_ssl?</span>&#x000A;            <span class="ruby-identifier">token</span> = <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">Client</span><span class="ruby-operator">::</span><span class="ruby-constant">AuthToken</span>.<span class="ruby-identifier">new</span>(&#x000A;              <span class="ruby-identifier">:target_uri</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">construct_uri</span>(<span class="ruby-constant">DRb</span>.<span class="ruby-identifier">uri</span>),&#x000A;              <span class="ruby-identifier">:verify_mode</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">OpenSSL</span><span class="ruby-operator">::</span><span class="ruby-constant">SSL</span><span class="ruby-operator">::</span><span class="ruby-constant">VERIFY_PEER</span>,&#x000A;              <span class="ruby-identifier">:private_key_data</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'quick_cert'</span>, <span class="ruby-value str">'core'</span>, <span class="ruby-value str">'core_keypair.pem'</span>)),&#x000A;              <span class="ruby-identifier">:certificate_data</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'quick_cert'</span>, <span class="ruby-value str">'core'</span>, <span class="ruby-value str">'cert_core.pem'</span>)),&#x000A;              <span class="ruby-identifier">:ca_certificate_data</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'quick_cert'</span>, <span class="ruby-value str">'CA'</span>, <span class="ruby-value str">'cacert.pem'</span>))&#x000A;            )&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-identifier">token</span> = <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">Client</span><span class="ruby-operator">::</span><span class="ruby-constant">AuthToken</span>.<span class="ruby-identifier">new</span>(&#x000A;              <span class="ruby-identifier">:target_uri</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">construct_uri</span>(<span class="ruby-constant">DRb</span>.<span class="ruby-identifier">uri</span>))&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-identifier">token</span>.<span class="ruby-identifier">dump_file</span>(<span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'core.token'</span>))&#x000A;          <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">chmod_R</span>(<span class="ruby-value">0775</span>, <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'core.token'</span>))&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000210'>
+                <a name='M000210'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>options_for_server</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000210-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000210-source'><span class="ruby-comment cmt"># File lib/capricorn/server/security.rb, line 12</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">options_for_server</span>&#x000A;          &#x000A;          <span class="ruby-identifier">config</span> = {}&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">use_ssl?</span>&#x000A;            <span class="ruby-identifier">install_quick_cert!</span>&#x000A;            <span class="ruby-identifier">dump_quick_cert_config!</span>&#x000A;            <span class="ruby-identifier">run_quick_cert!</span>&#x000A;            &#x000A;            <span class="ruby-identifier">keypair</span> = <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'quick_cert'</span>, <span class="ruby-value str">'capricorn'</span>, <span class="ruby-value str">'capricorn_keypair.pem'</span>)&#x000A;            <span class="ruby-identifier">cert</span>    = <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'quick_cert'</span>, <span class="ruby-value str">'capricorn'</span>, <span class="ruby-value str">'cert_capricorn.pem'</span>)&#x000A;            &#x000A;            <span class="ruby-identifier">config</span> = {&#x000A;              <span class="ruby-identifier">:SSLPrivateKey</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">OpenSSL</span><span class="ruby-operator">::</span><span class="ruby-constant">PKey</span><span class="ruby-operator">::</span><span class="ruby-constant">RSA</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">keypair</span>)),&#x000A;              <span class="ruby-identifier">:SSLCertificate</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">OpenSSL</span><span class="ruby-operator">::</span><span class="ruby-constant">X509</span><span class="ruby-operator">::</span><span class="ruby-constant">Certificate</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">cert</span>)),&#x000A;              <span class="ruby-identifier">:SSLVerifyMode</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">OpenSSL</span><span class="ruby-operator">::</span><span class="ruby-constant">SSL</span><span class="ruby-operator">::</span><span class="ruby-constant">VERIFY_PEER</span> <span class="ruby-operator">|</span> <span class="ruby-constant">OpenSSL</span><span class="ruby-operator">::</span><span class="ruby-constant">SSL</span><span class="ruby-operator">::</span><span class="ruby-constant">VERIFY_FAIL_IF_NO_PEER_CERT</span>,&#x000A;              <span class="ruby-identifier">:SSLCACertificateFile</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'quick_cert'</span>, <span class="ruby-value str">'CA'</span>, <span class="ruby-value str">'cacert.pem'</span>)&#x000A;            }&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          &#x000A;          <span class="ruby-identifier">config</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000213'>
+                <a name='M000213'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>run_quick_cert!</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000213-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000213-source'><span class="ruby-comment cmt"># File lib/capricorn/server/security.rb, line 84</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run_quick_cert!</span>&#x000A;          <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span> <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'quick_cert'</span>, <span class="ruby-value str">'CA'</span>)&#x000A;          &#x000A;          <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">chdir</span>(<span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'quick_cert'</span>)) <span class="ruby-keyword kw">do</span>&#x000A;            <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">run</span> <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">find_bin</span>(<span class="ruby-value str">'QuickCert'</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>
