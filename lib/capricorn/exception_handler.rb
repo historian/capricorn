@@ -56,6 +56,7 @@ module Capricorn
     end
     
     def log(*args, &block)
+      args = [args.inspect] if args.size == 1 and Array === args.first
       logger.out.info(*args, &block)
     end
     
