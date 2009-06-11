@@ -25,7 +25,7 @@ module Capricorn
           (options[:all] || k.group_name == group) && 
           Thor::Util.constant_to_thor_path(k.name) =~ search
         end
-        display_klasses(false, classes)
+        display_klasses(classes)
       end
     end
     
@@ -44,48 +44,37 @@ module Capricorn
     
     private
     
-    def display_klasses(with_modules = false, klasses = Thor.subclasses)
-      klasses -= [Thor, Capricorn::AppRunner] unless with_modules
-      raise Error, "No Thor tasks available" if klasses.empty?
+    def display_klasses(klasses = Thor.subclasses)
+      klasses -= [Thor, Capricorn::AppRunner]
       
-      if with_modules && !thor_yaml.empty?
-        max_name = thor_yaml.max { |(xk, xv), (yk, yv)| xk.to_s.size <=> yk.to_s.size }.first.size
-        modules_label    = "Modules"
-        namespaces_label = "Namespaces"
-        column_width     = [max_name + 4, modules_label.size + 1].max
+      if klasses.empty?
+        puts "\033[1;34mNo Thor tasks available\033[0m"
+      else
+        maxima = column_maxima_for(klasses)
         
-        print "%-#{column_width}s" % modules_label
-        puts namespaces_label
-        print "%-#{column_width}s" % ("-" * modules_label.size)
-        puts "-" * namespaces_label.size
-        
-        thor_yaml.each do |name, info|
-          print "%-#{column_width}s" % name
-          puts info[:constants].map { |c| Thor::Util.constant_to_thor_path(c) }.join(", ")
-        end
-      
-        puts
+        puts # add some spacing
+        klasses.each { |k| display_tasks(k, maxima.first, maxima.last) }
       end
-      
+    end  
+    
+    def column_maxima_for(klasses)
       # Calculate the largest base class name
-      max_base = klasses.max do |x,y| 
+      klass_with_longest_name = klasses.max do |x,y| 
         Thor::Util.constant_to_thor_path(x.name).size <=> Thor::Util.constant_to_thor_path(y.name).size
-      end.name.size
+      end
+      max_base = klass_with_longest_name.name.size
       
       # Calculate the size of the largest option description
       max_left_item = klasses.max do |x,y| 
-        (x.maxima.usage + x.maxima.opt).to_i <=> (y.maxima.usage + y.maxima.opt).to_i
+        total_x = (x.maxima.usage + x.maxima.opt).to_i
+        total_y = (y.maxima.usage + y.maxima.opt).to_i
+        total_x <=> total_y
       end
       
       max_left = max_left_item.maxima.usage + max_left_item.maxima.opt
       
-      unless klasses.empty?
-        puts # add some spacing
-        klasses.each { |k| display_tasks(k, max_base, max_left); }
-      else
-        puts "\033[1;34mNo Thor tasks available\033[0m"
-      end
-    end  
+      return [max_base, max_left]
+    end
     
     def display_tasks(klass, max_base, max_left)
       if klass.tasks.values.length > 1

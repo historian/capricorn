@@ -60,17 +60,30 @@ module Capricorn
       end
       
       def create_database
-        db_name = satellite.domain.downcase.gsub(/[^a-z]+/, '_')[0,63]
+        db_name = database_name_for(satellite)
         db_user = db_name[0,13]
         db_pswd = (rand(1_000_000_000) + 10_000).to_s
         
-        system.create_database(satellite.basedomain, "#{db_name}_d", "#{db_user}_ud", db_pswd)
-        system.create_database(satellite.basedomain, "#{db_name}_t", "#{db_user}_ut", db_pswd)
-        system.create_database(satellite.basedomain, "#{db_name}_p", "#{db_user}_up", db_pswd)
-        
+        create_database_for(satellite, :d, db_name, db_user, db_pswd)
+        create_database_for(satellite, :t, db_name, db_user, db_pswd)
+        create_database_for(satellite, :p, db_name, db_user, db_pswd)
         
         system.as_user(system.web_user, system.web_group) do
-          config = %{
+          db_file = File.join(system.satellite_root, 'config', 'database.yml')
+          write_database_config(db_file, db_name, db_user, db_pswd)
+        end
+      end
+      
+      def drop_databases
+        db_name = satellite.domain.downcase.gsub(/[^a-z]+/, '_')[0,63]
+        
+        system.drop_database("#{db_name}_d")
+        system.drop_database("#{db_name}_t")
+        system.drop_database("#{db_name}_p")
+      end
+      
+      def write_database_config(db_file, db_name, db_user, db_pswd)
+        File.open(db_file, 'w+') { |f| f.write(%{
 development:
   adapter: mysql
   database: #{db_name}_d
@@ -97,19 +110,17 @@ production:
   host: localhost
   encoding: utf8
   socket: /var/lib/mysql/mysql.sock
-}
-          
-          db_file = File.join(system.satellite_root, 'config', 'database.yml')
-          File.open(db_file, 'w+') { |f| f.write config }
-        end
+}) }
       end
       
-      def drop_databases
-        db_name = satellite.domain.downcase.gsub(/[^a-z]+/, '_')[0,63]
-        
-        system.drop_database("#{db_name}_d")
-        system.drop_database("#{db_name}_t")
-        system.drop_database("#{db_name}_p")
+      def database_name_for(satellite)
+        satellite.domain.downcase.gsub(/[^a-z]+/, '_')[0,63]
+      end
+      
+      def create_database_for(satellite, environment, db_name, db_user, db_pswd)
+        db_name = "#{db_name}_#{environment}"
+        db_user = "#{db_user}_u#{environment}"
+        system.create_database(satellite.basedomain, db_name, db_user, db_pswd)
       end
       
       module Helper

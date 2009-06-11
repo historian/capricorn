@@ -41,15 +41,10 @@ module Capricorn
             puts "Pid file #{PidFile.pid_file} already exists. Not starting."
             exit 1
           end
-          Capricorn::Daemon::PidFile.store(Process.pid)
-          Dir.chdir Capricorn.system.root
-          File.umask 0000
           
-          Capricorn::ExceptionHandler.redirect_std
+          setup_child
+          regitser_handlers(daemon, &block)
           
-          trap("TERM") { daemon.stop; exit }
-          at_exit { Capricorn::Daemon::PidFile.destroy if $master }
-          at_exit(&block) if block
           daemon.start
         end
         puts "Daemon started."
@@ -64,6 +59,21 @@ module Capricorn
         pid && Process.kill("TERM", pid)
       rescue Errno::ESRCH
         puts "Pid file found, but process was not running. The daemon may have died."
+      end
+      
+    private
+      
+      def self.setup_child
+        Capricorn::Daemon::PidFile.store(Process.pid)
+        Dir.chdir Capricorn.system.root
+        File.umask 0000
+        Capricorn::ExceptionHandler.redirect_std
+      end
+      
+      def self.regitser_handlers(daemon, &block)
+        trap("TERM") { daemon.stop; exit }
+        at_exit { Capricorn::Daemon::PidFile.destroy if $master }
+        at_exit(&block) if block
       end
       
     end

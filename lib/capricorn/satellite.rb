@@ -21,7 +21,7 @@ module Capricorn
         @domain = domain
         @engines = {}
       end
-      @domain.gsub! /^www\./, ''
+      @domain.gsub!(/^www\./, '')
     end
     
     def basedomain

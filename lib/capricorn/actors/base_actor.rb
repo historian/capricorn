@@ -71,7 +71,7 @@ module Capricorn
         gems_header  = "  # Gems added by engine_manager:\n  \n"
         
         gsub_file('config/environment.rb') do |content|
-          content.gsub! /^\s*config.gem.+\n/, ''
+          content.gsub!(/^\s*config.gem.+\n/, '')
           content.gsub! %r{#{Regexp.escape(rails_header)}(#{Regexp.escape(gems_header)})?},
             "#{rails_header}#{gems_header}"
           

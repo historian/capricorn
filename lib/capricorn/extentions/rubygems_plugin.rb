@@ -20,7 +20,7 @@ module Gem # :nodoc:
     alias_method :to_ruby_without_engines, :to_ruby # :nodoc:
     def to_ruby # :nodoc:
       code = to_ruby_without_engines
-      code.gsub! /s\.engine_dependencies\s+[=]([^\n]+)/, 's.instance_variable_set(:@engine_dependencies,\1)'
+      code.gsub!(/s\.engine_dependencies\s+[=]([^\n]+)/, 's.instance_variable_set(:@engine_dependencies,\1)')
       code
     end
   end

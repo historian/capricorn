@@ -21,7 +21,7 @@ module Thor::Util # :nodoc:
   
   def self.constant_to_thor_path(*args) # :nodoc:
     path = old_constant_to_thor_path(*args)
-    path.sub! /^#{Thor.namespace}:/, '' if Thor.namespace
+    path.sub!(/^#{Thor.namespace}:/, '') if Thor.namespace
     path
   end
   

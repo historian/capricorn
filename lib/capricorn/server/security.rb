@@ -36,18 +36,25 @@ module Capricorn
             FileUtils.mkdir_p('/tmp/quick_cert')
             File.chmod(0700, '/tmp/quick_cert')
             
-            Dir.chdir('/tmp/quick_cert') do
-              Capricorn.system.run "curl -O #{Capricorn::QUICK_CERT}"
-              Capricorn.system.run "tar xzf QuickCert-1.0.2.tar.gz"
-              
-              Dir.chdir('/tmp/quick_cert/QuickCert-1.0.2') do
-                Capricorn.system.run "#{Capricorn.system.ruby_path} ./setup.rb config"
-                Capricorn.system.run "#{Capricorn.system.ruby_path} ./setup.rb setup"
-                Capricorn.system.run "#{Capricorn.system.ruby_path} ./setup.rb install"
-              end
-            end
+            download_quick_cert!
+            build_quick_cert!
             
             FileUtils.rm_rf('/tmp/quick_cert')
+          end
+        end
+        
+        def download_quick_cert!
+          Dir.chdir('/tmp/quick_cert') do
+            Capricorn.system.run "curl -O #{Capricorn::QUICK_CERT}"
+            Capricorn.system.run "tar xzf QuickCert-1.0.2.tar.gz"
+          end
+        end
+        
+        def build_quick_cert!
+          Dir.chdir('/tmp/quick_cert/QuickCert-1.0.2') do
+            Capricorn.system.run "#{Capricorn.system.ruby_path} ./setup.rb config"
+            Capricorn.system.run "#{Capricorn.system.ruby_path} ./setup.rb setup"
+            Capricorn.system.run "#{Capricorn.system.ruby_path} ./setup.rb install"
           end
         end
         

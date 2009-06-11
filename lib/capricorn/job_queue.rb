@@ -16,7 +16,8 @@ module Capricorn
       @worker    = Thread.new(self) do |job_queue|
         while job_queue.running? or job_queue.peek
           
-          if job = job_queue.peek
+          job = job_queue.peek
+          if job
             job.run(job_queue)
             job_queue.delete(job.id)
           else
