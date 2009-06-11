@@ -105,7 +105,7 @@ module Capricorn
           FileUtils.mkdir_p("db/migrate", :verbose => true)
           unlinked_migrations.concat(Dir.glob("#{path}/*.rb"))
           linked_migrations.each do |migration, target|
-            if target.starts_with? spec.full_gem_path
+            if target[0,spec.full_gem_path.size] == spec.full_gem_path
               unlinked_migrations.delete(target)
               unused_migrations.delete(migration)
             end
