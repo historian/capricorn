@@ -88,18 +88,16 @@ module Capricorn
       end
     end
     
-    def make_development_satellite(satellite)
+    def make_development_satellite(satellite, name)
       if satellite
         Capricorn.runtime_gem('rubigen', Capricorn::RUBIGEN_VERSION)
         resolve_options_with satellite do
           as_user(web_user, web_group) do
-            Dir.chdir(File.dirname(satellite_root)) do
+            Dir.chdir(satellite_root) do
               
-              name = File.basename(satellite_root)
-              
-              FileUtils.rm_r("#{name}/doc", :verbose => true) rescue nil
-              FileUtils.rm_r("#{name}/README", :verbose => true) rescue nil
-              FileUtils.rm_r("#{name}/public/javascripts", :verbose => true) rescue nil
+              FileUtils.rm_r("doc", :verbose => true) rescue nil
+              FileUtils.rm_r("README", :verbose => true) rescue nil
+              FileUtils.rm_r("public/javascripts", :verbose => true) rescue nil
               
               require 'rubigen/scripts/generate'
               RubiGen::Base.use_application_sources!

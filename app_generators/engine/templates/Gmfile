@@ -4,7 +4,7 @@ specify do |s|
   s.summary = %q{Fix this}
   s.homepage = %q{Fix this}
 
-  s.author = "Fix this"
+  s.author = "[AUTHOR]"
   s.email  = %q{Fix this}
   
   s.ignore_files %r{^public/(\d{3}|index)\.html$}
