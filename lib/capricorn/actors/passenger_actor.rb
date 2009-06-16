@@ -9,9 +9,18 @@ module Capricorn
       # restart the current satellite.
       def restart
         system.as_user(system.web_user, system.web_group) do
-          tmp_restart = File.join(system.satellite_root, 'tmp', 'restart.txt')
+          tmp_restart = system.passenger_restart_txt
           FileUtils.touch tmp_restart, :verbose => true
         end
+      end
+      
+      module Config
+        
+        # set the passneger restart file.
+        def passenger_restart_txt(&block)
+          satellite_option(:passenger_restart_txt, block) { |v,s| v || File.join(satellite_root, 'tmp', 'restart.txt') }
+        end
+        
       end
       
     end
