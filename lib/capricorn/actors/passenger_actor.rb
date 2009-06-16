@@ -18,7 +18,7 @@ module Capricorn
         
         # set the passneger restart file.
         def passenger_restart_txt(&block)
-          satellite_option(:passenger_restart_txt, block) { |v,s| v || File.join(satellite_root, 'tmp', 'restart.txt') }
+          satellite_option(:passenger_restart_txt, block) { |s, v| v || File.join(satellite_root, 'tmp', 'restart.txt') }
         end
         
       end
