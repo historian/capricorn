@@ -47,7 +47,14 @@ module Capricorn
         FileUtils.chown_R(system.web_user, system.web_group, httpdocs_path)
         
         File.open(File.join(system.satellite_root, '../conf/vhost.conf'), 'w+') do |f|
-          f.puts "DocumentRoot #{httpdocs_path}/public"
+          f.write %{DocumentRoot #{httpdocs_path}/public
+<Directory  "#{httpdocs_path}/public">
+  Options All
+  AllowOverride All
+  Order allow,deny
+  Allow from all
+</Directory>
+}
         end
       end
       

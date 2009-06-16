@@ -133,7 +133,14 @@ module Capricorn
         end
         system.as_user(system.web_user, system.web_group) do
           unlinked_migrations.each do |migration|
-            FileUtils.ln_s(migration, "db/migrate/#{File.basename(migration)}", :verbose => true)
+            
+            begin
+              FileUtils.ln_s(migration, "db/migrate/#{File.basename(migration)}", :verbose => true)
+            rescue
+              FileUtils.rm_rf("db/migrate/#{File.basename(migration)}", :verbose => true)
+              retry
+            end
+              
           end
         end
         
@@ -171,18 +178,30 @@ module Capricorn
         # install a gem.
         def gem_install(name, options={})
           gem_cmd('install', name, options)
+          gem_refresh
+        end
+        
+        def gem_refresh
+          original_paths = Gem.path
+          Gem.refresh
+          Gem.send(:set_paths, original_paths.compact.join(File::PATH_SEPARATOR))
         end
         
         # check if a gem is installed
         def gem_installed(name, options)
           version = options[:version] || '0.0.0'
           options = { :version => version, :installed => true }
-          (gem_cmd('list', name, options).strip == 'true')
+          (gem_cmd('list', name, options).strip =~ /true/)
         end
         
         # update a gem
         def gem_update(name, options={})
-          !(gem_cmd('update', name, options) =~ /Nothing to update/)
+          if !(gem_cmd('update', name, options) =~ /Nothing to update/)
+            gem_refresh
+            true
+          else
+            false
+          end
         end
         
         # ensure the presence of a gem
@@ -207,9 +226,7 @@ module Capricorn
               "--#{k}=#{v.inspect}"
             end
           end
-          output = user_run(user, "#{gem_bin_path} #{cmd} #{args.join(' ')}")
-          Gem.refresh
-          output
+          user_run(user, "#{gem_bin_path} #{cmd} #{args.join(' ')}")
         end
         
       end
