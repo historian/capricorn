@@ -41,149 +41,149 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000176">bind</a></li>
-              <li><a href="#M000170">development?</a></li>
-              <li><a href="#M000173">environment</a></li>
-              <li><a href="#M000172">production?</a></li>
-              <li><a href="#M000177">server_hostname</a></li>
-              <li><a href="#M000178">server_port</a></li>
-              <li><a href="#M000169">use_development!</a></li>
-              <li><a href="#M000171">use_production!</a></li>
-              <li><a href="#M000174">use_ssl!</a></li>
-              <li><a href="#M000175">use_ssl?</a></li>
+              <li><a href="#M000185">bind</a></li>
+              <li><a href="#M000179">development?</a></li>
+              <li><a href="#M000182">environment</a></li>
+              <li><a href="#M000181">production?</a></li>
+              <li><a href="#M000186">server_hostname</a></li>
+              <li><a href="#M000187">server_port</a></li>
+              <li><a href="#M000178">use_development!</a></li>
+              <li><a href="#M000180">use_production!</a></li>
+              <li><a href="#M000183">use_ssl!</a></li>
+              <li><a href="#M000184">use_ssl?</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000176'>
-                <a name='M000176'>      </a>
+              <div class='public-instance method' id='method-M000185'>
+                <a name='M000185'>      </a>
                 <div class='synopsis'>
                   <span class='name'>bind</span>
                   <span class='arguments'>(hostname=nil, port=nil)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000176-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000185-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000176-source'><span class="ruby-comment cmt"># File lib/capricorn/system/config.rb, line 34</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bind</span>(<span class="ruby-identifier">hostname</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">port</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-identifier">server_hostname</span> { <span class="ruby-identifier">hostname</span> }&#x000A;        <span class="ruby-identifier">server_port</span>     { <span class="ruby-identifier">port</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000185-source'><span class="ruby-comment cmt"># File lib/capricorn/system/config.rb, line 34</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bind</span>(<span class="ruby-identifier">hostname</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">port</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-identifier">server_hostname</span> { <span class="ruby-identifier">hostname</span> }&#x000A;        <span class="ruby-identifier">server_port</span>     { <span class="ruby-identifier">port</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000170'>
-                <a name='M000170'>      </a>
+              <div class='public-instance method' id='method-M000179'>
+                <a name='M000179'>      </a>
                 <div class='synopsis'>
                   <span class='name'>development?</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000170-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000179-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000170-source'><span class="ruby-comment cmt"># File lib/capricorn/system/config.rb, line 10</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">development?</span>&#x000A;        <span class="ruby-identifier">environment</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'development'</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000179-source'><span class="ruby-comment cmt"># File lib/capricorn/system/config.rb, line 10</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">development?</span>&#x000A;        <span class="ruby-identifier">environment</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'development'</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000173'>
-                <a name='M000173'>      </a>
+              <div class='public-instance method' id='method-M000182'>
+                <a name='M000182'>      </a>
                 <div class='synopsis'>
                   <span class='name'>environment</span>
                   <span class='arguments'>(&amp;block)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000173-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000182-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000173-source'><span class="ruby-comment cmt"># File lib/capricorn/system/config.rb, line 22</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">environment</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:environment</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value str">'production'</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000182-source'><span class="ruby-comment cmt"># File lib/capricorn/system/config.rb, line 22</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">environment</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:environment</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value str">'production'</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000172'>
-                <a name='M000172'>      </a>
+              <div class='public-instance method' id='method-M000181'>
+                <a name='M000181'>      </a>
                 <div class='synopsis'>
                   <span class='name'>production?</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000172-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000181-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000172-source'><span class="ruby-comment cmt"># File lib/capricorn/system/config.rb, line 18</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">production?</span>&#x000A;        <span class="ruby-identifier">environment</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'production'</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000181-source'><span class="ruby-comment cmt"># File lib/capricorn/system/config.rb, line 18</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">production?</span>&#x000A;        <span class="ruby-identifier">environment</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'production'</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000177'>
-                <a name='M000177'>      </a>
+              <div class='public-instance method' id='method-M000186'>
+                <a name='M000186'>      </a>
                 <div class='synopsis'>
                   <span class='name'>server_hostname</span>
                   <span class='arguments'>(&amp;block)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000177-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000186-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000177-source'><span class="ruby-comment cmt"># File lib/capricorn/system/config.rb, line 39</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">server_hostname</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:server_hostname</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value str">'localhost'</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000186-source'><span class="ruby-comment cmt"># File lib/capricorn/system/config.rb, line 39</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">server_hostname</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:server_hostname</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value str">'localhost'</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000178'>
-                <a name='M000178'>      </a>
+              <div class='public-instance method' id='method-M000187'>
+                <a name='M000187'>      </a>
                 <div class='synopsis'>
                   <span class='name'>server_port</span>
                   <span class='arguments'>(&amp;block)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000178-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000187-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000178-source'><span class="ruby-comment cmt"># File lib/capricorn/system/config.rb, line 43</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">server_port</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:server_port</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value">5000</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000187-source'><span class="ruby-comment cmt"># File lib/capricorn/system/config.rb, line 43</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">server_port</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:server_port</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value">5000</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000169'>
-                <a name='M000169'>      </a>
+              <div class='public-instance method' id='method-M000178'>
+                <a name='M000178'>      </a>
                 <div class='synopsis'>
                   <span class='name'>use_development!</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000169-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000178-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000169-source'><span class="ruby-comment cmt"># File lib/capricorn/system/config.rb, line 6</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">use_development!</span>&#x000A;        <span class="ruby-identifier">environment</span> { <span class="ruby-value str">'development'</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000178-source'><span class="ruby-comment cmt"># File lib/capricorn/system/config.rb, line 6</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">use_development!</span>&#x000A;        <span class="ruby-identifier">environment</span> { <span class="ruby-value str">'development'</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000171'>
-                <a name='M000171'>      </a>
+              <div class='public-instance method' id='method-M000180'>
+                <a name='M000180'>      </a>
                 <div class='synopsis'>
                   <span class='name'>use_production!</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000171-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000180-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000171-source'><span class="ruby-comment cmt"># File lib/capricorn/system/config.rb, line 14</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">use_production!</span>&#x000A;        <span class="ruby-identifier">environment</span> { <span class="ruby-value str">'production'</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000180-source'><span class="ruby-comment cmt"># File lib/capricorn/system/config.rb, line 14</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">use_production!</span>&#x000A;        <span class="ruby-identifier">environment</span> { <span class="ruby-value str">'production'</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000174'>
-                <a name='M000174'>      </a>
+              <div class='public-instance method' id='method-M000183'>
+                <a name='M000183'>      </a>
                 <div class='synopsis'>
                   <span class='name'>use_ssl!</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000174-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000183-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000174-source'><span class="ruby-comment cmt"># File lib/capricorn/system/config.rb, line 26</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">use_ssl!</span>&#x000A;        <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:use_ssl</span>, <span class="ruby-identifier">lambda</span> { <span class="ruby-keyword kw">true</span> })&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000183-source'><span class="ruby-comment cmt"># File lib/capricorn/system/config.rb, line 26</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">use_ssl!</span>&#x000A;        <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:use_ssl</span>, <span class="ruby-identifier">lambda</span> { <span class="ruby-keyword kw">true</span> })&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000175'>
-                <a name='M000175'>      </a>
+              <div class='public-instance method' id='method-M000184'>
+                <a name='M000184'>      </a>
                 <div class='synopsis'>
                   <span class='name'>use_ssl?</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000175-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000184-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000175-source'><span class="ruby-comment cmt"># File lib/capricorn/system/config.rb, line 30</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">use_ssl?</span>&#x000A;        <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:use_ssl</span>, <span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000184-source'><span class="ruby-comment cmt"># File lib/capricorn/system/config.rb, line 30</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">use_ssl?</span>&#x000A;        <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:use_ssl</span>, <span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

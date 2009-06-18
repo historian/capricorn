@@ -41,139 +41,139 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000079">err</a></li>
-              <li><a href="#M000080">out</a></li>
-              <li><a href="#M000083">redirect_std</a></li>
-              <li><a href="#M000078">setup</a></li>
-              <li><a href="#M000081">stderr</a></li>
-              <li><a href="#M000082">stdout</a></li>
+              <li><a href="#M000087">err</a></li>
+              <li><a href="#M000088">out</a></li>
+              <li><a href="#M000091">redirect_std</a></li>
+              <li><a href="#M000086">setup</a></li>
+              <li><a href="#M000089">stderr</a></li>
+              <li><a href="#M000090">stdout</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000085">log</a></li>
-              <li><a href="#M000084">logger</a></li>
-              <li><a href="#M000086">report</a></li>
+              <li><a href="#M000093">log</a></li>
+              <li><a href="#M000092">logger</a></li>
+              <li><a href="#M000094">report</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000079'>
-                <a name='M000079'>      </a>
+              <div class='public-class method' id='method-M000087'>
+                <a name='M000087'>      </a>
                 <div class='synopsis'>
                   <span class='name'>err</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000079-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000087-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000079-source'><span class="ruby-comment cmt"># File lib/capricorn/exception_handler.rb, line 26</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">err</span>&#x000A;      <span class="ruby-ivar">@err</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000087-source'><span class="ruby-comment cmt"># File lib/capricorn/exception_handler.rb, line 26</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">err</span>&#x000A;      <span class="ruby-ivar">@err</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000080'>
-                <a name='M000080'>      </a>
+              <div class='public-class method' id='method-M000088'>
+                <a name='M000088'>      </a>
                 <div class='synopsis'>
                   <span class='name'>out</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000080-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000088-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000080-source'><span class="ruby-comment cmt"># File lib/capricorn/exception_handler.rb, line 30</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">out</span>&#x000A;      <span class="ruby-ivar">@out</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000088-source'><span class="ruby-comment cmt"># File lib/capricorn/exception_handler.rb, line 30</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">out</span>&#x000A;      <span class="ruby-ivar">@out</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000083'>
-                <a name='M000083'>      </a>
+              <div class='public-class method' id='method-M000091'>
+                <a name='M000091'>      </a>
                 <div class='synopsis'>
                   <span class='name'>redirect_std</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000083-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000091-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000083-source'><span class="ruby-comment cmt"># File lib/capricorn/exception_handler.rb, line 42</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">redirect_std</span>&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">STDOUT</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">stdout</span>&#x000A;        <span class="ruby-constant">STDOUT</span>.<span class="ruby-identifier">reopen</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">stdout</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      &#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">STDERR</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">stderr</span>&#x000A;        <span class="ruby-constant">STDERR</span>.<span class="ruby-identifier">reopen</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">stderr</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      &#x000A;      <span class="ruby-constant">STDIN</span>.<span class="ruby-identifier">reopen</span> <span class="ruby-value str">&quot;/dev/null&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000091-source'><span class="ruby-comment cmt"># File lib/capricorn/exception_handler.rb, line 42</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">redirect_std</span>&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">STDOUT</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">stdout</span>&#x000A;        <span class="ruby-constant">STDOUT</span>.<span class="ruby-identifier">reopen</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">stdout</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      &#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">STDERR</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">stderr</span>&#x000A;        <span class="ruby-constant">STDERR</span>.<span class="ruby-identifier">reopen</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">stderr</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      &#x000A;      <span class="ruby-constant">STDIN</span>.<span class="ruby-identifier">reopen</span> <span class="ruby-value str">&quot;/dev/null&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000078'>
-                <a name='M000078'>      </a>
+              <div class='public-class method' id='method-M000086'>
+                <a name='M000086'>      </a>
                 <div class='synopsis'>
                   <span class='name'>setup</span>
                   <span class='arguments'>(out=STDOUT, err=STDERR)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000078-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000086-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000078-source'><span class="ruby-comment cmt"># File lib/capricorn/exception_handler.rb, line 5</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">setup</span>(<span class="ruby-identifier">out</span>=<span class="ruby-constant">STDOUT</span>, <span class="ruby-identifier">err</span>=<span class="ruby-constant">STDERR</span>)&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">String</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">out</span>&#x000A;        <span class="ruby-ivar">@out</span>    = <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">out</span>, <span class="ruby-value str">'daily'</span>)&#x000A;        <span class="ruby-ivar">@stdout</span> = <span class="ruby-ivar">@out</span>.<span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-value str">'@logdev'</span>).<span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-value str">'@dev'</span>)&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-ivar">@out</span>    = <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">out</span>)&#x000A;        <span class="ruby-ivar">@stdout</span> = <span class="ruby-identifier">out</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      &#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">String</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">err</span>&#x000A;        <span class="ruby-ivar">@err</span> = <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">err</span>, <span class="ruby-value str">'daily'</span>)&#x000A;        <span class="ruby-ivar">@stderr</span> = <span class="ruby-ivar">@err</span>.<span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-value str">'@logdev'</span>).<span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-value str">'@dev'</span>)&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-ivar">@err</span>    = <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">err</span>)&#x000A;        <span class="ruby-ivar">@stderr</span> = <span class="ruby-identifier">err</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      &#x000A;      <span class="ruby-ivar">@out</span>.<span class="ruby-identifier">level</span> = <span class="ruby-constant">Logger</span><span class="ruby-operator">::</span><span class="ruby-constant">DEBUG</span>&#x000A;      <span class="ruby-ivar">@err</span>.<span class="ruby-identifier">level</span> = <span class="ruby-constant">Logger</span><span class="ruby-operator">::</span><span class="ruby-constant">DEBUG</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000086-source'><span class="ruby-comment cmt"># File lib/capricorn/exception_handler.rb, line 5</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">setup</span>(<span class="ruby-identifier">out</span>=<span class="ruby-constant">STDOUT</span>, <span class="ruby-identifier">err</span>=<span class="ruby-constant">STDERR</span>)&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">String</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">out</span>&#x000A;        <span class="ruby-ivar">@out</span>    = <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">out</span>, <span class="ruby-value str">'daily'</span>)&#x000A;        <span class="ruby-ivar">@stdout</span> = <span class="ruby-ivar">@out</span>.<span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-value str">'@logdev'</span>).<span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-value str">'@dev'</span>)&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-ivar">@out</span>    = <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">out</span>)&#x000A;        <span class="ruby-ivar">@stdout</span> = <span class="ruby-identifier">out</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      &#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">String</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">err</span>&#x000A;        <span class="ruby-ivar">@err</span> = <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">err</span>, <span class="ruby-value str">'daily'</span>)&#x000A;        <span class="ruby-ivar">@stderr</span> = <span class="ruby-ivar">@err</span>.<span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-value str">'@logdev'</span>).<span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-value str">'@dev'</span>)&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-ivar">@err</span>    = <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">err</span>)&#x000A;        <span class="ruby-ivar">@stderr</span> = <span class="ruby-identifier">err</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      &#x000A;      <span class="ruby-ivar">@out</span>.<span class="ruby-identifier">level</span> = <span class="ruby-constant">Logger</span><span class="ruby-operator">::</span><span class="ruby-constant">DEBUG</span>&#x000A;      <span class="ruby-ivar">@err</span>.<span class="ruby-identifier">level</span> = <span class="ruby-constant">Logger</span><span class="ruby-operator">::</span><span class="ruby-constant">DEBUG</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000081'>
-                <a name='M000081'>      </a>
+              <div class='public-class method' id='method-M000089'>
+                <a name='M000089'>      </a>
                 <div class='synopsis'>
                   <span class='name'>stderr</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000081-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000089-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000081-source'><span class="ruby-comment cmt"># File lib/capricorn/exception_handler.rb, line 34</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">stderr</span>&#x000A;      <span class="ruby-ivar">@stderr</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000089-source'><span class="ruby-comment cmt"># File lib/capricorn/exception_handler.rb, line 34</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">stderr</span>&#x000A;      <span class="ruby-ivar">@stderr</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000082'>
-                <a name='M000082'>      </a>
+              <div class='public-class method' id='method-M000090'>
+                <a name='M000090'>      </a>
                 <div class='synopsis'>
                   <span class='name'>stdout</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000082-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000090-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000082-source'><span class="ruby-comment cmt"># File lib/capricorn/exception_handler.rb, line 38</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">stdout</span>&#x000A;      <span class="ruby-ivar">@stdout</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000090-source'><span class="ruby-comment cmt"># File lib/capricorn/exception_handler.rb, line 38</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">stdout</span>&#x000A;      <span class="ruby-ivar">@stdout</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000085'>
-                <a name='M000085'>      </a>
+              <div class='public-instance method' id='method-M000093'>
+                <a name='M000093'>      </a>
                 <div class='synopsis'>
                   <span class='name'>log</span>
                   <span class='arguments'>(*args, &amp;block)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000085-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000093-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000085-source'><span class="ruby-comment cmt"># File lib/capricorn/exception_handler.rb, line 58</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">log</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">out</span>.<span class="ruby-identifier">info</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000093-source'><span class="ruby-comment cmt"># File lib/capricorn/exception_handler.rb, line 58</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">log</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-identifier">args</span> = [<span class="ruby-identifier">args</span>.<span class="ruby-identifier">inspect</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span> <span class="ruby-keyword kw">and</span> <span class="ruby-constant">Array</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>&#x000A;      <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">out</span>.<span class="ruby-identifier">info</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000084'>
-                <a name='M000084'>      </a>
+              <div class='public-instance method' id='method-M000092'>
+                <a name='M000092'>      </a>
                 <div class='synopsis'>
                   <span class='name'>logger</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000084-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000092-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000084-source'><span class="ruby-comment cmt"># File lib/capricorn/exception_handler.rb, line 54</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">logger</span>&#x000A;      <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">ExceptionHandler</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000092-source'><span class="ruby-comment cmt"># File lib/capricorn/exception_handler.rb, line 54</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">logger</span>&#x000A;      <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">ExceptionHandler</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000086'>
-                <a name='M000086'>      </a>
+              <div class='public-instance method' id='method-M000094'>
+                <a name='M000094'>      </a>
                 <div class='synopsis'>
                   <span class='name'>report</span>
                   <span class='arguments'>() {|| ...}</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000086-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000094-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000086-source'><span class="ruby-comment cmt"># File lib/capricorn/exception_handler.rb, line 62</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">report</span>&#x000A;      <span class="ruby-keyword kw">yield</span>&#x000A;    <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">StandardError</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">e</span>&#x000A;        <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">err</span>.<span class="ruby-identifier">error</span>(<span class="ruby-identifier">e</span>)&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">err</span>.<span class="ruby-identifier">fatal</span>(<span class="ruby-identifier">e</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">raise</span> <span class="ruby-identifier">e</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000094-source'><span class="ruby-comment cmt"># File lib/capricorn/exception_handler.rb, line 63</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">report</span>&#x000A;      <span class="ruby-keyword kw">yield</span>&#x000A;    <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">StandardError</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">e</span>&#x000A;        <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">err</span>.<span class="ruby-identifier">error</span>(<span class="ruby-identifier">e</span>)&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">err</span>.<span class="ruby-identifier">fatal</span>(<span class="ruby-identifier">e</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">raise</span> <span class="ruby-identifier">e</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

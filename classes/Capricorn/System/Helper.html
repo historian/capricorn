@@ -41,23 +41,23 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000193">use</a></li>
+              <li><a href="#M000202">use</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000193'>
-                <a name='M000193'>      </a>
+              <div class='public-instance method' id='method-M000202'>
+                <a name='M000202'>      </a>
                 <div class='synopsis'>
                   <span class='name'>use</span>
                   <span class='arguments'>(actor)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000193-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000202-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000193-source'><span class="ruby-comment cmt"># File lib/capricorn/system/helper.rb, line 6</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">use</span>(<span class="ruby-identifier">actor</span>)&#x000A;        <span class="ruby-identifier">actor_klass</span>  = (<span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">Actors</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">actor</span>) <span class="ruby-keyword kw">rescue</span> <span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Actor not found! (#{actor})&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">actor_klass</span>&#x000A;        &#x000A;        <span class="ruby-identifier">actor_helper</span> = (<span class="ruby-identifier">actor_klass</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-value str">'Helper'</span>) <span class="ruby-keyword kw">rescue</span> <span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-identifier">extend</span> <span class="ruby-identifier">actor_helper</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">actor_helper</span>&#x000A;        &#x000A;        <span class="ruby-identifier">actor_config</span> = (<span class="ruby-identifier">actor_klass</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-value str">'Config'</span>) <span class="ruby-keyword kw">rescue</span> <span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-identifier">extend</span> <span class="ruby-identifier">actor_config</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">actor_config</span>&#x000A;        &#x000A;        <span class="ruby-ivar">@actors</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">actor_klass</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000202-source'><span class="ruby-comment cmt"># File lib/capricorn/system/helper.rb, line 6</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">use</span>(<span class="ruby-identifier">actor</span>)&#x000A;        <span class="ruby-identifier">actor_klass</span>  = (<span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">Actors</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">actor</span>) <span class="ruby-keyword kw">rescue</span> <span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Actor not found! (#{actor})&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">actor_klass</span>&#x000A;        &#x000A;        <span class="ruby-identifier">actor_helper</span> = (<span class="ruby-identifier">actor_klass</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-value str">'Helper'</span>) <span class="ruby-keyword kw">rescue</span> <span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-identifier">extend</span> <span class="ruby-identifier">actor_helper</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">actor_helper</span>&#x000A;        &#x000A;        <span class="ruby-identifier">actor_config</span> = (<span class="ruby-identifier">actor_klass</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-value str">'Config'</span>) <span class="ruby-keyword kw">rescue</span> <span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-identifier">extend</span> <span class="ruby-identifier">actor_config</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">actor_config</span>&#x000A;        &#x000A;        <span class="ruby-ivar">@actors</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">actor_klass</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

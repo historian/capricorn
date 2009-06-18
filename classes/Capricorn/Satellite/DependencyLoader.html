@@ -45,15 +45,15 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000099">load_for</a></li>
-              <li><a href="#M000100">new</a></li>
+              <li><a href="#M000127">load_for</a></li>
+              <li><a href="#M000128">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000101">add_dependecies!</a></li>
-              <li><a href="#M000103">each</a></li>
-              <li><a href="#M000102">order_by_dependecies!</a></li>
-              <li><a href="#M000104">reverse_each</a></li>
+              <li><a href="#M000129">add_dependecies!</a></li>
+              <li><a href="#M000131">each</a></li>
+              <li><a href="#M000130">order_by_dependecies!</a></li>
+              <li><a href="#M000132">reverse_each</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -89,83 +89,83 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000099'>
-                <a name='M000099'>      </a>
+              <div class='public-class method' id='method-M000127'>
+                <a name='M000127'>      </a>
                 <div class='synopsis'>
                   <span class='name'>load_for</span>
                   <span class='arguments'>(engines)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000099-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000127-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000099-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/dependency_loader.rb, line 9</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">load_for</span>(<span class="ruby-identifier">engines</span>)&#x000A;        <span class="ruby-identifier">dependency_loader</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">engines</span>)&#x000A;        <span class="ruby-identifier">dependency_loader</span>.<span class="ruby-identifier">add_dependecies!</span>&#x000A;        <span class="ruby-identifier">dependency_loader</span>.<span class="ruby-identifier">order_by_dependecies!</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">dependency_loader</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000127-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/dependency_loader.rb, line 9</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">load_for</span>(<span class="ruby-identifier">engines</span>)&#x000A;        <span class="ruby-identifier">dependency_loader</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">engines</span>)&#x000A;        <span class="ruby-identifier">dependency_loader</span>.<span class="ruby-identifier">add_dependecies!</span>&#x000A;        <span class="ruby-identifier">dependency_loader</span>.<span class="ruby-identifier">order_by_dependecies!</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">dependency_loader</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000100'>
-                <a name='M000100'>      </a>
+              <div class='public-class method' id='method-M000128'>
+                <a name='M000128'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(engines)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000100-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000128-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000100-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/dependency_loader.rb, line 17</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">engines</span>)&#x000A;        <span class="ruby-identifier">specs</span> = <span class="ruby-identifier">engines</span>.<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">s</span> = <span class="ruby-constant">Gem</span>.<span class="ruby-identifier">source_index</span>.<span class="ruby-identifier">find_name</span>(<span class="ruby-identifier">k</span>, <span class="ruby-constant">Gem</span><span class="ruby-operator">::</span><span class="ruby-constant">Requirement</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">r</span>[<span class="ruby-identifier">:version</span>] <span class="ruby-operator">||</span> <span class="ruby-value str">&quot;&gt;= 0.0.0&quot;</span>))&#x000A;          <span class="ruby-identifier">s</span>.<span class="ruby-identifier">last</span>&#x000A;        <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">compact</span>&#x000A;        &#x000A;        <span class="ruby-ivar">@names</span> = <span class="ruby-identifier">specs</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">spec</span><span class="ruby-operator">|</span> <span class="ruby-identifier">spec</span>.<span class="ruby-identifier">name</span> }&#x000A;        <span class="ruby-ivar">@specs</span> = <span class="ruby-identifier">specs</span>.<span class="ruby-identifier">inject</span>({}) { <span class="ruby-operator">|</span><span class="ruby-identifier">h</span>, <span class="ruby-identifier">spec</span><span class="ruby-operator">|</span> <span class="ruby-identifier">h</span>[<span class="ruby-identifier">spec</span>.<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">spec</span> ; <span class="ruby-identifier">h</span> }&#x000A;        <span class="ruby-ivar">@engines</span> = <span class="ruby-identifier">engines</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000128-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/dependency_loader.rb, line 17</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">engines</span>)&#x000A;        <span class="ruby-identifier">original_paths</span> = [<span class="ruby-constant">Gem</span>.<span class="ruby-identifier">path</span>].<span class="ruby-identifier">flatten</span>&#x000A;        <span class="ruby-constant">Gem</span>.<span class="ruby-identifier">refresh</span>&#x000A;        <span class="ruby-constant">Gem</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">:set_paths</span>, <span class="ruby-identifier">original_paths</span>.<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">File</span><span class="ruby-operator">::</span><span class="ruby-constant">PATH_SEPARATOR</span>))&#x000A;        &#x000A;        <span class="ruby-identifier">specs</span> = <span class="ruby-identifier">engines</span>.<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">s</span> = <span class="ruby-constant">Gem</span>.<span class="ruby-identifier">source_index</span>.<span class="ruby-identifier">find_name</span>(<span class="ruby-identifier">k</span>, <span class="ruby-constant">Gem</span><span class="ruby-operator">::</span><span class="ruby-constant">Requirement</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">r</span>[<span class="ruby-identifier">:version</span>] <span class="ruby-operator">||</span> <span class="ruby-value str">&quot;&gt;= 0.0.0&quot;</span>))&#x000A;          <span class="ruby-identifier">s</span>.<span class="ruby-identifier">last</span>&#x000A;        <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">compact</span>&#x000A;        &#x000A;        <span class="ruby-ivar">@names</span> = <span class="ruby-identifier">specs</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">spec</span><span class="ruby-operator">|</span> <span class="ruby-identifier">spec</span>.<span class="ruby-identifier">name</span> }&#x000A;        <span class="ruby-ivar">@specs</span> = <span class="ruby-identifier">specs</span>.<span class="ruby-identifier">inject</span>({}) { <span class="ruby-operator">|</span><span class="ruby-identifier">h</span>, <span class="ruby-identifier">spec</span><span class="ruby-operator">|</span> <span class="ruby-identifier">h</span>[<span class="ruby-identifier">spec</span>.<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">spec</span> ; <span class="ruby-identifier">h</span> }&#x000A;        <span class="ruby-ivar">@engines</span> = <span class="ruby-identifier">engines</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000101'>
-                <a name='M000101'>      </a>
+              <div class='public-instance method' id='method-M000129'>
+                <a name='M000129'>      </a>
                 <div class='synopsis'>
                   <span class='name'>add_dependecies!</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000101-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000129-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000101-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/dependency_loader.rb, line 28</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_dependecies!</span>&#x000A;        <span class="ruby-ivar">@specs</span>.<span class="ruby-identifier">values</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">spec</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">add_dependecies_for</span> <span class="ruby-identifier">spec</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000129-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/dependency_loader.rb, line 32</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_dependecies!</span>&#x000A;        <span class="ruby-ivar">@specs</span>.<span class="ruby-identifier">values</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">spec</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">add_dependecies_for</span> <span class="ruby-identifier">spec</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000103'>
-                <a name='M000103'>      </a>
+              <div class='public-instance method' id='method-M000131'>
+                <a name='M000131'>      </a>
                 <div class='synopsis'>
                   <span class='name'>each</span>
                   <span class='arguments'>() {|@specs[name]| ...}</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000103-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000131-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000103-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/dependency_loader.rb, line 38</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each</span>&#x000A;        <span class="ruby-ivar">@names</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-keyword kw">yield</span>(<span class="ruby-ivar">@specs</span>[<span class="ruby-identifier">name</span>])&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000131-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/dependency_loader.rb, line 42</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each</span>&#x000A;        <span class="ruby-ivar">@names</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-keyword kw">yield</span>(<span class="ruby-ivar">@specs</span>[<span class="ruby-identifier">name</span>])&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000102'>
-                <a name='M000102'>      </a>
+              <div class='public-instance method' id='method-M000130'>
+                <a name='M000130'>      </a>
                 <div class='synopsis'>
                   <span class='name'>order_by_dependecies!</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000102-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000130-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000102-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/dependency_loader.rb, line 34</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">order_by_dependecies!</span>&#x000A;        <span class="ruby-ivar">@names</span> = <span class="ruby-identifier">tsort</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000130-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/dependency_loader.rb, line 38</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">order_by_dependecies!</span>&#x000A;        <span class="ruby-ivar">@names</span> = <span class="ruby-identifier">tsort</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000104'>
-                <a name='M000104'>      </a>
+              <div class='public-instance method' id='method-M000132'>
+                <a name='M000132'>      </a>
                 <div class='synopsis'>
                   <span class='name'>reverse_each</span>
                   <span class='arguments'>() {|@specs[name]| ...}</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000104-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000132-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000104-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/dependency_loader.rb, line 44</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reverse_each</span>&#x000A;        <span class="ruby-ivar">@names</span>.<span class="ruby-identifier">reverse</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-keyword kw">yield</span>(<span class="ruby-ivar">@specs</span>[<span class="ruby-identifier">name</span>])&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000132-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/dependency_loader.rb, line 48</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reverse_each</span>&#x000A;        <span class="ruby-ivar">@names</span>.<span class="ruby-identifier">reverse</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-keyword kw">yield</span>(<span class="ruby-ivar">@specs</span>[<span class="ruby-identifier">name</span>])&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

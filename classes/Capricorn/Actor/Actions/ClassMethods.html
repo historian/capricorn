@@ -41,18 +41,18 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000133">action</a></li>
-              <li><a href="#M000131">after</a></li>
-              <li><a href="#M000129">before</a></li>
-              <li><a href="#M000132">methods_for</a></li>
-              <li><a href="#M000130">on</a></li>
+              <li><a href="#M000141">action</a></li>
+              <li><a href="#M000139">after</a></li>
+              <li><a href="#M000137">before</a></li>
+              <li><a href="#M000140">methods_for</a></li>
+              <li><a href="#M000138">on</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000133'>
-                <a name='M000133'>      </a>
+              <div class='public-instance method' id='method-M000141'>
+                <a name='M000141'>      </a>
                 <div class='synopsis'>
                   <span class='name'>action</span>
                   <span class='arguments'>(*names)</span>
@@ -63,14 +63,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000133-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000141-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000133-source'><span class="ruby-comment cmt"># File lib/capricorn/actor/actions.rb, line 54</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">action</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">names</span>)&#x000A;          <span class="ruby-identifier">names</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-identifier">module_eval</span> <span class="ruby-node">%{&#x000A;              def self.before_#{name}(meth)&#x000A;                before(:#{name}, meth)&#x000A;              end&#x000A;              def self.on_#{name}(meth)&#x000A;                on(:#{name}, meth)&#x000A;              end&#x000A;              def self.after_#{name}(meth)&#x000A;                after(:#{name}, meth)&#x000A;              end&#x000A;              def run_#{name}_callbacks!&#x000A;                run_callbacks!(:#{name})&#x000A;              end&#x000A;            }</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000141-source'><span class="ruby-comment cmt"># File lib/capricorn/actor/actions.rb, line 54</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">action</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">names</span>)&#x000A;          <span class="ruby-identifier">names</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-identifier">module_eval</span> <span class="ruby-node">%{&#x000A;              def self.before_#{name}(meth)&#x000A;                before(:#{name}, meth)&#x000A;              end&#x000A;              def self.on_#{name}(meth)&#x000A;                on(:#{name}, meth)&#x000A;              end&#x000A;              def self.after_#{name}(meth)&#x000A;                after(:#{name}, meth)&#x000A;              end&#x000A;              def run_#{name}_callbacks!&#x000A;                run_callbacks!(:#{name})&#x000A;              end&#x000A;            }</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000131'>
-                <a name='M000131'>      </a>
+              <div class='public-instance method' id='method-M000139'>
+                <a name='M000139'>      </a>
                 <div class='synopsis'>
                   <span class='name'>after</span>
                   <span class='arguments'>(action, meth)</span>
@@ -81,14 +81,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000131-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000139-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000131-source'><span class="ruby-comment cmt"># File lib/capricorn/actor/actions.rb, line 38</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">after</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">meth</span>)&#x000A;          <span class="ruby-identifier">methods_for</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">:after</span>).<span class="ruby-identifier">push</span>(<span class="ruby-identifier">meth</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000139-source'><span class="ruby-comment cmt"># File lib/capricorn/actor/actions.rb, line 38</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">after</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">meth</span>)&#x000A;          <span class="ruby-identifier">methods_for</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">:after</span>).<span class="ruby-identifier">push</span>(<span class="ruby-identifier">meth</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000129'>
-                <a name='M000129'>      </a>
+              <div class='public-instance method' id='method-M000137'>
+                <a name='M000137'>      </a>
                 <div class='synopsis'>
                   <span class='name'>before</span>
                   <span class='arguments'>(action, meth)</span>
@@ -99,14 +99,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000129-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000137-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000129-source'><span class="ruby-comment cmt"># File lib/capricorn/actor/actions.rb, line 28</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">meth</span>)&#x000A;          <span class="ruby-identifier">methods_for</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">:before</span>).<span class="ruby-identifier">push</span>(<span class="ruby-identifier">meth</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000137-source'><span class="ruby-comment cmt"># File lib/capricorn/actor/actions.rb, line 28</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">meth</span>)&#x000A;          <span class="ruby-identifier">methods_for</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">:before</span>).<span class="ruby-identifier">push</span>(<span class="ruby-identifier">meth</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000132'>
-                <a name='M000132'>      </a>
+              <div class='public-instance method' id='method-M000140'>
+                <a name='M000140'>      </a>
                 <div class='synopsis'>
                   <span class='name'>methods_for</span>
                   <span class='arguments'>(action, fase)</span>
@@ -117,14 +117,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000132-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000140-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000132-source'><span class="ruby-comment cmt"># File lib/capricorn/actor/actions.rb, line 43</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">methods_for</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">fase</span>)&#x000A;          <span class="ruby-identifier">action</span> = <span class="ruby-identifier">action</span>.<span class="ruby-identifier">to_sym</span>&#x000A;          <span class="ruby-identifier">fase</span>   = <span class="ruby-identifier">fase</span>.<span class="ruby-identifier">to_sym</span>&#x000A;          &#x000A;          <span class="ruby-ivar">@actions</span> <span class="ruby-operator">||=</span> {}&#x000A;          <span class="ruby-ivar">@actions</span>[<span class="ruby-identifier">action</span>] <span class="ruby-operator">||=</span> {}&#x000A;          <span class="ruby-ivar">@actions</span>[<span class="ruby-identifier">action</span>][<span class="ruby-identifier">fase</span>] <span class="ruby-operator">||=</span> []&#x000A;          <span class="ruby-ivar">@actions</span>[<span class="ruby-identifier">action</span>][<span class="ruby-identifier">fase</span>]&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000140-source'><span class="ruby-comment cmt"># File lib/capricorn/actor/actions.rb, line 43</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">methods_for</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">fase</span>)&#x000A;          <span class="ruby-identifier">action</span> = <span class="ruby-identifier">action</span>.<span class="ruby-identifier">to_sym</span>&#x000A;          <span class="ruby-identifier">fase</span>   = <span class="ruby-identifier">fase</span>.<span class="ruby-identifier">to_sym</span>&#x000A;          &#x000A;          <span class="ruby-ivar">@actions</span> <span class="ruby-operator">||=</span> {}&#x000A;          <span class="ruby-ivar">@actions</span>[<span class="ruby-identifier">action</span>] <span class="ruby-operator">||=</span> {}&#x000A;          <span class="ruby-ivar">@actions</span>[<span class="ruby-identifier">action</span>][<span class="ruby-identifier">fase</span>] <span class="ruby-operator">||=</span> []&#x000A;          <span class="ruby-ivar">@actions</span>[<span class="ruby-identifier">action</span>][<span class="ruby-identifier">fase</span>]&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000130'>
-                <a name='M000130'>      </a>
+              <div class='public-instance method' id='method-M000138'>
+                <a name='M000138'>      </a>
                 <div class='synopsis'>
                   <span class='name'>on</span>
                   <span class='arguments'>(action, meth)</span>
@@ -135,10 +135,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000130-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000138-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000130-source'><span class="ruby-comment cmt"># File lib/capricorn/actor/actions.rb, line 33</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">on</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">meth</span>)&#x000A;          <span class="ruby-identifier">methods_for</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">:on</span>).<span class="ruby-identifier">push</span>(<span class="ruby-identifier">meth</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000138-source'><span class="ruby-comment cmt"># File lib/capricorn/actor/actions.rb, line 33</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">on</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">meth</span>)&#x000A;          <span class="ruby-identifier">methods_for</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">:on</span>).<span class="ruby-identifier">push</span>(<span class="ruby-identifier">meth</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

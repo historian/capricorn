@@ -45,9 +45,9 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000054">remove_config_file</a></li>
-              <li><a href="#M000052">restart</a></li>
-              <li><a href="#M000053">write_config_file</a></li>
+              <li><a href="#M000057">remove_config_file</a></li>
+              <li><a href="#M000055">restart</a></li>
+              <li><a href="#M000056">write_config_file</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -57,8 +57,8 @@
             </div>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000054'>
-                <a name='M000054'>      </a>
+              <div class='public-instance method' id='method-M000057'>
+                <a name='M000057'>      </a>
                 <div class='synopsis'>
                   <span class='name'>remove_config_file</span>
                   <span class='arguments'>()</span>
@@ -69,14 +69,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000054-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000057-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000054-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/apache_actor.rb, line 36</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_config_file</span>&#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">unlink</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">apache_conf_path</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span> <span class="ruby-identifier">system</span>.<span class="ruby-identifier">apache_conf_path</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000057-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/apache_actor.rb, line 36</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_config_file</span>&#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">unlink</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">apache_conf_path</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span> <span class="ruby-identifier">system</span>.<span class="ruby-identifier">apache_conf_path</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000052'>
-                <a name='M000052'>      </a>
+              <div class='public-instance method' id='method-M000055'>
+                <a name='M000055'>      </a>
                 <div class='synopsis'>
                   <span class='name'>restart</span>
                   <span class='arguments'>()</span>
@@ -87,14 +87,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000052-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000055-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000052-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/apache_actor.rb, line 13</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">restart</span>&#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">run</span> <span class="ruby-node">&quot;#{system.apachectl_path} -k restart&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000055-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/apache_actor.rb, line 13</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">restart</span>&#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">run</span> <span class="ruby-node">&quot;#{system.apachectl_path} -k restart&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000053'>
-                <a name='M000053'>      </a>
+              <div class='public-instance method' id='method-M000056'>
+                <a name='M000056'>      </a>
                 <div class='synopsis'>
                   <span class='name'>write_config_file</span>
                   <span class='arguments'>()</span>
@@ -105,10 +105,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000053-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000056-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000053-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/apache_actor.rb, line 18</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write_config_file</span>&#x000A;        <span class="ruby-identifier">config</span> = <span class="ruby-node">%{&lt;VirtualHost *&gt;&#x000A;  ServerName #{satellite.domain}&#x000A;  &#x000A;  ErrorLog   logs/#{satellite.domain}.error.log&#x000A;  CustomLog  logs/#{satellite.domain}.access.log common&#x000A;  DocumentRoot #{system.satellite_root}/public&#x000A;  &lt;Directory &quot;#{system.satellite_root}/public&quot;&gt;&#x000A;    Options All&#x000A;    AllowOverride All&#x000A;    Order allow,deny&#x000A;    Allow from all&#x000A;  &lt;/Directory&gt;&#x000A;&lt;/VirtualHost&gt;}</span>&#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">apache_conf_path</span>, <span class="ruby-value str">'w+'</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span> <span class="ruby-identifier">config</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000056-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/apache_actor.rb, line 18</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write_config_file</span>&#x000A;        <span class="ruby-identifier">config</span> = <span class="ruby-node">%{&lt;VirtualHost *&gt;&#x000A;  ServerName #{satellite.domain}&#x000A;  &#x000A;  ErrorLog   logs/#{satellite.domain}.error.log&#x000A;  CustomLog  logs/#{satellite.domain}.access.log common&#x000A;  DocumentRoot #{system.satellite_root}/public&#x000A;  &lt;Directory &quot;#{system.satellite_root}/public&quot;&gt;&#x000A;    Options All&#x000A;    AllowOverride All&#x000A;    Order allow,deny&#x000A;    Allow from all&#x000A;  &lt;/Directory&gt;&#x000A;&lt;/VirtualHost&gt;}</span>&#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">apache_conf_path</span>, <span class="ruby-value str">'w+'</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span> <span class="ruby-identifier">config</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

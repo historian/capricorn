@@ -41,107 +41,107 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000157">option</a></li>
-              <li><a href="#M000161">resolve_options!</a></li>
-              <li><a href="#M000163">resolve_options_for_satellite!</a></li>
-              <li><a href="#M000162">resolve_options_for_system!</a></li>
-              <li><a href="#M000160">resolve_options_with</a></li>
-              <li><a href="#M000158">satellite_option</a></li>
-              <li><a href="#M000159">set_satellite_option</a></li>
+              <li><a href="#M000166">option</a></li>
+              <li><a href="#M000170">resolve_options!</a></li>
+              <li><a href="#M000172">resolve_options_for_satellite!</a></li>
+              <li><a href="#M000171">resolve_options_for_system!</a></li>
+              <li><a href="#M000169">resolve_options_with</a></li>
+              <li><a href="#M000167">satellite_option</a></li>
+              <li><a href="#M000168">set_satellite_option</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000157'>
-                <a name='M000157'>      </a>
+              <div class='public-instance method' id='method-M000166'>
+                <a name='M000166'>      </a>
                 <div class='synopsis'>
                   <span class='name'>option</span>
                   <span class='arguments'>(name, proc, &amp;handler)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000157-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000166-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000157-source'><span class="ruby-comment cmt"># File lib/capricorn/system/options.rb, line 6</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">option</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">proc</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">handler</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">proc</span>&#x000A;          <span class="ruby-ivar">@option_descriptors</span>.<span class="ruby-identifier">push</span>({&#x000A;            <span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>,&#x000A;            <span class="ruby-identifier">:proc</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">proc</span>,&#x000A;            <span class="ruby-identifier">:handler</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">handler</span>&#x000A;          })&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">handler</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@options</span>.<span class="ruby-identifier">key?</span>(<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;            <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">handler</span>.<span class="ruby-identifier">call</span>(<span class="ruby-keyword kw">nil</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>]&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000166-source'><span class="ruby-comment cmt"># File lib/capricorn/system/options.rb, line 6</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">option</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">proc</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">handler</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">proc</span>&#x000A;          <span class="ruby-ivar">@option_descriptors</span>.<span class="ruby-identifier">push</span>({&#x000A;            <span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>,&#x000A;            <span class="ruby-identifier">:proc</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">proc</span>,&#x000A;            <span class="ruby-identifier">:handler</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">handler</span>&#x000A;          })&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">handler</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@options</span>.<span class="ruby-identifier">key?</span>(<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;            <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">handler</span>.<span class="ruby-identifier">call</span>(<span class="ruby-keyword kw">nil</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>]&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000161'>
-                <a name='M000161'>      </a>
+              <div class='public-instance method' id='method-M000170'>
+                <a name='M000170'>      </a>
                 <div class='synopsis'>
                   <span class='name'>resolve_options!</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000161-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000170-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000161-source'><span class="ruby-comment cmt"># File lib/capricorn/system/options.rb, line 52</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">resolve_options!</span>&#x000A;        <span class="ruby-identifier">resolve_options_for_system!</span>&#x000A;        <span class="ruby-identifier">resolve_options_for_satellite!</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000170-source'><span class="ruby-comment cmt"># File lib/capricorn/system/options.rb, line 52</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">resolve_options!</span>&#x000A;        <span class="ruby-identifier">resolve_options_for_system!</span>&#x000A;        <span class="ruby-identifier">resolve_options_for_satellite!</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000163'>
-                <a name='M000163'>      </a>
+              <div class='public-instance method' id='method-M000172'>
+                <a name='M000172'>      </a>
                 <div class='synopsis'>
                   <span class='name'>resolve_options_for_satellite!</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000163-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000172-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000163-source'><span class="ruby-comment cmt"># File lib/capricorn/system/options.rb, line 66</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">resolve_options_for_satellite!</span>&#x000A;        <span class="ruby-ivar">@satellite_options</span> = {}&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@current_satellite</span>&#x000A;          <span class="ruby-ivar">@satellite_option_descriptors</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">option</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-identifier">value</span> = <span class="ruby-identifier">option</span>[<span class="ruby-identifier">:proc</span>].<span class="ruby-identifier">call</span>(<span class="ruby-ivar">@current_satellite</span>)           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">option</span>[<span class="ruby-identifier">:proc</span>]&#x000A;            <span class="ruby-identifier">value</span> = <span class="ruby-identifier">option</span>[<span class="ruby-identifier">:handler</span>].<span class="ruby-identifier">call</span>(<span class="ruby-ivar">@current_satellite</span>, <span class="ruby-identifier">value</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">option</span>[<span class="ruby-identifier">:handler</span>]&#x000A;            <span class="ruby-ivar">@satellite_options</span>[<span class="ruby-identifier">option</span>[<span class="ruby-identifier">:name</span>]] = <span class="ruby-identifier">value</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000172-source'><span class="ruby-comment cmt"># File lib/capricorn/system/options.rb, line 66</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">resolve_options_for_satellite!</span>&#x000A;        <span class="ruby-ivar">@satellite_options</span> = {}&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@current_satellite</span>&#x000A;          <span class="ruby-ivar">@satellite_option_descriptors</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">option</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-identifier">value</span> = <span class="ruby-identifier">option</span>[<span class="ruby-identifier">:proc</span>].<span class="ruby-identifier">call</span>(<span class="ruby-ivar">@current_satellite</span>)           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">option</span>[<span class="ruby-identifier">:proc</span>]&#x000A;            <span class="ruby-identifier">value</span> = <span class="ruby-identifier">option</span>[<span class="ruby-identifier">:handler</span>].<span class="ruby-identifier">call</span>(<span class="ruby-ivar">@current_satellite</span>, <span class="ruby-identifier">value</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">option</span>[<span class="ruby-identifier">:handler</span>]&#x000A;            <span class="ruby-ivar">@satellite_options</span>[<span class="ruby-identifier">option</span>[<span class="ruby-identifier">:name</span>]] = <span class="ruby-identifier">value</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000162'>
-                <a name='M000162'>      </a>
+              <div class='public-instance method' id='method-M000171'>
+                <a name='M000171'>      </a>
                 <div class='synopsis'>
                   <span class='name'>resolve_options_for_system!</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000162-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000171-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000162-source'><span class="ruby-comment cmt"># File lib/capricorn/system/options.rb, line 57</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">resolve_options_for_system!</span>&#x000A;        <span class="ruby-ivar">@options</span> = {}&#x000A;        <span class="ruby-ivar">@option_descriptors</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">option</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">value</span> = <span class="ruby-identifier">option</span>[<span class="ruby-identifier">:proc</span>].<span class="ruby-identifier">call</span>           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">option</span>[<span class="ruby-identifier">:proc</span>]&#x000A;          <span class="ruby-identifier">value</span> = <span class="ruby-identifier">option</span>[<span class="ruby-identifier">:handler</span>].<span class="ruby-identifier">call</span>(<span class="ruby-identifier">value</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">option</span>[<span class="ruby-identifier">:handler</span>]&#x000A;          <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">option</span>[<span class="ruby-identifier">:name</span>]] = <span class="ruby-identifier">value</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000171-source'><span class="ruby-comment cmt"># File lib/capricorn/system/options.rb, line 57</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">resolve_options_for_system!</span>&#x000A;        <span class="ruby-ivar">@options</span> = {}&#x000A;        <span class="ruby-ivar">@option_descriptors</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">option</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">value</span> = <span class="ruby-identifier">option</span>[<span class="ruby-identifier">:proc</span>].<span class="ruby-identifier">call</span>           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">option</span>[<span class="ruby-identifier">:proc</span>]&#x000A;          <span class="ruby-identifier">value</span> = <span class="ruby-identifier">option</span>[<span class="ruby-identifier">:handler</span>].<span class="ruby-identifier">call</span>(<span class="ruby-identifier">value</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">option</span>[<span class="ruby-identifier">:handler</span>]&#x000A;          <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">option</span>[<span class="ruby-identifier">:name</span>]] = <span class="ruby-identifier">value</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000160'>
-                <a name='M000160'>      </a>
+              <div class='public-instance method' id='method-M000169'>
+                <a name='M000169'>      </a>
                 <div class='synopsis'>
                   <span class='name'>resolve_options_with</span>
                   <span class='arguments'>(satellite) {|| ...}</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000160-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000169-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000160-source'><span class="ruby-comment cmt"># File lib/capricorn/system/options.rb, line 40</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">resolve_options_with</span>(<span class="ruby-identifier">satellite</span>)&#x000A;        <span class="ruby-ivar">@current_satellite</span> = <span class="ruby-identifier">satellite</span>&#x000A;        <span class="ruby-identifier">resolve_options!</span>&#x000A;        &#x000A;        <span class="ruby-identifier">result</span> = <span class="ruby-keyword kw">yield</span>&#x000A;        &#x000A;        <span class="ruby-ivar">@current_satellite</span> = <span class="ruby-keyword kw">nil</span>&#x000A;        <span class="ruby-identifier">resolve_options!</span>&#x000A;        &#x000A;        <span class="ruby-identifier">result</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000169-source'><span class="ruby-comment cmt"># File lib/capricorn/system/options.rb, line 40</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">resolve_options_with</span>(<span class="ruby-identifier">satellite</span>)&#x000A;        <span class="ruby-ivar">@current_satellite</span> = <span class="ruby-identifier">satellite</span>&#x000A;        <span class="ruby-identifier">resolve_options!</span>&#x000A;        &#x000A;        <span class="ruby-identifier">result</span> = <span class="ruby-keyword kw">yield</span>&#x000A;        &#x000A;        <span class="ruby-ivar">@current_satellite</span> = <span class="ruby-keyword kw">nil</span>&#x000A;        <span class="ruby-identifier">resolve_options!</span>&#x000A;        &#x000A;        <span class="ruby-identifier">result</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000158'>
-                <a name='M000158'>      </a>
+              <div class='public-instance method' id='method-M000167'>
+                <a name='M000167'>      </a>
                 <div class='synopsis'>
                   <span class='name'>satellite_option</span>
                   <span class='arguments'>(name, proc, &amp;handler)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000158-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000167-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000158-source'><span class="ruby-comment cmt"># File lib/capricorn/system/options.rb, line 21</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">satellite_option</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">proc</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">handler</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">proc</span>&#x000A;          <span class="ruby-ivar">@satellite_option_descriptors</span>.<span class="ruby-identifier">push</span>({&#x000A;            <span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>,&#x000A;            <span class="ruby-identifier">:proc</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">proc</span>,&#x000A;            <span class="ruby-identifier">:handler</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">handler</span>&#x000A;          })&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">handler</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@satellite_options</span>.<span class="ruby-identifier">key?</span>(<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;            <span class="ruby-ivar">@satellite_options</span>[<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">handler</span>.<span class="ruby-identifier">call</span>(<span class="ruby-ivar">@current_satellite</span>, <span class="ruby-keyword kw">nil</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-ivar">@satellite_options</span>[<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>]&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000167-source'><span class="ruby-comment cmt"># File lib/capricorn/system/options.rb, line 21</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">satellite_option</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">proc</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">handler</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">proc</span>&#x000A;          <span class="ruby-ivar">@satellite_option_descriptors</span>.<span class="ruby-identifier">push</span>({&#x000A;            <span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>,&#x000A;            <span class="ruby-identifier">:proc</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">proc</span>,&#x000A;            <span class="ruby-identifier">:handler</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">handler</span>&#x000A;          })&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">handler</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@satellite_options</span>.<span class="ruby-identifier">key?</span>(<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;            <span class="ruby-ivar">@satellite_options</span>[<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">handler</span>.<span class="ruby-identifier">call</span>(<span class="ruby-ivar">@current_satellite</span>, <span class="ruby-keyword kw">nil</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-ivar">@satellite_options</span>[<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>]&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000159'>
-                <a name='M000159'>      </a>
+              <div class='public-instance method' id='method-M000168'>
+                <a name='M000168'>      </a>
                 <div class='synopsis'>
                   <span class='name'>set_satellite_option</span>
                   <span class='arguments'>(name, value)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000159-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000168-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000159-source'><span class="ruby-comment cmt"># File lib/capricorn/system/options.rb, line 36</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_satellite_option</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">value</span>)&#x000A;        <span class="ruby-ivar">@satellite_options</span>[<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">value</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000168-source'><span class="ruby-comment cmt"># File lib/capricorn/system/options.rb, line 36</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_satellite_option</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">value</span>)&#x000A;        <span class="ruby-ivar">@satellite_options</span>[<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">value</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

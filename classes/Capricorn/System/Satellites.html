@@ -41,79 +41,79 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000168">destroy_satellite!</a></li>
-              <li><a href="#M000166">find_satellite</a></li>
-              <li><a href="#M000165">satellites</a></li>
-              <li><a href="#M000164">satellites_hash</a></li>
-              <li><a href="#M000167">save_satellite!</a></li>
+              <li><a href="#M000177">destroy_satellite!</a></li>
+              <li><a href="#M000175">find_satellite</a></li>
+              <li><a href="#M000174">satellites</a></li>
+              <li><a href="#M000173">satellites_hash</a></li>
+              <li><a href="#M000176">save_satellite!</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000168'>
-                <a name='M000168'>      </a>
+              <div class='public-instance method' id='method-M000177'>
+                <a name='M000177'>      </a>
                 <div class='synopsis'>
                   <span class='name'>destroy_satellite!</span>
                   <span class='arguments'>(satellite)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000168-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000177-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000168-source'><span class="ruby-comment cmt"># File lib/capricorn/system/satellites.rb, line 23</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">destroy_satellite!</span>(<span class="ruby-identifier">satellite</span>)&#x000A;        <span class="ruby-identifier">satellites_hash</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">domain</span>)&#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">rm_f</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'satellites'</span>, <span class="ruby-node">&quot;#{satellite.domain}.yml&quot;</span>))&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000177-source'><span class="ruby-comment cmt"># File lib/capricorn/system/satellites.rb, line 23</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">destroy_satellite!</span>(<span class="ruby-identifier">satellite</span>)&#x000A;        <span class="ruby-identifier">satellites_hash</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">domain</span>)&#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">rm_f</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'satellites'</span>, <span class="ruby-node">&quot;#{satellite.domain}.yml&quot;</span>))&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000166'>
-                <a name='M000166'>      </a>
+              <div class='public-instance method' id='method-M000175'>
+                <a name='M000175'>      </a>
                 <div class='synopsis'>
                   <span class='name'>find_satellite</span>
                   <span class='arguments'>(domain)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000166-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000175-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000166-source'><span class="ruby-comment cmt"># File lib/capricorn/system/satellites.rb, line 14</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_satellite</span>(<span class="ruby-identifier">domain</span>)&#x000A;        <span class="ruby-identifier">satellites_hash</span>[<span class="ruby-identifier">domain</span>]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000175-source'><span class="ruby-comment cmt"># File lib/capricorn/system/satellites.rb, line 14</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_satellite</span>(<span class="ruby-identifier">domain</span>)&#x000A;        <span class="ruby-identifier">satellites_hash</span>[<span class="ruby-identifier">domain</span>]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000165'>
-                <a name='M000165'>      </a>
+              <div class='public-instance method' id='method-M000174'>
+                <a name='M000174'>      </a>
                 <div class='synopsis'>
                   <span class='name'>satellites</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000165-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000174-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000165-source'><span class="ruby-comment cmt"># File lib/capricorn/system/satellites.rb, line 10</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">satellites</span>&#x000A;        <span class="ruby-identifier">satellites_hash</span>.<span class="ruby-identifier">values</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000174-source'><span class="ruby-comment cmt"># File lib/capricorn/system/satellites.rb, line 10</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">satellites</span>&#x000A;        <span class="ruby-identifier">satellites_hash</span>.<span class="ruby-identifier">values</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000164'>
-                <a name='M000164'>      </a>
+              <div class='public-instance method' id='method-M000173'>
+                <a name='M000173'>      </a>
                 <div class='synopsis'>
                   <span class='name'>satellites_hash</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000164-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000173-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000164-source'><span class="ruby-comment cmt"># File lib/capricorn/system/satellites.rb, line 6</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">satellites_hash</span>&#x000A;        <span class="ruby-ivar">@satellites</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">load_satellites</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000173-source'><span class="ruby-comment cmt"># File lib/capricorn/system/satellites.rb, line 6</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">satellites_hash</span>&#x000A;        <span class="ruby-ivar">@satellites</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">load_satellites</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000167'>
-                <a name='M000167'>      </a>
+              <div class='public-instance method' id='method-M000176'>
+                <a name='M000176'>      </a>
                 <div class='synopsis'>
                   <span class='name'>save_satellite!</span>
                   <span class='arguments'>(satellite)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000167-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000176-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000167-source'><span class="ruby-comment cmt"># File lib/capricorn/system/satellites.rb, line 18</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">save_satellite!</span>(<span class="ruby-identifier">satellite</span>)&#x000A;        <span class="ruby-identifier">satellites_hash</span>[<span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">domain</span>] = <span class="ruby-identifier">satellite</span>&#x000A;        <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">dump_file</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'satellites'</span>, <span class="ruby-node">&quot;#{satellite.domain}.yml&quot;</span>))&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000176-source'><span class="ruby-comment cmt"># File lib/capricorn/system/satellites.rb, line 18</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">save_satellite!</span>(<span class="ruby-identifier">satellite</span>)&#x000A;        <span class="ruby-identifier">satellites_hash</span>[<span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">domain</span>] = <span class="ruby-identifier">satellite</span>&#x000A;        <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">dump_file</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'satellites'</span>, <span class="ruby-node">&quot;#{satellite.domain}.yml&quot;</span>))&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

@@ -46,18 +46,18 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000215">construct_uri</a></li>
-              <li><a href="#M000219">run_server</a></li>
-              <li><a href="#M000217">start</a></li>
-              <li><a href="#M000218">start_with_failsafe</a></li>
-              <li><a href="#M000216">stop</a></li>
+              <li><a href="#M000227">construct_uri</a></li>
+              <li><a href="#M000231">run_server</a></li>
+              <li><a href="#M000229">start</a></li>
+              <li><a href="#M000230">start_with_failsafe</a></li>
+              <li><a href="#M000228">stop</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000215'>
-                <a name='M000215'>      </a>
+              <div class='public-instance method' id='method-M000227'>
+                <a name='M000227'>      </a>
                 <div class='synopsis'>
                   <span class='name'>construct_uri</span>
                   <span class='arguments'>(uri)</span>
@@ -69,14 +69,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000215-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000227-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000215-source'><span class="ruby-comment cmt"># File lib/capricorn/server/daemon.rb, line 15</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">construct_uri</span>(<span class="ruby-identifier">uri</span>)&#x000A;          <span class="ruby-identifier">uri</span>        = <span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">uri</span>)&#x000A;          <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">scheme</span> = ( <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">use_ssl?</span> <span class="ruby-value">? </span><span class="ruby-value str">'ssl+capricorn'</span> <span class="ruby-operator">:</span> <span class="ruby-value str">'capricorn'</span>)&#x000A;          <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">to_s</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000227-source'><span class="ruby-comment cmt"># File lib/capricorn/server/daemon.rb, line 15</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">construct_uri</span>(<span class="ruby-identifier">uri</span>)&#x000A;          <span class="ruby-identifier">uri</span>        = <span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">uri</span>)&#x000A;          <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">scheme</span> = ( <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">use_ssl?</span> <span class="ruby-value">? </span><span class="ruby-value str">'ssl+capricorn'</span> <span class="ruby-operator">:</span> <span class="ruby-value str">'capricorn'</span>)&#x000A;          <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">to_s</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000219'>
-                <a name='M000219'>      </a>
+              <div class='public-instance method' id='method-M000231'>
+                <a name='M000231'>      </a>
                 <div class='synopsis'>
                   <span class='name'>run_server</span>
                   <span class='arguments'>()</span>
@@ -87,14 +87,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000219-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000231-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000219-source'><span class="ruby-comment cmt"># File lib/capricorn/server/daemon.rb, line 66</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run_server</span>&#x000A;          <span class="ruby-identifier">$master</span> = <span class="ruby-keyword kw">false</span>&#x000A;          <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">chdir</span>(<span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">root</span>)&#x000A;          &#x000A;          <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">log</span> <span class="ruby-value str">&quot;Server started&quot;</span>&#x000A;          <span class="ruby-identifier">uri</span> = <span class="ruby-node">&quot;druby://#{Capricorn.system.server_hostname}:#{Capricorn.system.server_port}&quot;</span>&#x000A;          <span class="ruby-constant">DRb</span>.<span class="ruby-identifier">start_service</span> <span class="ruby-identifier">uri</span>, <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">proxy</span>, <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">options_for_server</span>&#x000A;          <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">log</span> <span class="ruby-node">&quot;listening at #{self.construct_uri(uri)}&quot;</span>&#x000A;          <span class="ruby-identifier">make_client_cert_public!</span>&#x000A;          &#x000A;          <span class="ruby-identifier">at_exit</span> <span class="ruby-keyword kw">do</span>&#x000A;            <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">queue</span>.<span class="ruby-identifier">stop!</span>&#x000A;            <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">log</span> <span class="ruby-value str">&quot;Server stopped&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          &#x000A;          <span class="ruby-constant">DRb</span>.<span class="ruby-identifier">thread</span>.<span class="ruby-identifier">join</span>&#x000A;          <span class="ruby-identifier">exit</span>(<span class="ruby-identifier">$exitstatus</span> <span class="ruby-operator">||</span> <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">STOP_STATUS</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000231-source'><span class="ruby-comment cmt"># File lib/capricorn/server/daemon.rb, line 59</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run_server</span>&#x000A;          <span class="ruby-constant">Process</span>.<span class="ruby-identifier">fork</span> <span class="ruby-keyword kw">do</span>&#x000A;            <span class="ruby-identifier">$master</span> = <span class="ruby-keyword kw">false</span>&#x000A;            <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">chdir</span>(<span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">root</span>)&#x000A;            &#x000A;            <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">log</span> <span class="ruby-value str">&quot;Server started&quot;</span>&#x000A;            <span class="ruby-identifier">uri</span> = <span class="ruby-node">&quot;druby://#{Capricorn.system.server_hostname}:#{Capricorn.system.server_port}&quot;</span>&#x000A;            <span class="ruby-constant">DRb</span>.<span class="ruby-identifier">start_service</span> <span class="ruby-identifier">uri</span>, <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">proxy</span>, <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">options_for_server</span>&#x000A;            <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">log</span> <span class="ruby-node">&quot;listening at #{self.construct_uri(uri)}&quot;</span>&#x000A;            <span class="ruby-identifier">make_client_cert_public!</span>&#x000A;            &#x000A;            <span class="ruby-identifier">at_exit</span> <span class="ruby-keyword kw">do</span>&#x000A;              <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">queue</span>.<span class="ruby-identifier">stop!</span>&#x000A;              <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">log</span> <span class="ruby-value str">&quot;Server stopped&quot;</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;            &#x000A;            <span class="ruby-constant">DRb</span>.<span class="ruby-identifier">thread</span>.<span class="ruby-identifier">join</span>&#x000A;            <span class="ruby-identifier">exit</span>(<span class="ruby-identifier">$exitstatus</span> <span class="ruby-operator">||</span> <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">STOP_STATUS</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000217'>
-                <a name='M000217'>      </a>
+              <div class='public-instance method' id='method-M000229'>
+                <a name='M000229'>      </a>
                 <div class='synopsis'>
                   <span class='name'>start</span>
                   <span class='arguments'>()</span>
@@ -105,14 +105,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000217-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000229-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000217-source'><span class="ruby-comment cmt"># File lib/capricorn/server/daemon.rb, line 27</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">start</span>&#x000A;          <span class="ruby-identifier">start_with_failsafe</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000229-source'><span class="ruby-comment cmt"># File lib/capricorn/server/daemon.rb, line 27</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">start</span>&#x000A;          <span class="ruby-identifier">start_with_failsafe</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000218'>
-                <a name='M000218'>      </a>
+              <div class='public-instance method' id='method-M000230'>
+                <a name='M000230'>      </a>
                 <div class='synopsis'>
                   <span class='name'>start_with_failsafe</span>
                   <span class='arguments'>()</span>
@@ -123,14 +123,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000218-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000230-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000218-source'><span class="ruby-comment cmt"># File lib/capricorn/server/daemon.rb, line 32</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">start_with_failsafe</span>&#x000A;          <span class="ruby-identifier">$master</span> = <span class="ruby-keyword kw">true</span>&#x000A;          <span class="ruby-identifier">stop_server</span> = <span class="ruby-keyword kw">false</span>&#x000A;          <span class="ruby-identifier">wait_before_start</span> = <span class="ruby-value">0</span>&#x000A;          <span class="ruby-identifier">retries</span> = <span class="ruby-value">0</span>&#x000A;          <span class="ruby-keyword kw">until</span> <span class="ruby-identifier">stop_server</span>&#x000A;            <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">wait_before_start</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>&#x000A;              <span class="ruby-identifier">sleep</span>(<span class="ruby-identifier">wait_before_start</span>)&#x000A;              <span class="ruby-identifier">wait_before_start</span> = <span class="ruby-value">0</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;            &#x000A;            <span class="ruby-identifier">pid</span> = <span class="ruby-constant">Process</span>.<span class="ruby-identifier">fork</span> { <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">run_server</span> }&#x000A;            <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">pid</span>&#x000A;            <span class="ruby-constant">Process</span>.<span class="ruby-identifier">waitpid</span>(<span class="ruby-identifier">pid</span>, <span class="ruby-value">0</span>)&#x000A;            <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">$?</span>.<span class="ruby-identifier">exitstatus</span>&#x000A;            <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">STOP_STATUS</span>&#x000A;              <span class="ruby-identifier">stop_server</span> = <span class="ruby-keyword kw">true</span>&#x000A;              <span class="ruby-identifier">retries</span>     = <span class="ruby-value">0</span>&#x000A;            <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">RESTART_STATUS</span>&#x000A;              <span class="ruby-identifier">wait_before_start</span> = <span class="ruby-value">2</span>&#x000A;              <span class="ruby-identifier">retries</span>     = <span class="ruby-value">0</span>&#x000A;            <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">RELOAD_STATUS</span>&#x000A;              <span class="ruby-identifier">stop_server</span> = <span class="ruby-keyword kw">true</span>&#x000A;              <span class="ruby-identifier">retries</span>     = <span class="ruby-value">0</span>&#x000A;              <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">Daemon</span><span class="ruby-operator">::</span><span class="ruby-constant">PidFile</span>.<span class="ruby-identifier">destroy</span>&#x000A;              <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">run</span> <span class="ruby-node">%{#{Capricorn::BIN_PATH} #{ORIGINAL_ARGV.join(' ')}}</span>&#x000A;            <span class="ruby-keyword kw">else</span>&#x000A;              <span class="ruby-identifier">retries</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>&#x000A;              <span class="ruby-identifier">stop_server</span> = <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">retries</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">3</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000230-source'><span class="ruby-comment cmt"># File lib/capricorn/server/daemon.rb, line 32</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">start_with_failsafe</span>&#x000A;          <span class="ruby-identifier">$master</span> = <span class="ruby-keyword kw">true</span>&#x000A;          <span class="ruby-identifier">retries</span> = <span class="ruby-value">0</span>&#x000A;          <span class="ruby-identifier">loop</span> <span class="ruby-keyword kw">do</span>&#x000A;            <span class="ruby-identifier">pid</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">run_server</span>&#x000A;            <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">pid</span>&#x000A;            <span class="ruby-constant">Process</span>.<span class="ruby-identifier">waitpid</span>(<span class="ruby-identifier">pid</span>, <span class="ruby-value">0</span>)&#x000A;            &#x000A;            <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">$?</span>.<span class="ruby-identifier">exitstatus</span>&#x000A;            <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">STOP_STATUS</span>&#x000A;              <span class="ruby-keyword kw">return</span>&#x000A;            <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">RESTART_STATUS</span>&#x000A;              <span class="ruby-identifier">retries</span> = <span class="ruby-value">0</span>&#x000A;            <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">RELOAD_STATUS</span>&#x000A;              <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">Daemon</span><span class="ruby-operator">::</span><span class="ruby-constant">PidFile</span>.<span class="ruby-identifier">destroy</span>&#x000A;              <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">run</span> <span class="ruby-node">%{#{Capricorn::BIN_PATH} #{ORIGINAL_ARGV.join(' ')}}</span>&#x000A;              <span class="ruby-keyword kw">return</span>&#x000A;            <span class="ruby-keyword kw">else</span>&#x000A;              <span class="ruby-identifier">retries</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>&#x000A;              <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">retries</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">3</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;            &#x000A;            <span class="ruby-identifier">sleep</span>(<span class="ruby-value">2</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000216'>
-                <a name='M000216'>      </a>
+              <div class='public-instance method' id='method-M000228'>
+                <a name='M000228'>      </a>
                 <div class='synopsis'>
                   <span class='name'>stop</span>
                   <span class='arguments'>()</span>
@@ -141,10 +141,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000216-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000228-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000216-source'><span class="ruby-comment cmt"># File lib/capricorn/server/daemon.rb, line 22</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stop</span>&#x000A;          <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">client</span>.<span class="ruby-identifier">stop_server</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000228-source'><span class="ruby-comment cmt"># File lib/capricorn/server/daemon.rb, line 22</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stop</span>&#x000A;          <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">client</span>.<span class="ruby-identifier">stop_server</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

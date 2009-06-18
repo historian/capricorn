@@ -41,21 +41,21 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000036">plesk_client</a></li>
-              <li><a href="#M000037">plesk_client_bin</a></li>
-              <li><a href="#M000040">plesk_database_bin</a></li>
-              <li><a href="#M000043">plesk_database_server</a></li>
-              <li><a href="#M000038">plesk_domain_bin</a></li>
-              <li><a href="#M000042">plesk_httpd_bin</a></li>
-              <li><a href="#M000039">plesk_subdomain_bin</a></li>
-              <li><a href="#M000041">plesk_websrvmng_bin</a></li>
+              <li><a href="#M000039">plesk_client</a></li>
+              <li><a href="#M000040">plesk_client_bin</a></li>
+              <li><a href="#M000043">plesk_database_bin</a></li>
+              <li><a href="#M000046">plesk_database_server</a></li>
+              <li><a href="#M000041">plesk_domain_bin</a></li>
+              <li><a href="#M000045">plesk_httpd_bin</a></li>
+              <li><a href="#M000042">plesk_subdomain_bin</a></li>
+              <li><a href="#M000044">plesk_websrvmng_bin</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000036'>
-                <a name='M000036'>      </a>
+              <div class='public-instance method' id='method-M000039'>
+                <a name='M000039'>      </a>
                 <div class='synopsis'>
                   <span class='name'>plesk_client</span>
                   <span class='arguments'>(&amp;block)</span>
@@ -66,14 +66,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000036-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000039-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000036-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 167</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_client</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">satellite_option</span>(<span class="ruby-identifier">:plesk_client</span>, <span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000039-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 185</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_client</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">satellite_option</span>(<span class="ruby-identifier">:plesk_client</span>, <span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000037'>
-                <a name='M000037'>      </a>
+              <div class='public-instance method' id='method-M000040'>
+                <a name='M000040'>      </a>
                 <div class='synopsis'>
                   <span class='name'>plesk_client_bin</span>
                   <span class='arguments'>(&amp;block)</span>
@@ -84,14 +84,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000037-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000040-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000037-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 172</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_client_bin</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:plesk_client_bin</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value str">'/usr/local/psa/bin/client'</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000040-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 190</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_client_bin</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:plesk_client_bin</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value str">'/usr/local/psa/bin/client'</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000040'>
-                <a name='M000040'>      </a>
+              <div class='public-instance method' id='method-M000043'>
+                <a name='M000043'>      </a>
                 <div class='synopsis'>
                   <span class='name'>plesk_database_bin</span>
                   <span class='arguments'>(&amp;block)</span>
@@ -102,14 +102,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000040-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000043-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000040-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 187</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_database_bin</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:plesk_database_bin</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value str">'/usr/local/psa/bin/database'</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000043-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 205</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_database_bin</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:plesk_database_bin</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value str">'/usr/local/psa/bin/database'</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000043'>
-                <a name='M000043'>      </a>
+              <div class='public-instance method' id='method-M000046'>
+                <a name='M000046'>      </a>
                 <div class='synopsis'>
                   <span class='name'>plesk_database_server</span>
                   <span class='arguments'>(&amp;block)</span>
@@ -120,14 +120,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000043-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000046-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000043-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 202</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_database_server</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:plesk_database_server</span>, <span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000046-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 220</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_database_server</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:plesk_database_server</span>, <span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000038'>
-                <a name='M000038'>      </a>
+              <div class='public-instance method' id='method-M000041'>
+                <a name='M000041'>      </a>
                 <div class='synopsis'>
                   <span class='name'>plesk_domain_bin</span>
                   <span class='arguments'>(&amp;block)</span>
@@ -138,14 +138,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000038-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000041-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000038-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 177</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_domain_bin</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:plesk_domain_bin</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value str">'/usr/local/psa/bin/domain'</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000041-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 195</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_domain_bin</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:plesk_domain_bin</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value str">'/usr/local/psa/bin/domain'</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000042'>
-                <a name='M000042'>      </a>
+              <div class='public-instance method' id='method-M000045'>
+                <a name='M000045'>      </a>
                 <div class='synopsis'>
                   <span class='name'>plesk_httpd_bin</span>
                   <span class='arguments'>(&amp;block)</span>
@@ -156,14 +156,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000042-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000045-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000042-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 197</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_httpd_bin</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:plesk_httpd_bin</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value str">'/etc/init.d/httpd'</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000045-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 215</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_httpd_bin</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:plesk_httpd_bin</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value str">'/etc/init.d/httpd'</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000039'>
-                <a name='M000039'>      </a>
+              <div class='public-instance method' id='method-M000042'>
+                <a name='M000042'>      </a>
                 <div class='synopsis'>
                   <span class='name'>plesk_subdomain_bin</span>
                   <span class='arguments'>(&amp;block)</span>
@@ -174,14 +174,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000039-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000042-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000039-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 182</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_subdomain_bin</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:plesk_subdomain_bin</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value str">'/usr/local/psa/bin/subdomain'</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000042-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 200</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_subdomain_bin</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:plesk_subdomain_bin</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value str">'/usr/local/psa/bin/subdomain'</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000041'>
-                <a name='M000041'>      </a>
+              <div class='public-instance method' id='method-M000044'>
+                <a name='M000044'>      </a>
                 <div class='synopsis'>
                   <span class='name'>plesk_websrvmng_bin</span>
                   <span class='arguments'>(&amp;block)</span>
@@ -192,10 +192,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000041-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000044-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000041-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 192</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_websrvmng_bin</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:plesk_websrvmng_bin</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value str">'/usr/local/psa/admin/sbin/websrvmng'</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000044-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 210</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plesk_websrvmng_bin</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:plesk_websrvmng_bin</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value str">'/usr/local/psa/admin/sbin/websrvmng'</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Capricorn::Apps::Dev [Capricorn]</title>
+    <title>: Capricorn::Actors::HostFileActor::Config [Capricorn]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <link href='../../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
       //<![CDATA[
         function popupCode(url) {
@@ -26,18 +26,14 @@
     <div class='class' id='wrapper'>
       <div class='header'>
         <h1 class='name'>
-          <span class='type'>Class</span>
-          Capricorn::Apps::Dev
+          <span class='type'>Module</span>
+          Capricorn::Actors::HostFileActor::Config
         </h1>
         <ol class='paths'>
           <li>
-            <a href="../../../files/lib/capricorn/apps/dev_rb.html">lib/capricorn/apps/dev.rb</a>
+            <a href="../../../../files/lib/capricorn/actors/host_file_actor_rb.html">lib/capricorn/actors/host_file_actor.rb</a>
           </li>
         </ol>
-        <div class='parent'>
-          Parent:
-          <strong><a href="../../Thor.html">Thor</a></strong>
-        </div>
       </div>
       <div id='content'>
         <div id='text'>
@@ -45,23 +41,28 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000028">activate</a></li>
+              <li><a href="#M000085">host_file_path</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000028'>
-                <a name='M000028'>      </a>
+              <div class='public-instance method' id='method-M000085'>
+                <a name='M000085'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>activate</span>
-                  <span class='arguments'>(domain, name)</span>
+                  <span class='name'>host_file_path</span>
+                  <span class='arguments'>(&amp;block)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  path to the hosts file.
+                  </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000028-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000085-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000028-source'><span class="ruby-comment cmt"># File lib/capricorn/apps/dev.rb, line 8</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">activate</span>(<span class="ruby-identifier">domain</span>, <span class="ruby-identifier">name</span>)&#x000A;        <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">runtime_gem</span>(<span class="ruby-value str">'rubigen'</span>, <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">RUBIGEN_VERSION</span>)&#x000A;        <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">client</span>.<span class="ruby-identifier">make_development_satellite</span>(<span class="ruby-identifier">domain</span>, <span class="ruby-identifier">name</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000085-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/host_file_actor.rb, line 69</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">host_file_path</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:host_file_path</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-value str">'/etc/hosts'</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
