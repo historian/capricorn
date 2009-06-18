@@ -30,6 +30,7 @@ module Capricorn
     autoload :PleskActor,     (base+'/capricorn/actors/plesk_actor')
     autoload :ApacheActor,    (base+'/capricorn/actors/apache_actor')
     autoload :Sqlite3Actor,   (base+'/capricorn/actors/sqlite3_actor')
+    autoload :HostFileActor,  (base+'/capricorn/actors/host_file_actor')
     autoload :PassengerActor, (base+'/capricorn/actors/passenger_actor')
   end
   
