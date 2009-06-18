@@ -7,12 +7,17 @@ module Capricorn
       desc 'list', 'show all managed satellites'
       method_options :token => :optional
       def list
-        Capricorn.client(options[:token]).satellites.each do |sat|
+        satellites = Capricorn.client(options[:token]).satellites
+        satellites.size.times do |i|
+          sat = satellites[i]
           puts sat.domain
           sat.engines.each do |name, options|
             puts "- #{name} #{options.inspect}"
           end
         end
+      rescue => e
+        p e
+        puts e.backtrace
       end
       
       desc 'install DOMAIN', 'install a satellite'
