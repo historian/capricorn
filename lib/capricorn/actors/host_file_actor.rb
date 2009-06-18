@@ -9,6 +9,7 @@ module Capricorn
       # addthe fost form the host file
       def add_host_name
         content = load_file
+        content[:capricorn]['127.0.0.1'] ||= []
         content[:capricorn]['127.0.0.1'].push satellite.domain
         dump_file(content)
       end
@@ -16,6 +17,7 @@ module Capricorn
       # remove the fost form the host file
       def remove_host_name
         content = load_file
+        content[:capricorn]['127.0.0.1'] ||= []
         content[:capricorn]['127.0.0.1'].delete satellite.domain
         dump_file(content)
       end
