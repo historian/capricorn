@@ -15,6 +15,10 @@ module Capricorn
       end
       
       def initialize(engines)
+        original_paths = [Gem.path].flatten
+        Gem.refresh
+        Gem.send(:set_paths, original_paths.compact.join(File::PATH_SEPARATOR))
+        
         specs = engines.collect do |k,r|
           s = Gem.source_index.find_name(k, Gem::Requirement.new(r[:version] || ">= 0.0.0"))
           s.last

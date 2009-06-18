@@ -182,7 +182,7 @@ module Capricorn
         end
         
         def gem_refresh
-          original_paths = Gem.path
+          original_paths = [Gem.path].flatten
           Gem.refresh
           Gem.send(:set_paths, original_paths.compact.join(File::PATH_SEPARATOR))
         end
