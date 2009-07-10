@@ -54,6 +54,12 @@ module Capricorn
         Capricorn.client(options[:token]).update_server
       end
       
+      desc "gupdate", 'update the gems'
+      method_options :token => :optional
+      def gupdate
+        Capricorn.client(options[:token]).update_gems
+      end
+      
       desc "version", 'version of the server'
       method_options :token => :optional
       def version

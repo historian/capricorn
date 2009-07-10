@@ -77,6 +77,17 @@ module Capricorn
       end
     end
     
+    def relink_satellite(satellite)
+      self.queue.enqueue("relink #{satellite.domain}", :satellite => satellite) do |options|
+        satellite = options[:satellite]
+        
+        if satellite
+          run_action_on :link_satellite, satellite
+          save_satellite! satellite
+        end
+      end
+    end
+    
     def uninstall_satellite(satellite)
       if satellite
         self.queue.enqueue("uninstall #{satellite.domain}", :satellite => satellite) do |options|
@@ -90,6 +101,8 @@ module Capricorn
     
     def make_development_satellite(satellite, name)
       if satellite
+        satellite.module_name = name.to_s
+        satellite.development = true
         Capricorn.runtime_gem('rubigen', Capricorn::RUBIGEN_VERSION)
         resolve_options_with satellite do
           as_user(web_user, web_group) do
@@ -98,6 +111,11 @@ module Capricorn
               FileUtils.rm_r("doc", :verbose => true) rescue nil
               FileUtils.rm_r("README", :verbose => true) rescue nil
               FileUtils.rm_r("public/javascripts", :verbose => true) rescue nil
+              FileUtils.mkdir_p("public/vendor", :verbose => true) rescue nil
+              FileUtils.ln_s(
+                File.join(satellite_root, "public"),
+                File.join(satellite_root, "public/vendor", satellite.module_name),
+                :verbose => true) rescue nil
               
               require 'rubigen/scripts/generate'
               RubiGen::Base.use_application_sources!
@@ -106,6 +124,7 @@ module Capricorn
             end
           end
         end
+        save_satellite! satellite
       else
         false
       end

@@ -10,7 +10,7 @@ module Capricorn
         satellites = Capricorn.client(options[:token]).satellites
         satellites.size.times do |i|
           sat = satellites[i]
-          puts sat.domain
+          puts [sat.domain, (sat.development ? ['development:', sat.module_name] : [])].flatten.join(' ')
           sat.engines.each do |name, options|
             puts "- #{name} #{options.inspect}"
           end
@@ -30,6 +30,12 @@ module Capricorn
       method_options :token => :optional
       def uninstall(domain)
         Capricorn.client(options[:token]).uninstall_satellite(domain)
+      end
+      
+      desc 'relink DOMAIN', 'relink a satellite'
+      method_options :token => :optional
+      def relink(domain)
+        Capricorn.client(options[:token]).relink_satellite(domain)
       end
     end
     

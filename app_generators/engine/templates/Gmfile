@@ -5,14 +5,14 @@ specify do |s|
   s.homepage = %q{Fix this}
 
   s.author = "[AUTHOR]"
-  s.email  = %q{Fix this}
+  s.email  = "[EMAIL]"
   
   s.ignore_files %r{^public/(\d{3}|index)\.html$}
   s.ignore_files %r{^public/favicon.ico$}
   s.ignore_files %r{^public/robots.txt$}
   s.ignore_files %r{^public/images/rails\.png$}
   s.ignore_files %r{^lib/tasks}
-  s.ignore_files %r{^config/(boot|database|environment|initializers|locales)}
+  s.ignore_files %r{^config/(boot|database|environment|initializers)}
   s.ignore_files %r{^app/controllers/application_controller.rb}
   s.ignore_files %r{^app/helpers/application_helper.rb}
   s.ignore_files %r{^db/schema.rb}

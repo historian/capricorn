@@ -48,8 +48,21 @@ module Capricorn
       end
     end
     
+    def update_gems
+      Capricorn.system.gem_update(:all)
+    end
+    
     def install_satellite(domain)
       Capricorn.system.install_satellite(domain)
+    end
+    
+    def relink_satellite(domain)
+      satellite = Capricorn.system.find_satellite(domain)
+      if satellite
+        Capricorn.system.relink_satellite(satellite)
+      else
+        Capricorn.log "Satellite not found (#{domain})"
+      end
     end
     
     def uninstall_satellite(domain)

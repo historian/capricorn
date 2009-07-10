@@ -43,10 +43,28 @@ module Capricorn
         Dir.chdir(system.satellite_root) do
           system.as_user(system.web_user, system.web_group) do
             
+            clean_index_html_file
             write_environment
             clean_links
             @dependecies.reverse_each do |spec|
               link_engine(spec)
+            end
+            
+            FileUtils.symlink(
+              File.join(system.satellite_root, "public"),
+              File.join(system.satellite_root, "public/vendor", satellite.module_name),
+              :verbose => true) rescue nil
+            
+            if File.exist? 'public/crossdomain.xml'
+              File.unlink 'public/crossdomain.xml'
+            end
+            File.open('public/crossdomain.xml', 'w+') do |f|
+              f.write %{<?xml version="1.0" encoding="UTF-8"?>
+<cross-domain-policy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.adobe.com/xml/schemas/PolicyFile.xsd">
+  <allow-access-from domain="*" />
+  <site-control permitted-cross-domain-policies="master-only"/>
+  <allow-http-request-headers-from domain="*" headers="*" secure="false"/>
+</cross-domain-policy>}
             end
             
           end
@@ -55,6 +73,13 @@ module Capricorn
       end
       
     private
+      
+      def clean_index_html_file
+        index_html = File.join(system.satellite_root, 'public', 'index.html')
+        if File.file?(index_html)
+          FileUtils.rm_f(index_html, :verbose => true) rescue nil
+        end
+      end
       
       def link(src, dst)
         FileUtils.mkdir_p(File.dirname(dst), :verbose => true)
@@ -100,6 +125,15 @@ module Capricorn
           end
         end
         
+        path = File.join(spec.full_gem_path, 'config/locales')
+        if File.directory?(path)
+          FileUtils.mkdir_p("config/locales", :verbose => true)
+          Dir.glob("#{path}/*.{rb,yml,yaml}").each do |locale_file|
+            FileUtils.ln_s(locale_file, "config/locales/#{File.basename(locale_file)}",
+              :verbose => true) rescue nil
+          end
+        end
+        
         path = File.join(spec.full_gem_path, 'db', 'migrate')
         if File.directory?(path)
           FileUtils.mkdir_p("db/migrate", :verbose => true)
@@ -114,6 +148,9 @@ module Capricorn
       end
       
       def clean_links
+        Dir.glob("config/locales/*").each do |path|
+          FileUtils.rm_rf(path) if File.symlink?(path)
+        end
         FileUtils.rm_rf("lib/tasks/vendor", :verbose => true)
         FileUtils.rm_rf("public/vendor", :verbose => true)
       end
@@ -196,7 +233,12 @@ module Capricorn
         
         # update a gem
         def gem_update(name, options={})
-          if !(gem_cmd('update', name, options) =~ /Nothing to update/)
+          output = if name == :all
+            gem_cmd('update', nil, options)
+          else
+            gem_cmd('update', name, options)
+          end
+          if !(output =~ /Nothing to update/)
             gem_refresh
             true
           else

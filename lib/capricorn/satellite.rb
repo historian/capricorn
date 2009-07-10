@@ -11,6 +11,7 @@ module Capricorn
     include Capricorn::Satellite::Persistence
     
     attr_reader :domain, :engines
+    attr_accessor :development, :module_name
     
     def initialize(domain)
       if Hash === domain
@@ -20,6 +21,7 @@ module Capricorn
       else
         @domain = domain
         @engines = {}
+        @development = false
       end
       @domain.gsub!(/^www\./, '')
     end

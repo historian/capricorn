@@ -1,6 +1,6 @@
 specify do |s|
   s.name    = %q{capricorn}
-  s.version = "0.2.07"
+  s.version = "0.2.20"
   s.summary = %q{Manage satellites}
   s.homepage = %q{http://github.com/simonmenke/capricorn}
   
