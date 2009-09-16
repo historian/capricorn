@@ -35,6 +35,9 @@ module Capricorn
         @next_id += 1
         @jobs[job.id] = job
         @job_queue.push job.id
+        if options[:immediate]
+          @immediated_jobs.push(id)
+        end
         return job.id
       end
     end

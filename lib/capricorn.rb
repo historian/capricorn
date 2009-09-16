@@ -51,7 +51,7 @@ module Capricorn
   RELOAD_STATUS  = 103
   QUICK_CERT     = "http://segment7.net/projects/ruby/QuickCert/QuickCert-1.0.2.tar.gz"
   
-  THOR_VERSION          = '>= 0.9.9'
+  THOR_VERSION          = '= 0.9.9'
   RUBIGEN_VERSION       = '>= 1.5.2'
   
   Capricorn::ExceptionHandler.setup

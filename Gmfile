@@ -1,6 +1,6 @@
 specify do |s|
   s.name    = %q{capricorn}
-  s.version = "0.2.20"
+  s.version = "0.2.25"
   s.summary = %q{Manage satellites}
   s.homepage = %q{http://github.com/simonmenke/capricorn}
   
@@ -9,5 +9,4 @@ specify do |s|
   
   s.include_files "lib/**/*.rb", "app_generators/**/*"
   s.executables = %w( capricorn )
-  
 end

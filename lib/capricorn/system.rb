@@ -67,8 +67,8 @@ module Capricorn
       File.join(@root, *args)
     end
     
-    def install_satellite(domain)
-      self.queue.enqueue("install new satellite #{domain}", :domain => domain) do |options|
+    def install_satellite(domain, immediate)
+      self.queue.enqueue("install new satellite #{domain}", :domain => domain, :immediate => immediate) do |options|
         satellite = Capricorn::Satellite.new(options[:domain])
         
         run_action_on :install_satellite, satellite
@@ -77,8 +77,8 @@ module Capricorn
       end
     end
     
-    def relink_satellite(satellite)
-      self.queue.enqueue("relink #{satellite.domain}", :satellite => satellite) do |options|
+    def relink_satellite(satellite, immediate)
+      self.queue.enqueue("relink #{satellite.domain}", :satellite => satellite, :immediate => immediate) do |options|
         satellite = options[:satellite]
         
         if satellite
@@ -88,9 +88,26 @@ module Capricorn
       end
     end
     
-    def uninstall_satellite(satellite)
+    def update_satellite(satellite, immediate)
       if satellite
-        self.queue.enqueue("uninstall #{satellite.domain}", :satellite => satellite) do |options|
+        self.queue.enqueue("update #{satellite.domain}", :satellite => satellite, :immediate => immediate) do |options|
+          
+          satellite = options[:satellite]
+          if satellite.update_all_engines
+            run_action_on :update_engine, satellite
+            run_action_on :link_satellite, satellite
+            save_satellite! satellite
+          end
+          
+        end
+      else
+        false
+      end
+    end
+    
+    def uninstall_satellite(satellite, immediate)
+      if satellite
+        self.queue.enqueue("uninstall #{satellite.domain}", :satellite => satellite, :immediate => immediate) do |options|
           run_action_on :uninstall_satellite, options[:satellite]
           destroy_satellite! options[:satellite]
         end
@@ -130,10 +147,10 @@ module Capricorn
       end
     end
     
-    def install_engine(satellite, name, options={})
+    def install_engine(satellite, name, options, immediate)
       if satellite
         self.queue.enqueue("install #{satellite.domain}: #{name} #{options.inspect}",
-          :satellite => satellite, :name => name, :options => options) do |options|
+          :satellite => satellite, :name => name, :options => options, :immediate => immediate) do |options|
           
           satellite, name, options = options[:satellite], options[:name], options[:options]
           resolve_options_with(satellite) { ensure_presence_of_gem(name, options) }
@@ -149,10 +166,10 @@ module Capricorn
       end
     end
     
-    def update_engine(satellite, name, options={})
+    def update_engine(satellite, name, options, immediate)
       if satellite
         self.queue.enqueue("update #{satellite.domain}: #{name} #{options.inspect}",
-          :satellite => satellite, :name => name, :options => options) do |options|
+          :satellite => satellite, :name => name, :options => options, :immediate => immediate) do |options|
           
           satellite, name, options = options[:satellite], options[:name], options[:options]
           resolve_options_with(satellite) { ensure_presence_of_gem(name, options) }
@@ -168,10 +185,10 @@ module Capricorn
       end
     end
     
-    def uninstall_engine(satellite, name)
+    def uninstall_engine(satellite, name, immediate)
       if satellite
         self.queue.enqueue("uninstall #{satellite.domain}: #{name}",
-          :satellite => satellite, :name => name) do |options|
+          :satellite => satellite, :name => name, :immediate => immediate) do |options|
           
           satellite, name = options[:satellite], options[:name]
           if satellite.remove_engine(name)

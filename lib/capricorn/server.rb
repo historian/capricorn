@@ -52,23 +52,32 @@ module Capricorn
       Capricorn.system.gem_update(:all)
     end
     
-    def install_satellite(domain)
-      Capricorn.system.install_satellite(domain)
+    def install_satellite(domain, immediate)
+      Capricorn.system.install_satellite(domain, immediate)
     end
     
-    def relink_satellite(domain)
+    def relink_satellite(domain, immediate)
       satellite = Capricorn.system.find_satellite(domain)
       if satellite
-        Capricorn.system.relink_satellite(satellite)
+        Capricorn.system.relink_satellite(satellite, immediate)
       else
         Capricorn.log "Satellite not found (#{domain})"
       end
     end
     
-    def uninstall_satellite(domain)
+    def update_satellite(domain, immediate)
       satellite = Capricorn.system.find_satellite(domain)
       if satellite
-        Capricorn.system.uninstall_satellite(satellite)
+        Capricorn.system.update_satellite(satellite, immediate)
+      else
+        Capricorn.log "Satellite not found (#{domain})"
+      end
+    end
+    
+    def uninstall_satellite(domain, immediate)
+      satellite = Capricorn.system.find_satellite(domain)
+      if satellite
+        Capricorn.system.uninstall_satellite(satellite, immediate)
       else
         Capricorn.log "Satellite not found (#{domain})"
       end
@@ -83,28 +92,28 @@ module Capricorn
       end
     end
     
-    def install_engine(domain, name, options={})
+    def install_engine(domain, name, options, immediate)
       satellite = Capricorn.system.find_satellite(domain)
       if satellite
-        Capricorn.system.install_engine(satellite, name, options)
+        Capricorn.system.install_engine(satellite, name, options, immediate)
       else
         Capricorn.log "Satellite not found (#{domain})"
       end
     end
     
-    def update_engine(domain, name, options={})
+    def update_engine(domain, name, options, immediate)
       satellite = Capricorn.system.find_satellite(domain)
       if satellite
-        Capricorn.system.update_engine(satellite, name, options)
+        Capricorn.system.update_engine(satellite, name, options, immediate)
       else
         Capricorn.log "Satellite not found (#{domain})"
       end
     end
     
-    def uninstall_engine(domain, name)
+    def uninstall_engine(domain, name, immediate)
       satellite = Capricorn.system.find_satellite(domain)
       if satellite
-        Capricorn.system.uninstall_engine(satellite, name)
+        Capricorn.system.uninstall_engine(satellite, name, immediate)
       else
         Capricorn.log "Satellite not found (#{domain})"
       end
