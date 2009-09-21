@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{capricorn}
-  s.version = "0.2.25"
+  s.version = "0.2.26"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Simon Menke"]
-  s.date = %q{2009-09-16}
+  s.date = %q{2009-09-21}
   s.default_executable = %q{capricorn}
   s.description = %q{Manage satellites}
   s.email = %q{simon.menke@gmail.com}
