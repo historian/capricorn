@@ -44,7 +44,6 @@ module Capricorn
         klass, task = Thor::Util.namespace_to_thor_class_and_task(meth)
         argv = ORIGINAL_ARGV.dup
         argv[0] = task
-        puts [:ARGV, argv].inspect
         begin
           klass.start(argv)
         rescue

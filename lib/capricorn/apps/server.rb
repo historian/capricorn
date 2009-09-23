@@ -66,7 +66,6 @@ module Capricorn
       
       desc "version", 'version of the server'
       def version
-        puts "token: "+ self.options.token
         puts "Client: #{Capricorn.version}"
         puts "Server: #{Capricorn.client(self.options.token).server_version}"
       end
