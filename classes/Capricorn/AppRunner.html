@@ -51,33 +51,33 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000246">subapps</a></li>
-              <li><a href="#M000247">use</a></li>
+              <li><a href="#M000241">subapps</a></li>
+              <li><a href="#M000242">use</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000248">help</a></li>
-              <li><a href="#M000249">method_missing</a></li>
+              <li><a href="#M000243">help</a></li>
+              <li><a href="#M000244">method_missing</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000246'>
-                <a name='M000246'>      </a>
+              <div class='public-class method' id='method-M000241'>
+                <a name='M000241'>      </a>
                 <div class='synopsis'>
                   <span class='name'>subapps</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000246-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000241-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000246-source'><span class="ruby-comment cmt"># File lib/capricorn/app_runner.rb, line 10</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">subapps</span>&#x000A;      <span class="ruby-ivar">@subapps</span> <span class="ruby-operator">||=</span> []&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000241-source'><span class="ruby-comment cmt"># File lib/capricorn/app_runner.rb, line 10</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">subapps</span>&#x000A;      <span class="ruby-ivar">@subapps</span> <span class="ruby-operator">||=</span> []&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000247'>
-                <a name='M000247'>      </a>
+              <div class='public-class method' id='method-M000242'>
+                <a name='M000242'>      </a>
                 <div class='synopsis'>
                   <span class='name'>use</span>
                   <span class='arguments'>(app)</span>
@@ -88,15 +88,15 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000247-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000242-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000247-source'><span class="ruby-comment cmt"># File lib/capricorn/app_runner.rb, line 15</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">use</span>(<span class="ruby-identifier">app</span>)&#x000A;      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">subapps</span>.<span class="ruby-identifier">push</span> <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">Apps</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">app</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000242-source'><span class="ruby-comment cmt"># File lib/capricorn/app_runner.rb, line 15</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">use</span>(<span class="ruby-identifier">app</span>)&#x000A;      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">subapps</span>.<span class="ruby-identifier">push</span> <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">Apps</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">app</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000248'>
-                <a name='M000248'>      </a>
+              <div class='public-instance method' id='method-M000243'>
+                <a name='M000243'>      </a>
                 <div class='synopsis'>
                   <span class='name'>help</span>
                   <span class='arguments'>(task=nil)</span>
@@ -107,14 +107,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000248-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000243-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000248-source'><span class="ruby-comment cmt"># File lib/capricorn/app_runner.rb, line 23</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">help</span>(<span class="ruby-identifier">task</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">task</span>&#x000A;        <span class="ruby-identifier">klass</span>, <span class="ruby-identifier">task</span> = <span class="ruby-constant">Thor</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-identifier">namespace_to_thor_class_and_task</span>(<span class="ruby-identifier">task</span>, <span class="ruby-keyword kw">false</span>)&#x000A;        <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">help</span>(<span class="ruby-identifier">shell</span>, <span class="ruby-identifier">task</span>, <span class="ruby-identifier">:namespace</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">subapps</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">klass</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">shell</span>.<span class="ruby-identifier">say</span>(<span class="ruby-node">&quot;== #{Thor::Util.namespace_from_thor_class(klass).split(':').last}&quot;</span>, <span class="ruby-constant">Thor</span><span class="ruby-operator">::</span><span class="ruby-constant">Shell</span><span class="ruby-operator">::</span><span class="ruby-constant">Color</span><span class="ruby-operator">::</span><span class="ruby-constant">BLUE</span>)&#x000A;          <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">help</span>(<span class="ruby-identifier">shell</span>, <span class="ruby-identifier">task</span>, <span class="ruby-identifier">:namespace</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-identifier">shell</span>.<span class="ruby-identifier">say</span>(<span class="ruby-value str">&quot;== general&quot;</span>, <span class="ruby-constant">Thor</span><span class="ruby-operator">::</span><span class="ruby-constant">Shell</span><span class="ruby-operator">::</span><span class="ruby-constant">Color</span><span class="ruby-operator">::</span><span class="ruby-constant">BLUE</span>)&#x000A;        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">help</span>(<span class="ruby-identifier">shell</span>, <span class="ruby-identifier">task</span>, <span class="ruby-identifier">:namespace</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">task</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">task</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value">?:</span>))&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000243-source'><span class="ruby-comment cmt"># File lib/capricorn/app_runner.rb, line 23</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">help</span>(<span class="ruby-identifier">task</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">task</span>&#x000A;        <span class="ruby-identifier">klass</span>, <span class="ruby-identifier">task</span> = <span class="ruby-constant">Thor</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-identifier">namespace_to_thor_class_and_task</span>(<span class="ruby-identifier">task</span>, <span class="ruby-keyword kw">false</span>)&#x000A;        <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">help</span>(<span class="ruby-identifier">shell</span>, <span class="ruby-identifier">task</span>, <span class="ruby-identifier">:namespace</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">subapps</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">klass</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">shell</span>.<span class="ruby-identifier">say</span>(<span class="ruby-node">&quot;== #{Thor::Util.namespace_from_thor_class(klass).split(':').last}&quot;</span>, <span class="ruby-constant">Thor</span><span class="ruby-operator">::</span><span class="ruby-constant">Shell</span><span class="ruby-operator">::</span><span class="ruby-constant">Color</span><span class="ruby-operator">::</span><span class="ruby-constant">BLUE</span>)&#x000A;          <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">help</span>(<span class="ruby-identifier">shell</span>, <span class="ruby-identifier">task</span>, <span class="ruby-identifier">:namespace</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-identifier">shell</span>.<span class="ruby-identifier">say</span>(<span class="ruby-value str">&quot;== general&quot;</span>, <span class="ruby-constant">Thor</span><span class="ruby-operator">::</span><span class="ruby-constant">Shell</span><span class="ruby-operator">::</span><span class="ruby-constant">Color</span><span class="ruby-operator">::</span><span class="ruby-constant">BLUE</span>)&#x000A;        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">help</span>(<span class="ruby-identifier">shell</span>, <span class="ruby-identifier">task</span>, <span class="ruby-identifier">:namespace</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">task</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">task</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value">?:</span>))&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000249'>
-                <a name='M000249'>      </a>
+              <div class='public-instance method' id='method-M000244'>
+                <a name='M000244'>      </a>
                 <div class='synopsis'>
                   <span class='name'>method_missing</span>
                   <span class='arguments'>(meth, *args)</span>
@@ -125,10 +125,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000249-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000244-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000249-source'><span class="ruby-comment cmt"># File lib/capricorn/app_runner.rb, line 38</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">method_missing</span>(<span class="ruby-identifier">meth</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;      <span class="ruby-identifier">meth</span> = <span class="ruby-identifier">meth</span>.<span class="ruby-identifier">to_s</span>&#x000A;      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">meth</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value">?:</span>)&#x000A;        <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">meth</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        &#x000A;        <span class="ruby-identifier">klass</span>, <span class="ruby-identifier">task</span> = <span class="ruby-constant">Thor</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-identifier">namespace_to_thor_class_and_task</span>(<span class="ruby-identifier">meth</span>)&#x000A;        <span class="ruby-identifier">argv</span> = <span class="ruby-constant">ORIGINAL_ARGV</span>.<span class="ruby-identifier">dup</span>&#x000A;        <span class="ruby-identifier">argv</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">task</span>&#x000A;        <span class="ruby-identifier">puts</span> [<span class="ruby-identifier">:ARGV</span>, <span class="ruby-identifier">argv</span>].<span class="ruby-identifier">inspect</span>&#x000A;        <span class="ruby-keyword kw">begin</span>&#x000A;          <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">start</span>(<span class="ruby-identifier">argv</span>)&#x000A;        <span class="ruby-keyword kw">rescue</span>&#x000A;          <span class="ruby-identifier">puts</span> <span class="ruby-identifier">$!</span>.<span class="ruby-identifier">message</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000244-source'><span class="ruby-comment cmt"># File lib/capricorn/app_runner.rb, line 38</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">method_missing</span>(<span class="ruby-identifier">meth</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;      <span class="ruby-identifier">meth</span> = <span class="ruby-identifier">meth</span>.<span class="ruby-identifier">to_s</span>&#x000A;      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">meth</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value">?:</span>)&#x000A;        <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">meth</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        &#x000A;        <span class="ruby-identifier">klass</span>, <span class="ruby-identifier">task</span> = <span class="ruby-constant">Thor</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-identifier">namespace_to_thor_class_and_task</span>(<span class="ruby-identifier">meth</span>)&#x000A;        <span class="ruby-identifier">argv</span> = <span class="ruby-constant">ORIGINAL_ARGV</span>.<span class="ruby-identifier">dup</span>&#x000A;        <span class="ruby-identifier">argv</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">task</span>&#x000A;        <span class="ruby-keyword kw">begin</span>&#x000A;          <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">start</span>(<span class="ruby-identifier">argv</span>)&#x000A;        <span class="ruby-keyword kw">rescue</span>&#x000A;          <span class="ruby-identifier">puts</span> <span class="ruby-identifier">$!</span>.<span class="ruby-identifier">message</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

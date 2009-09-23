@@ -41,14 +41,14 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000086">passenger_restart_txt</a></li>
+              <li><a href="#M000081">passenger_restart_txt</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000086'>
-                <a name='M000086'>      </a>
+              <div class='public-instance method' id='method-M000081'>
+                <a name='M000081'>      </a>
                 <div class='synopsis'>
                   <span class='name'>passenger_restart_txt</span>
                   <span class='arguments'>(&amp;block)</span>
@@ -59,10 +59,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000086-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000081-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000086-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/passenger_actor.rb, line 20</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">passenger_restart_txt</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">satellite_option</span>(<span class="ruby-identifier">:passenger_restart_txt</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-operator">||</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">satellite_root</span>, <span class="ruby-value str">'tmp'</span>, <span class="ruby-value str">'restart.txt'</span>) }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000081-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/passenger_actor.rb, line 20</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">passenger_restart_txt</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">satellite_option</span>(<span class="ruby-identifier">:passenger_restart_txt</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-operator">||</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">satellite_root</span>, <span class="ruby-value str">'tmp'</span>, <span class="ruby-value str">'restart.txt'</span>) }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

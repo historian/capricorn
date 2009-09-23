@@ -45,7 +45,7 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000085">restart</a></li>
+              <li><a href="#M000080">restart</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -55,8 +55,8 @@
             </div>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000085'>
-                <a name='M000085'>      </a>
+              <div class='public-instance method' id='method-M000080'>
+                <a name='M000080'>      </a>
                 <div class='synopsis'>
                   <span class='name'>restart</span>
                   <span class='arguments'>()</span>
@@ -67,10 +67,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000085-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000080-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000085-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/passenger_actor.rb, line 10</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">restart</span>&#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">as_user</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_user</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_group</span>) <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-identifier">tmp_restart</span> = <span class="ruby-identifier">system</span>.<span class="ruby-identifier">passenger_restart_txt</span>&#x000A;          <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">touch</span> <span class="ruby-identifier">tmp_restart</span>, <span class="ruby-identifier">:verbose</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000080-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/passenger_actor.rb, line 10</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">restart</span>&#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">as_user</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_user</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_group</span>) <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-identifier">tmp_restart</span> = <span class="ruby-identifier">system</span>.<span class="ruby-identifier">passenger_restart_txt</span>&#x000A;          <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">touch</span> <span class="ruby-identifier">tmp_restart</span>, <span class="ruby-identifier">:verbose</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

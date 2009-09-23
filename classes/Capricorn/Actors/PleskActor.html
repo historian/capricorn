@@ -45,16 +45,16 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000035">create_client</a></li>
-              <li><a href="#M000040">create_database</a></li>
-              <li><a href="#M000044">create_database_for</a></li>
-              <li><a href="#M000036">create_domain</a></li>
-              <li><a href="#M000043">database_name_for</a></li>
-              <li><a href="#M000041">drop_databases</a></li>
-              <li><a href="#M000037">link_htdocs</a></li>
-              <li><a href="#M000038">reload_subdomains</a></li>
-              <li><a href="#M000039">restart_apache</a></li>
-              <li><a href="#M000042">write_database_config</a></li>
+              <li><a href="#M000030">create_client</a></li>
+              <li><a href="#M000035">create_database</a></li>
+              <li><a href="#M000039">create_database_for</a></li>
+              <li><a href="#M000031">create_domain</a></li>
+              <li><a href="#M000038">database_name_for</a></li>
+              <li><a href="#M000036">drop_databases</a></li>
+              <li><a href="#M000032">link_htdocs</a></li>
+              <li><a href="#M000033">reload_subdomains</a></li>
+              <li><a href="#M000034">restart_apache</a></li>
+              <li><a href="#M000037">write_database_config</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -65,134 +65,134 @@
             </div>
             <div id='methods'>
               <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000030'>
+                <a name='M000030'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>create_client</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000030-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000030-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 14</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_client</span>&#x000A;        <span class="ruby-comment cmt"># only do this if this is needed</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">false</span>&#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">system</span>.<span class="ruby-identifier">client?</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">plesk_client</span>)&#x000A;            <span class="ruby-identifier">system</span>.<span class="ruby-identifier">create_client</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">plesk_client</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">plesk_client</span>, <span class="ruby-value str">'mypwd'</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
               <div class='public-instance method' id='method-M000035'>
                 <a name='M000035'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>create_client</span>
+                  <span class='name'>create_database</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000035-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000035-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 14</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_client</span>&#x000A;        <span class="ruby-comment cmt"># only do this if this is needed</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">false</span>&#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">system</span>.<span class="ruby-identifier">client?</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">plesk_client</span>)&#x000A;            <span class="ruby-identifier">system</span>.<span class="ruby-identifier">create_client</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">plesk_client</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">plesk_client</span>, <span class="ruby-value str">'mypwd'</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000035-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 69</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_database</span>&#x000A;        <span class="ruby-identifier">db_name</span> = <span class="ruby-identifier">database_name_for</span>(<span class="ruby-identifier">satellite</span>)&#x000A;        <span class="ruby-identifier">db_user</span> = <span class="ruby-identifier">db_name</span>[<span class="ruby-value">0</span>,<span class="ruby-value">13</span>]&#x000A;        <span class="ruby-identifier">db_pswd</span> = (<span class="ruby-identifier">rand</span>(<span class="ruby-value">1_000_000_000</span>) <span class="ruby-operator">+</span> <span class="ruby-value">10_000</span>).<span class="ruby-identifier">to_s</span>&#x000A;        &#x000A;        <span class="ruby-identifier">create_database_for</span>(<span class="ruby-identifier">satellite</span>, <span class="ruby-identifier">:d</span>, <span class="ruby-identifier">db_name</span>, <span class="ruby-identifier">db_user</span>, <span class="ruby-identifier">db_pswd</span>)&#x000A;        <span class="ruby-identifier">create_database_for</span>(<span class="ruby-identifier">satellite</span>, <span class="ruby-identifier">:t</span>, <span class="ruby-identifier">db_name</span>, <span class="ruby-identifier">db_user</span>, <span class="ruby-identifier">db_pswd</span>)&#x000A;        <span class="ruby-identifier">create_database_for</span>(<span class="ruby-identifier">satellite</span>, <span class="ruby-identifier">:p</span>, <span class="ruby-identifier">db_name</span>, <span class="ruby-identifier">db_user</span>, <span class="ruby-identifier">db_pswd</span>)&#x000A;        &#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">as_user</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_user</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_group</span>) <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-identifier">db_file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">satellite_root</span>, <span class="ruby-value str">'config'</span>, <span class="ruby-value str">'database.yml'</span>)&#x000A;          <span class="ruby-identifier">write_database_config</span>(<span class="ruby-identifier">db_file</span>, <span class="ruby-identifier">db_name</span>, <span class="ruby-identifier">db_user</span>, <span class="ruby-identifier">db_pswd</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000040'>
-                <a name='M000040'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>create_database</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000040-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000040-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 69</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_database</span>&#x000A;        <span class="ruby-identifier">db_name</span> = <span class="ruby-identifier">database_name_for</span>(<span class="ruby-identifier">satellite</span>)&#x000A;        <span class="ruby-identifier">db_user</span> = <span class="ruby-identifier">db_name</span>[<span class="ruby-value">0</span>,<span class="ruby-value">13</span>]&#x000A;        <span class="ruby-identifier">db_pswd</span> = (<span class="ruby-identifier">rand</span>(<span class="ruby-value">1_000_000_000</span>) <span class="ruby-operator">+</span> <span class="ruby-value">10_000</span>).<span class="ruby-identifier">to_s</span>&#x000A;        &#x000A;        <span class="ruby-identifier">create_database_for</span>(<span class="ruby-identifier">satellite</span>, <span class="ruby-identifier">:d</span>, <span class="ruby-identifier">db_name</span>, <span class="ruby-identifier">db_user</span>, <span class="ruby-identifier">db_pswd</span>)&#x000A;        <span class="ruby-identifier">create_database_for</span>(<span class="ruby-identifier">satellite</span>, <span class="ruby-identifier">:t</span>, <span class="ruby-identifier">db_name</span>, <span class="ruby-identifier">db_user</span>, <span class="ruby-identifier">db_pswd</span>)&#x000A;        <span class="ruby-identifier">create_database_for</span>(<span class="ruby-identifier">satellite</span>, <span class="ruby-identifier">:p</span>, <span class="ruby-identifier">db_name</span>, <span class="ruby-identifier">db_user</span>, <span class="ruby-identifier">db_pswd</span>)&#x000A;        &#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">as_user</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_user</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_group</span>) <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-identifier">db_file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">satellite_root</span>, <span class="ruby-value str">'config'</span>, <span class="ruby-value str">'database.yml'</span>)&#x000A;          <span class="ruby-identifier">write_database_config</span>(<span class="ruby-identifier">db_file</span>, <span class="ruby-identifier">db_name</span>, <span class="ruby-identifier">db_user</span>, <span class="ruby-identifier">db_pswd</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000044'>
-                <a name='M000044'>      </a>
+              <div class='public-instance method' id='method-M000039'>
+                <a name='M000039'>      </a>
                 <div class='synopsis'>
                   <span class='name'>create_database_for</span>
                   <span class='arguments'>(satellite, environment, db_name, db_user, db_pswd)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000044-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000039-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000044-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 127</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_database_for</span>(<span class="ruby-identifier">satellite</span>, <span class="ruby-identifier">environment</span>, <span class="ruby-identifier">db_name</span>, <span class="ruby-identifier">db_user</span>, <span class="ruby-identifier">db_pswd</span>)&#x000A;        <span class="ruby-identifier">db_name</span> = <span class="ruby-node">&quot;#{db_name}_#{environment}&quot;</span>&#x000A;        <span class="ruby-identifier">db_user</span> = <span class="ruby-node">&quot;#{db_user}_u#{environment}&quot;</span>&#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">create_database</span>(<span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">basedomain</span>, <span class="ruby-identifier">db_name</span>, <span class="ruby-identifier">db_user</span>, <span class="ruby-identifier">db_pswd</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000039-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 127</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_database_for</span>(<span class="ruby-identifier">satellite</span>, <span class="ruby-identifier">environment</span>, <span class="ruby-identifier">db_name</span>, <span class="ruby-identifier">db_user</span>, <span class="ruby-identifier">db_pswd</span>)&#x000A;        <span class="ruby-identifier">db_name</span> = <span class="ruby-node">&quot;#{db_name}_#{environment}&quot;</span>&#x000A;        <span class="ruby-identifier">db_user</span> = <span class="ruby-node">&quot;#{db_user}_u#{environment}&quot;</span>&#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">create_database</span>(<span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">basedomain</span>, <span class="ruby-identifier">db_name</span>, <span class="ruby-identifier">db_user</span>, <span class="ruby-identifier">db_pswd</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000031'>
+                <a name='M000031'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>create_domain</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000031-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000031-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 23</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_domain</span>&#x000A;        <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">system</span>.<span class="ruby-identifier">domain?</span>(<span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">basedomain</span>)&#x000A;          <span class="ruby-identifier">system</span>.<span class="ruby-identifier">create_domain</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">plesk_client</span>, <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">basedomain</span>,&#x000A;            <span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_user</span>[<span class="ruby-value">0</span>,<span class="ruby-value">20</span>], (<span class="ruby-identifier">rand</span>(<span class="ruby-value">1_000_000_000</span>) <span class="ruby-operator">+</span> <span class="ruby-value">10_000</span>).<span class="ruby-identifier">to_s</span>)&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">httpdocs_path</span> = <span class="ruby-node">&quot;/var/www/vhosts/#{satellite.basedomain}/httpdocs&quot;</span>&#x000A;          <span class="ruby-identifier">system</span>.<span class="ruby-identifier">set_satellite_option</span>(<span class="ruby-identifier">:web_user</span>,&#x000A;            <span class="ruby-identifier">system</span>.<span class="ruby-identifier">get_user_name</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">stat</span>(<span class="ruby-identifier">httpdocs_path</span>).<span class="ruby-identifier">uid</span>))&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;          &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">subdomain?</span> <span class="ruby-keyword kw">and</span> <span class="ruby-operator">!</span><span class="ruby-identifier">system</span>.<span class="ruby-identifier">subdomain?</span>(<span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">basedomain</span>, <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">subdomain</span>)&#x000A;          <span class="ruby-identifier">system</span>.<span class="ruby-identifier">create_subdomain</span>(<span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">basedomain</span>, <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">subdomain</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">satellite_root</span>)&#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">shared_root</span>)&#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">chown_R</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_user</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_group</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">satellite_root</span>)&#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">chown_R</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_user</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_group</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">shared_root</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000038'>
+                <a name='M000038'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>database_name_for</span>
+                  <span class='arguments'>(satellite)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000038-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000038-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 123</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">database_name_for</span>(<span class="ruby-identifier">satellite</span>)&#x000A;        <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">domain</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/[^a-z]+/</span>, <span class="ruby-value str">'_'</span>)[<span class="ruby-value">0</span>,<span class="ruby-value">63</span>]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000036'>
                 <a name='M000036'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>create_domain</span>
+                  <span class='name'>drop_databases</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000036-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000036-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 23</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_domain</span>&#x000A;        <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">system</span>.<span class="ruby-identifier">domain?</span>(<span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">basedomain</span>)&#x000A;          <span class="ruby-identifier">system</span>.<span class="ruby-identifier">create_domain</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">plesk_client</span>, <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">basedomain</span>,&#x000A;            <span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_user</span>[<span class="ruby-value">0</span>,<span class="ruby-value">20</span>], (<span class="ruby-identifier">rand</span>(<span class="ruby-value">1_000_000_000</span>) <span class="ruby-operator">+</span> <span class="ruby-value">10_000</span>).<span class="ruby-identifier">to_s</span>)&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">httpdocs_path</span> = <span class="ruby-node">&quot;/var/www/vhosts/#{satellite.basedomain}/httpdocs&quot;</span>&#x000A;          <span class="ruby-identifier">system</span>.<span class="ruby-identifier">set_satellite_option</span>(<span class="ruby-identifier">:web_user</span>,&#x000A;            <span class="ruby-identifier">system</span>.<span class="ruby-identifier">get_user_name</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">stat</span>(<span class="ruby-identifier">httpdocs_path</span>).<span class="ruby-identifier">uid</span>))&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;          &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">subdomain?</span> <span class="ruby-keyword kw">and</span> <span class="ruby-operator">!</span><span class="ruby-identifier">system</span>.<span class="ruby-identifier">subdomain?</span>(<span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">basedomain</span>, <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">subdomain</span>)&#x000A;          <span class="ruby-identifier">system</span>.<span class="ruby-identifier">create_subdomain</span>(<span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">basedomain</span>, <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">subdomain</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">satellite_root</span>)&#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">shared_root</span>)&#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">chown_R</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_user</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_group</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">satellite_root</span>)&#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">chown_R</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_user</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_group</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">shared_root</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000036-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 84</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">drop_databases</span>&#x000A;        <span class="ruby-identifier">db_name</span> = <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">domain</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/[^a-z]+/</span>, <span class="ruby-value str">'_'</span>)[<span class="ruby-value">0</span>,<span class="ruby-value">63</span>]&#x000A;        &#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">drop_database</span>(<span class="ruby-node">&quot;#{db_name}_d&quot;</span>)&#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">drop_database</span>(<span class="ruby-node">&quot;#{db_name}_t&quot;</span>)&#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">drop_database</span>(<span class="ruby-node">&quot;#{db_name}_p&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000043'>
-                <a name='M000043'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>database_name_for</span>
-                  <span class='arguments'>(satellite)</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000043-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000043-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 123</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">database_name_for</span>(<span class="ruby-identifier">satellite</span>)&#x000A;        <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">domain</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/[^a-z]+/</span>, <span class="ruby-value str">'_'</span>)[<span class="ruby-value">0</span>,<span class="ruby-value">63</span>]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000041'>
-                <a name='M000041'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>drop_databases</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000041-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000041-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 84</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">drop_databases</span>&#x000A;        <span class="ruby-identifier">db_name</span> = <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">domain</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/[^a-z]+/</span>, <span class="ruby-value str">'_'</span>)[<span class="ruby-value">0</span>,<span class="ruby-value">63</span>]&#x000A;        &#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">drop_database</span>(<span class="ruby-node">&quot;#{db_name}_d&quot;</span>)&#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">drop_database</span>(<span class="ruby-node">&quot;#{db_name}_t&quot;</span>)&#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">drop_database</span>(<span class="ruby-node">&quot;#{db_name}_p&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000037'>
-                <a name='M000037'>      </a>
+              <div class='public-instance method' id='method-M000032'>
+                <a name='M000032'>      </a>
                 <div class='synopsis'>
                   <span class='name'>link_htdocs</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000037-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000032-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000037-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 43</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">link_htdocs</span>&#x000A;        <span class="ruby-identifier">httpdocs_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">satellite_root</span>), <span class="ruby-value str">'httpdocs'</span>)&#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">rm_rf</span>(<span class="ruby-identifier">httpdocs_path</span>)&#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">ln_s</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">satellite_root</span>, <span class="ruby-identifier">httpdocs_path</span>)&#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">chown_R</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_user</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_group</span>, <span class="ruby-identifier">httpdocs_path</span>)&#x000A;        &#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">satellite_root</span>, <span class="ruby-value str">'../conf/vhost.conf'</span>), <span class="ruby-value str">'w+'</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span> <span class="ruby-node">%{DocumentRoot #{httpdocs_path}/public&#x000A;&lt;Directory  &quot;#{httpdocs_path}/public&quot;&gt;&#x000A;  Options All&#x000A;  AllowOverride All&#x000A;  Order allow,deny&#x000A;  Allow from all&#x000A;&lt;/Directory&gt;&#x000A;}</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000032-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 43</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">link_htdocs</span>&#x000A;        <span class="ruby-identifier">httpdocs_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">satellite_root</span>), <span class="ruby-value str">'httpdocs'</span>)&#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">rm_rf</span>(<span class="ruby-identifier">httpdocs_path</span>)&#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">ln_s</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">satellite_root</span>, <span class="ruby-identifier">httpdocs_path</span>)&#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">chown_R</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_user</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_group</span>, <span class="ruby-identifier">httpdocs_path</span>)&#x000A;        &#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">satellite_root</span>, <span class="ruby-value str">'../conf/vhost.conf'</span>), <span class="ruby-value str">'w+'</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span> <span class="ruby-node">%{DocumentRoot #{httpdocs_path}/public&#x000A;&lt;Directory  &quot;#{httpdocs_path}/public&quot;&gt;&#x000A;  Options All&#x000A;  AllowOverride All&#x000A;  Order allow,deny&#x000A;  Allow from all&#x000A;&lt;/Directory&gt;&#x000A;}</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000038'>
-                <a name='M000038'>      </a>
+              <div class='public-instance method' id='method-M000033'>
+                <a name='M000033'>      </a>
                 <div class='synopsis'>
                   <span class='name'>reload_subdomains</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000038-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000033-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000038-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 61</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reload_subdomains</span>&#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{system.plesk_websrvmng_bin} --reconfigure-vhost --vhost-name=#{satellite.basedomain}&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000033-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 61</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reload_subdomains</span>&#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{system.plesk_websrvmng_bin} --reconfigure-vhost --vhost-name=#{satellite.basedomain}&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000039'>
-                <a name='M000039'>      </a>
+              <div class='public-instance method' id='method-M000034'>
+                <a name='M000034'>      </a>
                 <div class='synopsis'>
                   <span class='name'>restart_apache</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000039-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000034-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000039-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 65</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">restart_apache</span>&#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{system.plesk_httpd_bin} restart&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000034-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 65</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">restart_apache</span>&#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{system.plesk_httpd_bin} restart&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000042'>
-                <a name='M000042'>      </a>
+              <div class='public-instance method' id='method-M000037'>
+                <a name='M000037'>      </a>
                 <div class='synopsis'>
                   <span class='name'>write_database_config</span>
                   <span class='arguments'>(db_file, db_name, db_user, db_pswd)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000042-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000037-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000042-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 92</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write_database_config</span>(<span class="ruby-identifier">db_file</span>, <span class="ruby-identifier">db_name</span>, <span class="ruby-identifier">db_user</span>, <span class="ruby-identifier">db_pswd</span>)&#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">db_file</span>, <span class="ruby-value str">'w+'</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span>(<span class="ruby-node">%{&#x000A;development:&#x000A;  adapter: mysql&#x000A;  database: #{db_name}_d&#x000A;  username: #{db_user}_ud&#x000A;  password: #{db_pswd}&#x000A;  host: localhost&#x000A;  encoding: utf8&#x000A;  socket: /var/lib/mysql/mysql.sock&#x000A;&#x000A;test:&#x000A;  adapter: mysql&#x000A;  database: #{db_name}_t&#x000A;  username: #{db_user}_ut&#x000A;  password: #{db_pswd}&#x000A;  host: localhost&#x000A;  encoding: utf8&#x000A;  socket: /var/lib/mysql/mysql.sock&#x000A;&#x000A;production:&#x000A;  adapter: mysql&#x000A;  database: #{db_name}_p&#x000A;  username: #{db_user}_up&#x000A;  password: #{db_pswd}&#x000A;  host: localhost&#x000A;  encoding: utf8&#x000A;  socket: /var/lib/mysql/mysql.sock&#x000A;}</span>) }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000037-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 92</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write_database_config</span>(<span class="ruby-identifier">db_file</span>, <span class="ruby-identifier">db_name</span>, <span class="ruby-identifier">db_user</span>, <span class="ruby-identifier">db_pswd</span>)&#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">db_file</span>, <span class="ruby-value str">'w+'</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span>(<span class="ruby-node">%{&#x000A;development:&#x000A;  adapter: mysql&#x000A;  database: #{db_name}_d&#x000A;  username: #{db_user}_ud&#x000A;  password: #{db_pswd}&#x000A;  host: localhost&#x000A;  encoding: utf8&#x000A;  socket: /var/lib/mysql/mysql.sock&#x000A;&#x000A;test:&#x000A;  adapter: mysql&#x000A;  database: #{db_name}_t&#x000A;  username: #{db_user}_ut&#x000A;  password: #{db_pswd}&#x000A;  host: localhost&#x000A;  encoding: utf8&#x000A;  socket: /var/lib/mysql/mysql.sock&#x000A;&#x000A;production:&#x000A;  adapter: mysql&#x000A;  database: #{db_name}_p&#x000A;  username: #{db_user}_up&#x000A;  password: #{db_pswd}&#x000A;  host: localhost&#x000A;  encoding: utf8&#x000A;  socket: /var/lib/mysql/mysql.sock&#x000A;}</span>) }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

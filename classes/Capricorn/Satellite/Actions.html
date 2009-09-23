@@ -41,65 +41,65 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000110">add_engine</a></li>
-              <li><a href="#M000113">remove_engine</a></li>
-              <li><a href="#M000111">update_all_engines</a></li>
-              <li><a href="#M000112">update_engine</a></li>
+              <li><a href="#M000105">add_engine</a></li>
+              <li><a href="#M000108">remove_engine</a></li>
+              <li><a href="#M000106">update_all_engines</a></li>
+              <li><a href="#M000107">update_engine</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000110'>
-                <a name='M000110'>      </a>
+              <div class='public-instance method' id='method-M000105'>
+                <a name='M000105'>      </a>
                 <div class='synopsis'>
                   <span class='name'>add_engine</span>
                   <span class='arguments'>(name, options={})</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000110-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000105-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000110-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/actions.rb, line 6</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_engine</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>={})&#x000A;        <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@engines</span>.<span class="ruby-identifier">key?</span> <span class="ruby-identifier">name</span>&#x000A;          <span class="ruby-ivar">@engines</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">options</span>&#x000A;          <span class="ruby-keyword kw">true</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-keyword kw">false</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000105-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/actions.rb, line 6</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_engine</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>={})&#x000A;        <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@engines</span>.<span class="ruby-identifier">key?</span> <span class="ruby-identifier">name</span>&#x000A;          <span class="ruby-ivar">@engines</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">options</span>&#x000A;          <span class="ruby-keyword kw">true</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-keyword kw">false</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000113'>
-                <a name='M000113'>      </a>
+              <div class='public-instance method' id='method-M000108'>
+                <a name='M000108'>      </a>
                 <div class='synopsis'>
                   <span class='name'>remove_engine</span>
                   <span class='arguments'>(name)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000113-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000108-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000113-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/actions.rb, line 44</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_engine</span>(<span class="ruby-identifier">name</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@engines</span>.<span class="ruby-identifier">key?</span> <span class="ruby-identifier">name</span>&#x000A;          <span class="ruby-ivar">@engines</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">name</span>)&#x000A;          <span class="ruby-keyword kw">true</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-keyword kw">false</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000108-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/actions.rb, line 44</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_engine</span>(<span class="ruby-identifier">name</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@engines</span>.<span class="ruby-identifier">key?</span> <span class="ruby-identifier">name</span>&#x000A;          <span class="ruby-ivar">@engines</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">name</span>)&#x000A;          <span class="ruby-keyword kw">true</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-keyword kw">false</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000111'>
-                <a name='M000111'>      </a>
+              <div class='public-instance method' id='method-M000106'>
+                <a name='M000106'>      </a>
                 <div class='synopsis'>
                   <span class='name'>update_all_engines</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000111-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000106-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000111-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/actions.rb, line 15</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_all_engines</span>&#x000A;        <span class="ruby-ivar">@engines</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">gem_name</span>,<span class="ruby-identifier">options</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">gem_update</span>(<span class="ruby-identifier">gem_name</span>)&#x000A;          &#x000A;          <span class="ruby-identifier">dep</span> = <span class="ruby-constant">Gem</span><span class="ruby-operator">::</span><span class="ruby-constant">Dependency</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">gem_name</span>.<span class="ruby-identifier">to_s</span>, <span class="ruby-constant">Gem</span><span class="ruby-operator">::</span><span class="ruby-constant">Requirement</span>.<span class="ruby-identifier">default</span>)&#x000A;          <span class="ruby-identifier">specs</span> = <span class="ruby-constant">Gem</span><span class="ruby-operator">::</span><span class="ruby-constant">SourceIndex</span>.<span class="ruby-identifier">from_installed_gems</span>.<span class="ruby-identifier">search</span>(<span class="ruby-identifier">dep</span>)&#x000A;          &#x000A;          <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">specs</span>.<span class="ruby-identifier">empty?</span>&#x000A;          &#x000A;          <span class="ruby-identifier">specs</span>.<span class="ruby-identifier">sort!</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">a</span>,<span class="ruby-identifier">b</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-identifier">b</span>.<span class="ruby-identifier">version</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">version</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          &#x000A;          <span class="ruby-identifier">spec_version</span> = <span class="ruby-identifier">specs</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">version</span>.<span class="ruby-identifier">to_s</span>&#x000A;          <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:version</span>] = <span class="ruby-identifier">spec_version</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000106-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/actions.rb, line 15</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_all_engines</span>&#x000A;        <span class="ruby-ivar">@engines</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">gem_name</span>,<span class="ruby-identifier">options</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">system</span>.<span class="ruby-identifier">gem_update</span>(<span class="ruby-identifier">gem_name</span>)&#x000A;          &#x000A;          <span class="ruby-identifier">dep</span> = <span class="ruby-constant">Gem</span><span class="ruby-operator">::</span><span class="ruby-constant">Dependency</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">gem_name</span>.<span class="ruby-identifier">to_s</span>, <span class="ruby-constant">Gem</span><span class="ruby-operator">::</span><span class="ruby-constant">Requirement</span>.<span class="ruby-identifier">default</span>)&#x000A;          <span class="ruby-identifier">specs</span> = <span class="ruby-constant">Gem</span><span class="ruby-operator">::</span><span class="ruby-constant">SourceIndex</span>.<span class="ruby-identifier">from_installed_gems</span>.<span class="ruby-identifier">search</span>(<span class="ruby-identifier">dep</span>)&#x000A;          &#x000A;          <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">specs</span>.<span class="ruby-identifier">empty?</span>&#x000A;          &#x000A;          <span class="ruby-identifier">specs</span>.<span class="ruby-identifier">sort!</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">a</span>,<span class="ruby-identifier">b</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-identifier">b</span>.<span class="ruby-identifier">version</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">version</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          &#x000A;          <span class="ruby-identifier">spec_version</span> = <span class="ruby-identifier">specs</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">version</span>.<span class="ruby-identifier">to_s</span>&#x000A;          <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:version</span>] = <span class="ruby-identifier">spec_version</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000112'>
-                <a name='M000112'>      </a>
+              <div class='public-instance method' id='method-M000107'>
+                <a name='M000107'>      </a>
                 <div class='synopsis'>
                   <span class='name'>update_engine</span>
                   <span class='arguments'>(name, options={})</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000112-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000107-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000112-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/actions.rb, line 35</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_engine</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>={})&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@engines</span>.<span class="ruby-identifier">key?</span> <span class="ruby-identifier">name</span>&#x000A;          <span class="ruby-ivar">@engines</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">options</span>&#x000A;          <span class="ruby-keyword kw">true</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-keyword kw">false</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000107-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/actions.rb, line 35</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_engine</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>={})&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@engines</span>.<span class="ruby-identifier">key?</span> <span class="ruby-identifier">name</span>&#x000A;          <span class="ruby-ivar">@engines</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">options</span>&#x000A;          <span class="ruby-keyword kw">true</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-keyword kw">false</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

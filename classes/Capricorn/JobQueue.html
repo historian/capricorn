@@ -45,24 +45,24 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000120">new</a></li>
+              <li><a href="#M000115">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000126">cancel</a></li>
-              <li><a href="#M000127">canceled?</a></li>
-              <li><a href="#M000123">delete</a></li>
-              <li><a href="#M000122">dequeue</a></li>
-              <li><a href="#M000134">each</a></li>
-              <li><a href="#M000121">enqueue</a></li>
-              <li><a href="#M000128">immediate</a></li>
-              <li><a href="#M000129">immediated?</a></li>
-              <li><a href="#M000130">join!</a></li>
-              <li><a href="#M000124">peek</a></li>
-              <li><a href="#M000133">running?</a></li>
-              <li><a href="#M000125">size</a></li>
-              <li><a href="#M000131">stop!</a></li>
-              <li><a href="#M000132">stopped?</a></li>
+              <li><a href="#M000121">cancel</a></li>
+              <li><a href="#M000122">canceled?</a></li>
+              <li><a href="#M000118">delete</a></li>
+              <li><a href="#M000117">dequeue</a></li>
+              <li><a href="#M000129">each</a></li>
+              <li><a href="#M000116">enqueue</a></li>
+              <li><a href="#M000123">immediate</a></li>
+              <li><a href="#M000124">immediated?</a></li>
+              <li><a href="#M000125">join!</a></li>
+              <li><a href="#M000119">peek</a></li>
+              <li><a href="#M000128">running?</a></li>
+              <li><a href="#M000120">size</a></li>
+              <li><a href="#M000126">stop!</a></li>
+              <li><a href="#M000127">stopped?</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -80,8 +80,8 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000120'>
-                <a name='M000120'>      </a>
+              <div class='public-class method' id='method-M000115'>
+                <a name='M000115'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>()</span>
@@ -92,15 +92,15 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000120-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000115-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000120-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 8</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>&#x000A;      <span class="ruby-ivar">@immediated_jobs</span> = <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>&#x000A;      <span class="ruby-ivar">@canceled_jobs</span> = <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>&#x000A;      <span class="ruby-ivar">@job_queue</span> = <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>&#x000A;      <span class="ruby-ivar">@jobs</span>      = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>&#x000A;      <span class="ruby-ivar">@mutex</span>     = <span class="ruby-constant">Mutex</span>.<span class="ruby-identifier">new</span>&#x000A;      <span class="ruby-ivar">@next_id</span>   = <span class="ruby-value">1</span>&#x000A;      &#x000A;      <span class="ruby-ivar">@worker</span>    = <span class="ruby-constant">Thread</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">job_queue</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">job_queue</span>.<span class="ruby-identifier">running?</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">job_queue</span>.<span class="ruby-identifier">peek</span>&#x000A;          &#x000A;          <span class="ruby-identifier">job</span> = <span class="ruby-identifier">job_queue</span>.<span class="ruby-identifier">peek</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">job</span>&#x000A;            <span class="ruby-identifier">job</span>.<span class="ruby-identifier">run</span>(<span class="ruby-identifier">job_queue</span>)&#x000A;            <span class="ruby-identifier">job_queue</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">job</span>.<span class="ruby-identifier">id</span>)&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-identifier">sleep</span>(<span class="ruby-value">1</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          &#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000115-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 8</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>&#x000A;      <span class="ruby-ivar">@immediated_jobs</span> = <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>&#x000A;      <span class="ruby-ivar">@canceled_jobs</span> = <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>&#x000A;      <span class="ruby-ivar">@job_queue</span> = <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>&#x000A;      <span class="ruby-ivar">@jobs</span>      = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>&#x000A;      <span class="ruby-ivar">@mutex</span>     = <span class="ruby-constant">Mutex</span>.<span class="ruby-identifier">new</span>&#x000A;      <span class="ruby-ivar">@next_id</span>   = <span class="ruby-value">1</span>&#x000A;      &#x000A;      <span class="ruby-ivar">@worker</span>    = <span class="ruby-constant">Thread</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">job_queue</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">job_queue</span>.<span class="ruby-identifier">running?</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">job_queue</span>.<span class="ruby-identifier">peek</span>&#x000A;          &#x000A;          <span class="ruby-identifier">job</span> = <span class="ruby-identifier">job_queue</span>.<span class="ruby-identifier">peek</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">job</span>&#x000A;            <span class="ruby-identifier">job</span>.<span class="ruby-identifier">run</span>(<span class="ruby-identifier">job_queue</span>)&#x000A;            <span class="ruby-identifier">job_queue</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">job</span>.<span class="ruby-identifier">id</span>)&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-identifier">sleep</span>(<span class="ruby-value">1</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          &#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000126'>
-                <a name='M000126'>      </a>
+              <div class='public-instance method' id='method-M000121'>
+                <a name='M000121'>      </a>
                 <div class='synopsis'>
                   <span class='name'>cancel</span>
                   <span class='arguments'>(id)</span>
@@ -111,14 +111,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000126-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000121-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000126-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 79</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cancel</span>(<span class="ruby-identifier">id</span>)&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-identifier">id</span> = <span class="ruby-ivar">@job_queue</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">id</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">id</span>&#x000A;          <span class="ruby-ivar">@jobs</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">id</span>)&#x000A;          <span class="ruby-ivar">@canceled_jobs</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">id</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000121-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 79</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cancel</span>(<span class="ruby-identifier">id</span>)&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-identifier">id</span> = <span class="ruby-ivar">@job_queue</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">id</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">id</span>&#x000A;          <span class="ruby-ivar">@jobs</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">id</span>)&#x000A;          <span class="ruby-ivar">@canceled_jobs</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">id</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000127'>
-                <a name='M000127'>      </a>
+              <div class='public-instance method' id='method-M000122'>
+                <a name='M000122'>      </a>
                 <div class='synopsis'>
                   <span class='name'>canceled?</span>
                   <span class='arguments'>(id)</span>
@@ -129,14 +129,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000127-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000122-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000127-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 90</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">canceled?</span>(<span class="ruby-identifier">id</span>)&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@canceled_jobs</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">id</span>).<span class="ruby-identifier">nil?</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000122-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 90</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">canceled?</span>(<span class="ruby-identifier">id</span>)&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@canceled_jobs</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">id</span>).<span class="ruby-identifier">nil?</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000123'>
-                <a name='M000123'>      </a>
+              <div class='public-instance method' id='method-M000118'>
+                <a name='M000118'>      </a>
                 <div class='synopsis'>
                   <span class='name'>delete</span>
                   <span class='arguments'>(id)</span>
@@ -147,14 +147,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000123-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000118-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000123-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 54</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete</span>(<span class="ruby-identifier">id</span>)&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-identifier">id</span> = <span class="ruby-ivar">@job_queue</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">id</span>)&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@jobs</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">id</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">id</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000118-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 54</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete</span>(<span class="ruby-identifier">id</span>)&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-identifier">id</span> = <span class="ruby-ivar">@job_queue</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">id</span>)&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@jobs</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">id</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">id</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000122'>
-                <a name='M000122'>      </a>
+              <div class='public-instance method' id='method-M000117'>
+                <a name='M000117'>      </a>
                 <div class='synopsis'>
                   <span class='name'>dequeue</span>
                   <span class='arguments'>()</span>
@@ -165,14 +165,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000122-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000117-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000122-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 46</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dequeue</span>&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-identifier">id</span> = <span class="ruby-ivar">@job_queue</span>.<span class="ruby-identifier">shift</span>&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@jobs</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">id</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">id</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000117-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 46</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dequeue</span>&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-identifier">id</span> = <span class="ruby-ivar">@job_queue</span>.<span class="ruby-identifier">shift</span>&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@jobs</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">id</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">id</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000134'>
-                <a name='M000134'>      </a>
+              <div class='public-instance method' id='method-M000129'>
+                <a name='M000129'>      </a>
                 <div class='synopsis'>
                   <span class='name'>each</span>
                   <span class='arguments'>() {|job, canceled, immediated| ...}</span>
@@ -183,14 +183,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000134-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000129-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000134-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 136</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each</span>&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-ivar">@job_queue</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">job</span>        = <span class="ruby-ivar">@jobs</span>[<span class="ruby-identifier">id</span>]&#x000A;          <span class="ruby-identifier">canceled</span>   = <span class="ruby-ivar">@canceled_jobs</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">id</span>)&#x000A;          <span class="ruby-identifier">immediated</span> = <span class="ruby-ivar">@immediated_jobs</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">id</span>)&#x000A;          &#x000A;          <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">job</span>, <span class="ruby-identifier">canceled</span>, <span class="ruby-identifier">immediated</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000129-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 136</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each</span>&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-ivar">@job_queue</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">job</span>        = <span class="ruby-ivar">@jobs</span>[<span class="ruby-identifier">id</span>]&#x000A;          <span class="ruby-identifier">canceled</span>   = <span class="ruby-ivar">@canceled_jobs</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">id</span>)&#x000A;          <span class="ruby-identifier">immediated</span> = <span class="ruby-ivar">@immediated_jobs</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">id</span>)&#x000A;          &#x000A;          <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">job</span>, <span class="ruby-identifier">canceled</span>, <span class="ruby-identifier">immediated</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000121'>
-                <a name='M000121'>      </a>
+              <div class='public-instance method' id='method-M000116'>
+                <a name='M000116'>      </a>
                 <div class='synopsis'>
                   <span class='name'>enqueue</span>
                   <span class='arguments'>(name, options={}, &amp;proc)</span>
@@ -202,14 +202,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000121-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000116-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000121-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 32</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enqueue</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">proc</span>)&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-identifier">job</span> = <span class="ruby-constant">Job</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@next_id</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">proc</span>)&#x000A;        <span class="ruby-ivar">@next_id</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>&#x000A;        <span class="ruby-ivar">@jobs</span>[<span class="ruby-identifier">job</span>.<span class="ruby-identifier">id</span>] = <span class="ruby-identifier">job</span>&#x000A;        <span class="ruby-ivar">@job_queue</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">job</span>.<span class="ruby-identifier">id</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:immediate</span>]&#x000A;          <span class="ruby-ivar">@immediated_jobs</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">id</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">job</span>.<span class="ruby-identifier">id</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000116-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 32</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enqueue</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">proc</span>)&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-identifier">job</span> = <span class="ruby-constant">Job</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@next_id</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">proc</span>)&#x000A;        <span class="ruby-ivar">@next_id</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>&#x000A;        <span class="ruby-ivar">@jobs</span>[<span class="ruby-identifier">job</span>.<span class="ruby-identifier">id</span>] = <span class="ruby-identifier">job</span>&#x000A;        <span class="ruby-ivar">@job_queue</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">job</span>.<span class="ruby-identifier">id</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:immediate</span>]&#x000A;          <span class="ruby-ivar">@immediated_jobs</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">id</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">job</span>.<span class="ruby-identifier">id</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000128'>
-                <a name='M000128'>      </a>
+              <div class='public-instance method' id='method-M000123'>
+                <a name='M000123'>      </a>
                 <div class='synopsis'>
                   <span class='name'>immediate</span>
                   <span class='arguments'>(id)</span>
@@ -220,14 +220,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000128-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000123-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000128-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 97</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">immediate</span>(<span class="ruby-identifier">id</span>)&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-ivar">@immediated_jobs</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">id</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@jobs</span>[<span class="ruby-identifier">id</span>]&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000123-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 97</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">immediate</span>(<span class="ruby-identifier">id</span>)&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-ivar">@immediated_jobs</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">id</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@jobs</span>[<span class="ruby-identifier">id</span>]&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000129'>
-                <a name='M000129'>      </a>
+              <div class='public-instance method' id='method-M000124'>
+                <a name='M000124'>      </a>
                 <div class='synopsis'>
                   <span class='name'>immediated?</span>
                   <span class='arguments'>(id)</span>
@@ -238,14 +238,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000129-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000124-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000129-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 104</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">immediated?</span>(<span class="ruby-identifier">id</span>)&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@immediated_jobs</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">id</span>).<span class="ruby-identifier">nil?</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000124-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 104</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">immediated?</span>(<span class="ruby-identifier">id</span>)&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@immediated_jobs</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">id</span>).<span class="ruby-identifier">nil?</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000130'>
-                <a name='M000130'>      </a>
+              <div class='public-instance method' id='method-M000125'>
+                <a name='M000125'>      </a>
                 <div class='synopsis'>
                   <span class='name'>join!</span>
                   <span class='arguments'>()</span>
@@ -256,14 +256,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000130-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000125-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000130-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 111</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">join!</span>&#x000A;      <span class="ruby-ivar">@worker</span>.<span class="ruby-identifier">join</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000125-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 111</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">join!</span>&#x000A;      <span class="ruby-ivar">@worker</span>.<span class="ruby-identifier">join</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000124'>
-                <a name='M000124'>      </a>
+              <div class='public-instance method' id='method-M000119'>
+                <a name='M000119'>      </a>
                 <div class='synopsis'>
                   <span class='name'>peek</span>
                   <span class='arguments'>()</span>
@@ -274,14 +274,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000124-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000119-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000124-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 62</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">peek</span>&#x000A;      <span class="ruby-identifier">job</span> = <span class="ruby-keyword kw">nil</span>&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-identifier">id</span> = <span class="ruby-ivar">@job_queue</span>.<span class="ruby-identifier">first</span>&#x000A;        <span class="ruby-identifier">job</span> = <span class="ruby-ivar">@jobs</span>[<span class="ruby-identifier">id</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">id</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">job</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000119-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 62</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">peek</span>&#x000A;      <span class="ruby-identifier">job</span> = <span class="ruby-keyword kw">nil</span>&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-identifier">id</span> = <span class="ruby-ivar">@job_queue</span>.<span class="ruby-identifier">first</span>&#x000A;        <span class="ruby-identifier">job</span> = <span class="ruby-ivar">@jobs</span>[<span class="ruby-identifier">id</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">id</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">job</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000133'>
-                <a name='M000133'>      </a>
+              <div class='public-instance method' id='method-M000128'>
+                <a name='M000128'>      </a>
                 <div class='synopsis'>
                   <span class='name'>running?</span>
                   <span class='arguments'>()</span>
@@ -292,14 +292,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000133-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000128-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000133-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 131</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">running?</span>&#x000A;      <span class="ruby-operator">!</span><span class="ruby-identifier">stopped?</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000128-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 131</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">running?</span>&#x000A;      <span class="ruby-operator">!</span><span class="ruby-identifier">stopped?</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000125'>
-                <a name='M000125'>      </a>
+              <div class='public-instance method' id='method-M000120'>
+                <a name='M000120'>      </a>
                 <div class='synopsis'>
                   <span class='name'>size</span>
                   <span class='arguments'>()</span>
@@ -310,14 +310,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000125-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000120-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000125-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 72</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">size</span>&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-ivar">@job_queue</span>.<span class="ruby-identifier">size</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000120-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 72</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">size</span>&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-ivar">@job_queue</span>.<span class="ruby-identifier">size</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000131'>
-                <a name='M000131'>      </a>
+              <div class='public-instance method' id='method-M000126'>
+                <a name='M000126'>      </a>
                 <div class='synopsis'>
                   <span class='name'>stop!</span>
                   <span class='arguments'>()</span>
@@ -328,14 +328,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000131-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000126-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000131-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 116</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stop!</span>&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-ivar">@stopped</span> = <span class="ruby-keyword kw">true</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">join!</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000126-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 116</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stop!</span>&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-ivar">@stopped</span> = <span class="ruby-keyword kw">true</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">join!</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000132'>
-                <a name='M000132'>      </a>
+              <div class='public-instance method' id='method-M000127'>
+                <a name='M000127'>      </a>
                 <div class='synopsis'>
                   <span class='name'>stopped?</span>
                   <span class='arguments'>()</span>
@@ -346,10 +346,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000132-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000127-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000132-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 124</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stopped?</span>&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-ivar">@stopped</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000127-source'><span class="ruby-comment cmt"># File lib/capricorn/job_queue.rb, line 124</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stopped?</span>&#x000A;      <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-ivar">@stopped</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

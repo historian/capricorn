@@ -41,12 +41,12 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000105">included</a></li>
+              <li><a href="#M000100">included</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000106">dump</a></li>
-              <li><a href="#M000107">dump_file</a></li>
+              <li><a href="#M000101">dump</a></li>
+              <li><a href="#M000102">dump_file</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -56,44 +56,44 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000105'>
-                <a name='M000105'>      </a>
+              <div class='public-class method' id='method-M000100'>
+                <a name='M000100'>      </a>
                 <div class='synopsis'>
                   <span class='name'>included</span>
                   <span class='arguments'>(base)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000105-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000100-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000105-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/persistence.rb, line 7</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">included</span>(<span class="ruby-identifier">base</span>)&#x000A;        <span class="ruby-identifier">base</span>.<span class="ruby-identifier">extend</span> <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">Satellite</span><span class="ruby-operator">::</span><span class="ruby-constant">Persistence</span><span class="ruby-operator">::</span><span class="ruby-constant">ClassMethods</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000100-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/persistence.rb, line 7</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">included</span>(<span class="ruby-identifier">base</span>)&#x000A;        <span class="ruby-identifier">base</span>.<span class="ruby-identifier">extend</span> <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">Satellite</span><span class="ruby-operator">::</span><span class="ruby-constant">Persistence</span><span class="ruby-operator">::</span><span class="ruby-constant">ClassMethods</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000106'>
-                <a name='M000106'>      </a>
+              <div class='public-instance method' id='method-M000101'>
+                <a name='M000101'>      </a>
                 <div class='synopsis'>
                   <span class='name'>dump</span>
                   <span class='arguments'>(io=nil)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000106-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000101-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000106-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/persistence.rb, line 24</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dump</span>(<span class="ruby-identifier">io</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-identifier">data</span> = {}&#x000A;        &#x000A;        <span class="ruby-identifier">private_vars</span> = <span class="ruby-node">%w( basedomain subdomain )</span>&#x000A;        <span class="ruby-identifier">instance_variables</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">ivar_name</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">ivar_name</span> = <span class="ruby-identifier">ivar_name</span>.<span class="ruby-identifier">to_s</span>&#x000A;          <span class="ruby-identifier">ivar_name</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/^@(.+)$/</span>&#x000A;          <span class="ruby-identifier">name</span> = <span class="ruby-identifier">$1</span>&#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">private_vars</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">name</span>&#x000A;            <span class="ruby-identifier">data</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-identifier">ivar_name</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">io</span>&#x000A;          <span class="ruby-identifier">io</span>.<span class="ruby-identifier">write</span> <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">dump</span>(<span class="ruby-identifier">data</span>)&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">dump</span>(<span class="ruby-identifier">data</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000101-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/persistence.rb, line 24</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dump</span>(<span class="ruby-identifier">io</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-identifier">data</span> = {}&#x000A;        &#x000A;        <span class="ruby-identifier">private_vars</span> = <span class="ruby-node">%w( basedomain subdomain )</span>&#x000A;        <span class="ruby-identifier">instance_variables</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">ivar_name</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">ivar_name</span> = <span class="ruby-identifier">ivar_name</span>.<span class="ruby-identifier">to_s</span>&#x000A;          <span class="ruby-identifier">ivar_name</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/^@(.+)$/</span>&#x000A;          <span class="ruby-identifier">name</span> = <span class="ruby-identifier">$1</span>&#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">private_vars</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">name</span>&#x000A;            <span class="ruby-identifier">data</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-identifier">ivar_name</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">io</span>&#x000A;          <span class="ruby-identifier">io</span>.<span class="ruby-identifier">write</span> <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">dump</span>(<span class="ruby-identifier">data</span>)&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">dump</span>(<span class="ruby-identifier">data</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000107'>
-                <a name='M000107'>      </a>
+              <div class='public-instance method' id='method-M000102'>
+                <a name='M000102'>      </a>
                 <div class='synopsis'>
                   <span class='name'>dump_file</span>
                   <span class='arguments'>(path)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000107-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000102-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000107-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/persistence.rb, line 44</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dump_file</span>(<span class="ruby-identifier">path</span>)&#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">path</span>, <span class="ruby-value str">'w+'</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">dump</span>(<span class="ruby-identifier">f</span>) }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000102-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite/persistence.rb, line 44</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dump_file</span>(<span class="ruby-identifier">path</span>)&#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">path</span>, <span class="ruby-value str">'w+'</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">dump</span>(<span class="ruby-identifier">f</span>) }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

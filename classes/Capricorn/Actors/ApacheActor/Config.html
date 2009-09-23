@@ -41,15 +41,15 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000065">apache_conf_path</a></li>
-              <li><a href="#M000064">apachectl_path</a></li>
+              <li><a href="#M000060">apache_conf_path</a></li>
+              <li><a href="#M000059">apachectl_path</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000065'>
-                <a name='M000065'>      </a>
+              <div class='public-instance method' id='method-M000060'>
+                <a name='M000060'>      </a>
                 <div class='synopsis'>
                   <span class='name'>apache_conf_path</span>
                   <span class='arguments'>(&amp;block)</span>
@@ -60,14 +60,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000065-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000060-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000065-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/apache_actor.rb, line 48</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">apache_conf_path</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">satellite_option</span>(<span class="ruby-identifier">:apache_conf_path</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-node">&quot;/opt/local/apache2/conf/apps/#{s.domain}.conf&quot;</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000060-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/apache_actor.rb, line 48</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">apache_conf_path</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">satellite_option</span>(<span class="ruby-identifier">:apache_conf_path</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-node">&quot;/opt/local/apache2/conf/apps/#{s.domain}.conf&quot;</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000064'>
-                <a name='M000064'>      </a>
+              <div class='public-instance method' id='method-M000059'>
+                <a name='M000059'>      </a>
                 <div class='synopsis'>
                   <span class='name'>apachectl_path</span>
                   <span class='arguments'>(&amp;block)</span>
@@ -78,10 +78,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000064-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000059-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000064-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/apache_actor.rb, line 43</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">apachectl_path</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:apachectl_path</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">find_bin</span>(<span class="ruby-value str">'apache2ctl'</span>, <span class="ruby-value str">'apachectl'</span>) }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000059-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/apache_actor.rb, line 43</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">apachectl_path</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">option</span>(<span class="ruby-identifier">:apachectl_path</span>, <span class="ruby-identifier">block</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">find_bin</span>(<span class="ruby-value str">'apache2ctl'</span>, <span class="ruby-value str">'apachectl'</span>) }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

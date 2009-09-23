@@ -45,14 +45,14 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000066">write_config_file</a></li>
+              <li><a href="#M000061">write_config_file</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000066'>
-                <a name='M000066'>      </a>
+              <div class='public-instance method' id='method-M000061'>
+                <a name='M000061'>      </a>
                 <div class='synopsis'>
                   <span class='name'>write_config_file</span>
                   <span class='arguments'>()</span>
@@ -63,10 +63,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000066-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000061-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000066-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/sqlite3_actor.rb, line 9</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write_config_file</span>&#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">as_user</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_user</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_group</span>) <span class="ruby-keyword kw">do</span>&#x000A;          &#x000A;          <span class="ruby-identifier">config</span> = <span class="ruby-value str">%{# SQLite version 3.x&#x000A;#   gem install sqlite3-ruby (not necessary on OS X Leopard)&#x000A;development:&#x000A;  adapter: sqlite3&#x000A;  database: db/system/development.sqlite3&#x000A;  pool: 5&#x000A;  timeout: 5000&#x000A;&#x000A;# Warning: The database defined as &quot;test&quot; will be erased and&#x000A;# re-generated from your development database when you run &quot;rake&quot;.&#x000A;# Do not set this db to the same as development or production.&#x000A;test:&#x000A;  adapter: sqlite3&#x000A;  database: db/system/test.sqlite3&#x000A;  pool: 5&#x000A;  timeout: 5000&#x000A;&#x000A;production:&#x000A;  adapter: sqlite3&#x000A;  database: db/system/production.sqlite3&#x000A;  pool: 5&#x000A;  timeout: 5000&#x000A;}</span>&#x000A;          &#x000A;          <span class="ruby-identifier">db_file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">satellite_root</span>, <span class="ruby-value str">'config'</span>, <span class="ruby-value str">'database.yml'</span>)&#x000A;          <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">db_file</span>, <span class="ruby-value str">'w+'</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span> <span class="ruby-identifier">config</span> }&#x000A;          &#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000061-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/sqlite3_actor.rb, line 9</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write_config_file</span>&#x000A;        <span class="ruby-identifier">system</span>.<span class="ruby-identifier">as_user</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_user</span>, <span class="ruby-identifier">system</span>.<span class="ruby-identifier">web_group</span>) <span class="ruby-keyword kw">do</span>&#x000A;          &#x000A;          <span class="ruby-identifier">config</span> = <span class="ruby-value str">%{# SQLite version 3.x&#x000A;#   gem install sqlite3-ruby (not necessary on OS X Leopard)&#x000A;development:&#x000A;  adapter: sqlite3&#x000A;  database: db/system/development.sqlite3&#x000A;  pool: 5&#x000A;  timeout: 5000&#x000A;&#x000A;# Warning: The database defined as &quot;test&quot; will be erased and&#x000A;# re-generated from your development database when you run &quot;rake&quot;.&#x000A;# Do not set this db to the same as development or production.&#x000A;test:&#x000A;  adapter: sqlite3&#x000A;  database: db/system/test.sqlite3&#x000A;  pool: 5&#x000A;  timeout: 5000&#x000A;&#x000A;production:&#x000A;  adapter: sqlite3&#x000A;  database: db/system/production.sqlite3&#x000A;  pool: 5&#x000A;  timeout: 5000&#x000A;}</span>&#x000A;          &#x000A;          <span class="ruby-identifier">db_file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">system</span>.<span class="ruby-identifier">satellite_root</span>, <span class="ruby-value str">'config'</span>, <span class="ruby-value str">'database.yml'</span>)&#x000A;          <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">db_file</span>, <span class="ruby-value str">'w+'</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span> <span class="ruby-identifier">config</span> }&#x000A;          &#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
