@@ -4,6 +4,8 @@ module Capricorn
   module Apps # :nodoc:
     
     class Dev < Thor
+      namespace :dev
+      
       desc "activate DOMAIN NAME", "turn an existing satelite into a development satelite"
       def activate(domain, name)
         Capricorn.runtime_gem('rubigen', Capricorn::RUBIGEN_VERSION)

@@ -1,5 +1,6 @@
 Capricorn.runtime_gem('thor', Capricorn::THOR_VERSION)
 
+=begin
 class Thor
   class << self
     attr_accessor :real_namespace # :nodoc:
@@ -30,3 +31,4 @@ module Thor::Util # :nodoc:
     old_constant_from_thor_path(path)
   end
 end
+=end

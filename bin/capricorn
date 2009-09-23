@@ -12,9 +12,11 @@ module Capricorn
 end
 
 Capricorn::AppRunner.use :Server
-Capricorn::AppRunner.use :Satellite
+Capricorn::AppRunner.use :Satellites
 Capricorn::AppRunner.use :Engines
 Capricorn::AppRunner.use :Jobs
 Capricorn::AppRunner.use :Dev
-Capricorn::AppRunner.namespace = 'capricorn:apps'
+# Capricorn::AppRunner.namespace = 'capricorn:apps'
 Capricorn::AppRunner.start
+# require 'thor/runner'
+# Thor::Runner.start

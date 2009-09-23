@@ -37,11 +37,11 @@ module Capricorn
   module Apps
     base = File.expand_path(File.dirname(__FILE__))
     
-    autoload :Dev,       (base+'/capricorn/apps/dev')
-    autoload :Jobs,      (base+'/capricorn/apps/jobs')
-    autoload :Server,    (base+'/capricorn/apps/server')
-    autoload :Engines,   (base+'/capricorn/apps/engines')
-    autoload :Satellite, (base+'/capricorn/apps/satellite')
+    autoload :Dev,        (base+'/capricorn/apps/dev')
+    autoload :Jobs,       (base+'/capricorn/apps/jobs')
+    autoload :Server,     (base+'/capricorn/apps/server')
+    autoload :Engines,    (base+'/capricorn/apps/engines')
+    autoload :Satellites, (base+'/capricorn/apps/satellites')
   end
   
   DEFAULT_ROOT_SYSTEM_DIR = '/var/capricorn'
@@ -51,7 +51,7 @@ module Capricorn
   RELOAD_STATUS  = 103
   QUICK_CERT     = "http://segment7.net/projects/ruby/QuickCert/QuickCert-1.0.2.tar.gz"
   
-  THOR_VERSION          = '= 0.9.9'
+  THOR_VERSION          = '>= 0.11.6'
   RUBIGEN_VERSION       = '>= 1.5.2'
   
   Capricorn::ExceptionHandler.setup
