@@ -37,10 +37,10 @@
             <a href="../../files/lib/capricorn/satellite/dependency_loader_rb.html">lib/capricorn/satellite/dependency_loader.rb</a>
           </li>
           <li class='other'>
-            <a href="../../files/lib/capricorn/satellite_rb.html">lib/capricorn/satellite.rb</a>
+            <a href="../../files/lib/capricorn/satellite/persistence_rb.html">lib/capricorn/satellite/persistence.rb</a>
           </li>
           <li class='other'>
-            <a href="../../files/lib/capricorn/satellite/persistence_rb.html">lib/capricorn/satellite/persistence.rb</a>
+            <a href="../../files/lib/capricorn/satellite_rb.html">lib/capricorn/satellite.rb</a>
           </li>
           <li>
             <a class='show' href='#' onclick='this.parentNode.parentNode.className += " expanded"; this.parentNode.removeChild(this); return false'>show all</a>
@@ -57,13 +57,13 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000115">new</a></li>
+              <li><a href="#M000101">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000116">basedomain</a></li>
-              <li><a href="#M000117">subdomain</a></li>
-              <li><a href="#M000118">subdomain?</a></li>
+              <li><a href="#M000102">basedomain</a></li>
+              <li><a href="#M000103">subdomain</a></li>
+              <li><a href="#M000104">subdomain?</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -88,6 +88,11 @@
               <div class='name-list'>
                 <table>
                   <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>development</td>
+                    <td class='context-item-value'>[RW]</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
                     <td class='context-item-name'>domain</td>
                     <td class='context-item-value'>[R]</td>
                     <td class='context-item-desc'></td>
@@ -97,62 +102,67 @@
                     <td class='context-item-value'>[R]</td>
                     <td class='context-item-desc'></td>
                   </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>module_name</td>
+                    <td class='context-item-value'>[RW]</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
                 </table>
               </div>
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000115'>
-                <a name='M000115'>      </a>
+              <div class='public-class method' id='method-M000101'>
+                <a name='M000101'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(domain)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000115-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000101-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000115-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite.rb, line 15</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">domain</span>)&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Hash</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">domain</span>&#x000A;        <span class="ruby-identifier">domain</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-node">&quot;@#{name}&quot;</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">value</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-ivar">@domain</span> = <span class="ruby-identifier">domain</span>&#x000A;        <span class="ruby-ivar">@engines</span> = {}&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-ivar">@domain</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/^www\./</span>, <span class="ruby-value str">''</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000101-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite.rb, line 16</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">domain</span>)&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Hash</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">domain</span>&#x000A;        <span class="ruby-identifier">domain</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-node">&quot;@#{name}&quot;</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">value</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-ivar">@domain</span> = <span class="ruby-identifier">domain</span>&#x000A;        <span class="ruby-ivar">@engines</span> = {}&#x000A;        <span class="ruby-ivar">@development</span> = <span class="ruby-keyword kw">false</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-ivar">@domain</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/^www\./</span>, <span class="ruby-value str">''</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000116'>
-                <a name='M000116'>      </a>
+              <div class='public-instance method' id='method-M000102'>
+                <a name='M000102'>      </a>
                 <div class='synopsis'>
                   <span class='name'>basedomain</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000116-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000102-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000116-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite.rb, line 27</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">basedomain</span>&#x000A;      <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@basedomain</span>&#x000A;        <span class="ruby-identifier">parts</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">domain</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'.'</span>)&#x000A;        <span class="ruby-identifier">parts</span> = <span class="ruby-identifier">parts</span>[<span class="ruby-value">-2</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>]&#x000A;        <span class="ruby-ivar">@basedomain</span> = <span class="ruby-identifier">parts</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">'.'</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-ivar">@basedomain</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000102-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite.rb, line 29</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">basedomain</span>&#x000A;      <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@basedomain</span>&#x000A;        <span class="ruby-identifier">parts</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">domain</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'.'</span>)&#x000A;        <span class="ruby-identifier">parts</span> = <span class="ruby-identifier">parts</span>[<span class="ruby-value">-2</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>]&#x000A;        <span class="ruby-ivar">@basedomain</span> = <span class="ruby-identifier">parts</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">'.'</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-ivar">@basedomain</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000117'>
-                <a name='M000117'>      </a>
+              <div class='public-instance method' id='method-M000103'>
+                <a name='M000103'>      </a>
                 <div class='synopsis'>
                   <span class='name'>subdomain</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000117-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000103-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000117-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite.rb, line 36</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">subdomain</span>&#x000A;      <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@subdomain</span>&#x000A;        <span class="ruby-identifier">parts</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">domain</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'.'</span>)&#x000A;        <span class="ruby-identifier">parts</span> = <span class="ruby-identifier">parts</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">-3</span>]&#x000A;        <span class="ruby-ivar">@subdomain</span> = <span class="ruby-identifier">parts</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">'.'</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-ivar">@subdomain</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@subdomain</span> <span class="ruby-operator">==</span> <span class="ruby-value str">''</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000103-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite.rb, line 38</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">subdomain</span>&#x000A;      <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@subdomain</span>&#x000A;        <span class="ruby-identifier">parts</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">domain</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'.'</span>)&#x000A;        <span class="ruby-identifier">parts</span> = <span class="ruby-identifier">parts</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">-3</span>]&#x000A;        <span class="ruby-ivar">@subdomain</span> = <span class="ruby-identifier">parts</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">'.'</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-ivar">@subdomain</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@subdomain</span> <span class="ruby-operator">==</span> <span class="ruby-value str">''</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000118'>
-                <a name='M000118'>      </a>
+              <div class='public-instance method' id='method-M000104'>
+                <a name='M000104'>      </a>
                 <div class='synopsis'>
                   <span class='name'>subdomain?</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000118-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000104-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000118-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite.rb, line 45</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">subdomain?</span>&#x000A;      <span class="ruby-operator">!</span><span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">subdomain</span>.<span class="ruby-identifier">nil?</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000104-source'><span class="ruby-comment cmt"># File lib/capricorn/satellite.rb, line 47</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">subdomain?</span>&#x000A;      <span class="ruby-operator">!</span><span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">subdomain</span>.<span class="ruby-identifier">nil?</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

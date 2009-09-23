@@ -41,37 +41,37 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000005">start</a></li>
-              <li><a href="#M000006">stop</a></li>
+              <li><a href="#M000003">start</a></li>
+              <li><a href="#M000004">stop</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000005'>
-                <a name='M000005'>      </a>
+              <div class='public-class method' id='method-M000003'>
+                <a name='M000003'>      </a>
                 <div class='synopsis'>
                   <span class='name'>start</span>
                   <span class='arguments'>(daemon, &amp;block)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000005-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000003-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000005-source'><span class="ruby-comment cmt"># File lib/capricorn/daemon.rb, line 36</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">start</span>(<span class="ruby-identifier">daemon</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">fork</span> <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-constant">Process</span>.<span class="ruby-identifier">setsid</span>&#x000A;          <span class="ruby-identifier">exit</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">fork</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-constant">PidFile</span>.<span class="ruby-identifier">exist?</span>&#x000A;            <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Pid file #{PidFile.pid_file} already exists. Not starting.&quot;</span>&#x000A;            <span class="ruby-identifier">exit</span> <span class="ruby-value">1</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          &#x000A;          <span class="ruby-identifier">setup_child</span>&#x000A;          <span class="ruby-identifier">regitser_handlers</span>(<span class="ruby-identifier">daemon</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          &#x000A;          <span class="ruby-identifier">daemon</span>.<span class="ruby-identifier">start</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Daemon started.&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000003-source'><span class="ruby-comment cmt"># File lib/capricorn/daemon.rb, line 36</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">start</span>(<span class="ruby-identifier">daemon</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">fork</span> <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-constant">Process</span>.<span class="ruby-identifier">setsid</span>&#x000A;          <span class="ruby-identifier">exit</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">fork</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-constant">PidFile</span>.<span class="ruby-identifier">exist?</span>&#x000A;            <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Pid file #{PidFile.pid_file} already exists. Not starting.&quot;</span>&#x000A;            <span class="ruby-identifier">exit</span> <span class="ruby-value">1</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          &#x000A;          <span class="ruby-identifier">setup_child</span>&#x000A;          <span class="ruby-identifier">regitser_handlers</span>(<span class="ruby-identifier">daemon</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          &#x000A;          <span class="ruby-identifier">daemon</span>.<span class="ruby-identifier">start</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Daemon started.&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000006'>
-                <a name='M000006'>      </a>
+              <div class='public-class method' id='method-M000004'>
+                <a name='M000004'>      </a>
                 <div class='synopsis'>
                   <span class='name'>stop</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000006-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000004-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000006-source'><span class="ruby-comment cmt"># File lib/capricorn/daemon.rb, line 53</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">stop</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">Daemon</span><span class="ruby-operator">::</span><span class="ruby-constant">PidFile</span>.<span class="ruby-identifier">exist?</span>&#x000A;          <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Pid file not found. Is the daemon started?&quot;</span>&#x000A;          <span class="ruby-identifier">exit</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-identifier">pid</span> = <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">Daemon</span><span class="ruby-operator">::</span><span class="ruby-constant">PidFile</span>.<span class="ruby-identifier">recall</span>&#x000A;        <span class="ruby-identifier">pid</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">Process</span>.<span class="ruby-identifier">kill</span>(<span class="ruby-value str">&quot;TERM&quot;</span>, <span class="ruby-identifier">pid</span>)&#x000A;      <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">ESRCH</span>&#x000A;        <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Pid file found, but process was not running. The daemon may have died.&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000004-source'><span class="ruby-comment cmt"># File lib/capricorn/daemon.rb, line 53</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">stop</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">Daemon</span><span class="ruby-operator">::</span><span class="ruby-constant">PidFile</span>.<span class="ruby-identifier">exist?</span>&#x000A;          <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Pid file not found. Is the daemon started?&quot;</span>&#x000A;          <span class="ruby-identifier">exit</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-identifier">pid</span> = <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">Daemon</span><span class="ruby-operator">::</span><span class="ruby-constant">PidFile</span>.<span class="ruby-identifier">recall</span>&#x000A;        <span class="ruby-identifier">pid</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">Process</span>.<span class="ruby-identifier">kill</span>(<span class="ruby-value str">&quot;TERM&quot;</span>, <span class="ruby-identifier">pid</span>)&#x000A;      <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">ESRCH</span>&#x000A;        <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Pid file found, but process was not running. The daemon may have died.&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

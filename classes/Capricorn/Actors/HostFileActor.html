@@ -45,8 +45,8 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000083">add_host_name</a></li>
-              <li><a href="#M000084">remove_host_name</a></li>
+              <li><a href="#M000089">add_host_name</a></li>
+              <li><a href="#M000090">remove_host_name</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -68,8 +68,8 @@
             </div>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000083'>
-                <a name='M000083'>      </a>
+              <div class='public-instance method' id='method-M000089'>
+                <a name='M000089'>      </a>
                 <div class='synopsis'>
                   <span class='name'>add_host_name</span>
                   <span class='arguments'>()</span>
@@ -80,14 +80,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000083-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000089-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000083-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/host_file_actor.rb, line 10</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_host_name</span>&#x000A;        <span class="ruby-identifier">content</span> = <span class="ruby-identifier">load_file</span>&#x000A;        <span class="ruby-identifier">content</span>[<span class="ruby-identifier">:capricorn</span>][<span class="ruby-value str">'127.0.0.1'</span>] <span class="ruby-operator">||=</span> []&#x000A;        <span class="ruby-identifier">content</span>[<span class="ruby-identifier">:capricorn</span>][<span class="ruby-value str">'127.0.0.1'</span>].<span class="ruby-identifier">push</span> <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">domain</span>&#x000A;        <span class="ruby-identifier">dump_file</span>(<span class="ruby-identifier">content</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000089-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/host_file_actor.rb, line 10</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_host_name</span>&#x000A;        <span class="ruby-identifier">content</span> = <span class="ruby-identifier">load_file</span>&#x000A;        <span class="ruby-identifier">content</span>[<span class="ruby-identifier">:capricorn</span>][<span class="ruby-value str">'127.0.0.1'</span>] <span class="ruby-operator">||=</span> []&#x000A;        <span class="ruby-identifier">content</span>[<span class="ruby-identifier">:capricorn</span>][<span class="ruby-value str">'127.0.0.1'</span>].<span class="ruby-identifier">push</span> <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">domain</span>&#x000A;        <span class="ruby-identifier">dump_file</span>(<span class="ruby-identifier">content</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000084'>
-                <a name='M000084'>      </a>
+              <div class='public-instance method' id='method-M000090'>
+                <a name='M000090'>      </a>
                 <div class='synopsis'>
                   <span class='name'>remove_host_name</span>
                   <span class='arguments'>()</span>
@@ -98,10 +98,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000084-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000090-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000084-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/host_file_actor.rb, line 18</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_host_name</span>&#x000A;        <span class="ruby-identifier">content</span> = <span class="ruby-identifier">load_file</span>&#x000A;        <span class="ruby-identifier">content</span>[<span class="ruby-identifier">:capricorn</span>][<span class="ruby-value str">'127.0.0.1'</span>] <span class="ruby-operator">||=</span> []&#x000A;        <span class="ruby-identifier">content</span>[<span class="ruby-identifier">:capricorn</span>][<span class="ruby-value str">'127.0.0.1'</span>].<span class="ruby-identifier">delete</span> <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">domain</span>&#x000A;        <span class="ruby-identifier">dump_file</span>(<span class="ruby-identifier">content</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000090-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/host_file_actor.rb, line 18</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_host_name</span>&#x000A;        <span class="ruby-identifier">content</span> = <span class="ruby-identifier">load_file</span>&#x000A;        <span class="ruby-identifier">content</span>[<span class="ruby-identifier">:capricorn</span>][<span class="ruby-value str">'127.0.0.1'</span>] <span class="ruby-operator">||=</span> []&#x000A;        <span class="ruby-identifier">content</span>[<span class="ruby-identifier">:capricorn</span>][<span class="ruby-value str">'127.0.0.1'</span>].<span class="ruby-identifier">delete</span> <span class="ruby-identifier">satellite</span>.<span class="ruby-identifier">domain</span>&#x000A;        <span class="ruby-identifier">dump_file</span>(<span class="ruby-identifier">content</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

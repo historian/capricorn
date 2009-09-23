@@ -50,37 +50,37 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000233">allow</a></li>
-              <li><a href="#M000232">new</a></li>
+              <li><a href="#M000245">allow</a></li>
+              <li><a href="#M000244">new</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000233'>
-                <a name='M000233'>      </a>
+              <div class='public-class method' id='method-M000245'>
+                <a name='M000245'>      </a>
                 <div class='synopsis'>
                   <span class='name'>allow</span>
                   <span class='arguments'>(*methods)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000233-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000245-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000233-source'><span class="ruby-comment cmt"># File lib/capricorn/server/proxy.rb, line 11</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">allow</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">methods</span>)&#x000A;        <span class="ruby-identifier">methods</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">method</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">module_eval</span> <span class="ruby-node">%{ def #{method}(*args,&amp;block) ; @server.#{method}(*args,&amp;block) ; end }</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000245-source'><span class="ruby-comment cmt"># File lib/capricorn/server/proxy.rb, line 11</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">allow</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">methods</span>)&#x000A;        <span class="ruby-identifier">methods</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">method</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">module_eval</span> <span class="ruby-node">%{ def #{method}(*args,&amp;block) ; @server.#{method}(*args,&amp;block) ; end }</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000232'>
-                <a name='M000232'>      </a>
+              <div class='public-class method' id='method-M000244'>
+                <a name='M000244'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(server)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000232-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000244-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000232-source'><span class="ruby-comment cmt"># File lib/capricorn/server/proxy.rb, line 7</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">server</span>)&#x000A;        <span class="ruby-ivar">@server</span> = <span class="ruby-identifier">server</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000244-source'><span class="ruby-comment cmt"># File lib/capricorn/server/proxy.rb, line 7</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">server</span>)&#x000A;        <span class="ruby-ivar">@server</span> = <span class="ruby-identifier">server</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

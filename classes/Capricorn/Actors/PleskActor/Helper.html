@@ -41,21 +41,21 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000048">client?</a></li>
-              <li><a href="#M000047">create_client</a></li>
-              <li><a href="#M000053">create_database</a></li>
-              <li><a href="#M000049">create_domain</a></li>
-              <li><a href="#M000051">create_subdomain</a></li>
-              <li><a href="#M000050">domain?</a></li>
-              <li><a href="#M000054">drop_database</a></li>
-              <li><a href="#M000052">subdomain?</a></li>
+              <li><a href="#M000054">client?</a></li>
+              <li><a href="#M000053">create_client</a></li>
+              <li><a href="#M000059">create_database</a></li>
+              <li><a href="#M000055">create_domain</a></li>
+              <li><a href="#M000057">create_subdomain</a></li>
+              <li><a href="#M000056">domain?</a></li>
+              <li><a href="#M000060">drop_database</a></li>
+              <li><a href="#M000058">subdomain?</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000048'>
-                <a name='M000048'>      </a>
+              <div class='public-instance method' id='method-M000054'>
+                <a name='M000054'>      </a>
                 <div class='synopsis'>
                   <span class='name'>client?</span>
                   <span class='arguments'>(login)</span>
@@ -66,27 +66,27 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000048-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000054-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000048-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 140</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">client?</span>(<span class="ruby-identifier">login</span>)&#x000A;          <span class="ruby-operator">!</span>(<span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{plesk_client_bin} -i #{login}&quot;</span>) <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/Object not found: Client/</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000054-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 140</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">client?</span>(<span class="ruby-identifier">login</span>)&#x000A;          <span class="ruby-operator">!</span>(<span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{plesk_client_bin} -i #{login}&quot;</span>) <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/Object not found: Client/</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000047'>
-                <a name='M000047'>      </a>
+              <div class='public-instance method' id='method-M000053'>
+                <a name='M000053'>      </a>
                 <div class='synopsis'>
                   <span class='name'>create_client</span>
                   <span class='arguments'>(name, login, pwd)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000047-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000053-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000047-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 135</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_client</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">login</span>, <span class="ruby-identifier">pwd</span>)&#x000A;          &#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000053-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 135</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_client</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">login</span>, <span class="ruby-identifier">pwd</span>)&#x000A;          &#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000053'>
-                <a name='M000053'>      </a>
+              <div class='public-instance method' id='method-M000059'>
+                <a name='M000059'>      </a>
                 <div class='synopsis'>
                   <span class='name'>create_database</span>
                   <span class='arguments'>(basedomain, db_name, db_user, pwd)</span>
@@ -97,14 +97,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000053-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000059-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000053-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 165</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_database</span>(<span class="ruby-identifier">basedomain</span>, <span class="ruby-identifier">db_name</span>, <span class="ruby-identifier">db_user</span>, <span class="ruby-identifier">pwd</span>)&#x000A;          <span class="ruby-identifier">o</span> = <span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{plesk_database_bin} -c #{db_name} -domain #{basedomain} -server #{plesk_database_server} -add_user #{db_user} -passwd #{pwd}&quot;</span>)&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">o</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/Database with requested name already exists/</span>&#x000A;            <span class="ruby-identifier">o</span> = <span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{plesk_database_bin} -u #{db_name} -add_user #{db_user} -passwd #{pwd}&quot;</span>)&#x000A;            <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">o</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/Unable to create database user: User/</span>&#x000A;              <span class="ruby-identifier">o</span> = <span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{plesk_database_bin} -u #{db_name} -update_user #{db_user} -passwd #{pwd}&quot;</span>)&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000059-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 165</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_database</span>(<span class="ruby-identifier">basedomain</span>, <span class="ruby-identifier">db_name</span>, <span class="ruby-identifier">db_user</span>, <span class="ruby-identifier">pwd</span>)&#x000A;          <span class="ruby-identifier">o</span> = <span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{plesk_database_bin} -c #{db_name} -domain #{basedomain} -server #{plesk_database_server} -add_user #{db_user} -passwd #{pwd}&quot;</span>)&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">o</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/Database with requested name already exists/</span>&#x000A;            <span class="ruby-identifier">o</span> = <span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{plesk_database_bin} -u #{db_name} -add_user #{db_user} -passwd #{pwd}&quot;</span>)&#x000A;            <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">o</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/Unable to create database user: User/</span>&#x000A;              <span class="ruby-identifier">o</span> = <span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{plesk_database_bin} -u #{db_name} -update_user #{db_user} -passwd #{pwd}&quot;</span>)&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000049'>
-                <a name='M000049'>      </a>
+              <div class='public-instance method' id='method-M000055'>
+                <a name='M000055'>      </a>
                 <div class='synopsis'>
                   <span class='name'>create_domain</span>
                   <span class='arguments'>(client, domain, user, passwd)</span>
@@ -115,14 +115,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000049-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000055-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000049-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 145</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_domain</span>(<span class="ruby-identifier">client</span>, <span class="ruby-identifier">domain</span>, <span class="ruby-identifier">user</span>, <span class="ruby-identifier">passwd</span>)&#x000A;          <span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{plesk_domain_bin} -c #{domain} -clogin #{client} -status enabled -hosting true -hst_type phys -dns true -www true -login #{user} -passwd #{passwd} -shell /bin/bash&quot;</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000055-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 145</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_domain</span>(<span class="ruby-identifier">client</span>, <span class="ruby-identifier">domain</span>, <span class="ruby-identifier">user</span>, <span class="ruby-identifier">passwd</span>)&#x000A;          <span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{plesk_domain_bin} -c #{domain} -clogin #{client} -status enabled -hosting true -hst_type phys -dns true -www true -login #{user} -passwd #{passwd} -shell /bin/bash&quot;</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000051'>
-                <a name='M000051'>      </a>
+              <div class='public-instance method' id='method-M000057'>
+                <a name='M000057'>      </a>
                 <div class='synopsis'>
                   <span class='name'>create_subdomain</span>
                   <span class='arguments'>(basedomain, subdomain)</span>
@@ -133,14 +133,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000051-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000057-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000051-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 155</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_subdomain</span>(<span class="ruby-identifier">basedomain</span>, <span class="ruby-identifier">subdomain</span>)&#x000A;          <span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{plesk_subdomain_bin} -c #{subdomain} -d #{basedomain}&quot;</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000057-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 155</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_subdomain</span>(<span class="ruby-identifier">basedomain</span>, <span class="ruby-identifier">subdomain</span>)&#x000A;          <span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{plesk_subdomain_bin} -c #{subdomain} -d #{basedomain}&quot;</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000050'>
-                <a name='M000050'>      </a>
+              <div class='public-instance method' id='method-M000056'>
+                <a name='M000056'>      </a>
                 <div class='synopsis'>
                   <span class='name'>domain?</span>
                   <span class='arguments'>(domain)</span>
@@ -151,14 +151,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000050-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000056-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000050-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 150</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">domain?</span>(<span class="ruby-identifier">domain</span>)&#x000A;          <span class="ruby-operator">!</span>(<span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{plesk_domain_bin} -i #{domain}&quot;</span>) <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/Object not found: Domain/</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000056-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 150</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">domain?</span>(<span class="ruby-identifier">domain</span>)&#x000A;          <span class="ruby-operator">!</span>(<span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{plesk_domain_bin} -i #{domain}&quot;</span>) <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/Object not found: Domain/</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000054'>
-                <a name='M000054'>      </a>
+              <div class='public-instance method' id='method-M000060'>
+                <a name='M000060'>      </a>
                 <div class='synopsis'>
                   <span class='name'>drop_database</span>
                   <span class='arguments'>(db_name)</span>
@@ -169,14 +169,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000054-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000060-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000054-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 176</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">drop_database</span>(<span class="ruby-identifier">db_name</span>)&#x000A;          <span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{plesk_database_bin} -r #{db_name}&quot;</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000060-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 176</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">drop_database</span>(<span class="ruby-identifier">db_name</span>)&#x000A;          <span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{plesk_database_bin} -r #{db_name}&quot;</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000052'>
-                <a name='M000052'>      </a>
+              <div class='public-instance method' id='method-M000058'>
+                <a name='M000058'>      </a>
                 <div class='synopsis'>
                   <span class='name'>subdomain?</span>
                   <span class='arguments'>(basedomain, subdomain)</span>
@@ -187,10 +187,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000052-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000058-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000052-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 160</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">subdomain?</span>(<span class="ruby-identifier">basedomain</span>, <span class="ruby-identifier">subdomain</span>)&#x000A;          <span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{plesk_subdomain_bin} -i -s #{subdomain} -d #{basedomain}&quot;</span>) <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/SUCCESS: Gathering/</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000058-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/plesk_actor.rb, line 160</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">subdomain?</span>(<span class="ruby-identifier">basedomain</span>, <span class="ruby-identifier">subdomain</span>)&#x000A;          <span class="ruby-identifier">run</span>(<span class="ruby-node">&quot;#{plesk_subdomain_bin} -i -s #{subdomain} -d #{basedomain}&quot;</span>) <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/SUCCESS: Gathering/</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

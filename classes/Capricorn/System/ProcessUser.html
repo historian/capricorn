@@ -41,21 +41,21 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000201">as_user</a></li>
-              <li><a href="#M000195">get_gid</a></li>
-              <li><a href="#M000197">get_group_name</a></li>
-              <li><a href="#M000194">get_uid</a></li>
-              <li><a href="#M000196">get_user_name</a></li>
-              <li><a href="#M000199">is_group</a></li>
-              <li><a href="#M000198">is_user</a></li>
-              <li><a href="#M000200">switch_to_user</a></li>
+              <li><a href="#M000210">as_user</a></li>
+              <li><a href="#M000204">get_gid</a></li>
+              <li><a href="#M000206">get_group_name</a></li>
+              <li><a href="#M000203">get_uid</a></li>
+              <li><a href="#M000205">get_user_name</a></li>
+              <li><a href="#M000208">is_group</a></li>
+              <li><a href="#M000207">is_user</a></li>
+              <li><a href="#M000209">switch_to_user</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000201'>
-                <a name='M000201'>      </a>
+              <div class='public-instance method' id='method-M000210'>
+                <a name='M000210'>      </a>
                 <div class='synopsis'>
                   <span class='name'>as_user</span>
                   <span class='arguments'>(username, groupname=nil, &amp;block)</span>
@@ -66,14 +66,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000201-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000210-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000201-source'><span class="ruby-comment cmt"># File lib/capricorn/system/process_user.rb, line 57</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">as_user</span>(<span class="ruby-identifier">username</span>, <span class="ruby-identifier">groupname</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">euid</span> = <span class="ruby-constant">Process</span>.<span class="ruby-identifier">euid</span>&#x000A;        <span class="ruby-identifier">egid</span> = <span class="ruby-constant">Process</span>.<span class="ruby-identifier">egid</span>&#x000A;        &#x000A;        <span class="ruby-identifier">value</span> = <span class="ruby-keyword kw">nil</span>&#x000A;        <span class="ruby-keyword kw">begin</span>&#x000A;          <span class="ruby-identifier">switch_to_user</span>(<span class="ruby-identifier">username</span>, <span class="ruby-identifier">groupname</span>)&#x000A;          <span class="ruby-identifier">value</span> = <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span>&#x000A;        <span class="ruby-keyword kw">ensure</span>&#x000A;          <span class="ruby-identifier">switch_to_user</span>(<span class="ruby-identifier">euid</span>, <span class="ruby-identifier">egid</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-identifier">value</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000210-source'><span class="ruby-comment cmt"># File lib/capricorn/system/process_user.rb, line 57</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">as_user</span>(<span class="ruby-identifier">username</span>, <span class="ruby-identifier">groupname</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">euid</span> = <span class="ruby-constant">Process</span>.<span class="ruby-identifier">euid</span>&#x000A;        <span class="ruby-identifier">egid</span> = <span class="ruby-constant">Process</span>.<span class="ruby-identifier">egid</span>&#x000A;        &#x000A;        <span class="ruby-identifier">value</span> = <span class="ruby-keyword kw">nil</span>&#x000A;        <span class="ruby-keyword kw">begin</span>&#x000A;          <span class="ruby-identifier">switch_to_user</span>(<span class="ruby-identifier">username</span>, <span class="ruby-identifier">groupname</span>)&#x000A;          <span class="ruby-identifier">value</span> = <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span>&#x000A;        <span class="ruby-keyword kw">ensure</span>&#x000A;          <span class="ruby-identifier">switch_to_user</span>(<span class="ruby-identifier">euid</span>, <span class="ruby-identifier">egid</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-identifier">value</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000195'>
-                <a name='M000195'>      </a>
+              <div class='public-instance method' id='method-M000204'>
+                <a name='M000204'>      </a>
                 <div class='synopsis'>
                   <span class='name'>get_gid</span>
                   <span class='arguments'>(groupname)</span>
@@ -84,14 +84,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000195-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000204-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000195-source'><span class="ruby-comment cmt"># File lib/capricorn/system/process_user.rb, line 13</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_gid</span>(<span class="ruby-identifier">groupname</span>)&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">groupname</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Numeric</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">groupname</span>&#x000A;        <span class="ruby-constant">Etc</span>.<span class="ruby-identifier">getgrnam</span>(<span class="ruby-identifier">groupname</span>).<span class="ruby-identifier">gid</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000204-source'><span class="ruby-comment cmt"># File lib/capricorn/system/process_user.rb, line 13</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_gid</span>(<span class="ruby-identifier">groupname</span>)&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">groupname</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Numeric</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">groupname</span>&#x000A;        <span class="ruby-constant">Etc</span>.<span class="ruby-identifier">getgrnam</span>(<span class="ruby-identifier">groupname</span>).<span class="ruby-identifier">gid</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000197'>
-                <a name='M000197'>      </a>
+              <div class='public-instance method' id='method-M000206'>
+                <a name='M000206'>      </a>
                 <div class='synopsis'>
                   <span class='name'>get_group_name</span>
                   <span class='arguments'>(gid=Process.gid)</span>
@@ -102,14 +102,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000197-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000206-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000197-source'><span class="ruby-comment cmt"># File lib/capricorn/system/process_user.rb, line 25</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_group_name</span>(<span class="ruby-identifier">gid</span>=<span class="ruby-constant">Process</span>.<span class="ruby-identifier">gid</span>)&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">gid</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">String</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">gid</span>&#x000A;        <span class="ruby-constant">Etc</span>.<span class="ruby-identifier">getgrgid</span>(<span class="ruby-identifier">gid</span>).<span class="ruby-identifier">name</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000206-source'><span class="ruby-comment cmt"># File lib/capricorn/system/process_user.rb, line 25</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_group_name</span>(<span class="ruby-identifier">gid</span>=<span class="ruby-constant">Process</span>.<span class="ruby-identifier">gid</span>)&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">gid</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">String</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">gid</span>&#x000A;        <span class="ruby-constant">Etc</span>.<span class="ruby-identifier">getgrgid</span>(<span class="ruby-identifier">gid</span>).<span class="ruby-identifier">name</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000194'>
-                <a name='M000194'>      </a>
+              <div class='public-instance method' id='method-M000203'>
+                <a name='M000203'>      </a>
                 <div class='synopsis'>
                   <span class='name'>get_uid</span>
                   <span class='arguments'>(username)</span>
@@ -120,14 +120,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000194-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000203-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000194-source'><span class="ruby-comment cmt"># File lib/capricorn/system/process_user.rb, line 7</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_uid</span>(<span class="ruby-identifier">username</span>)&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">username</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Numeric</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">username</span>&#x000A;        <span class="ruby-constant">Etc</span>.<span class="ruby-identifier">getpwnam</span>(<span class="ruby-identifier">username</span>).<span class="ruby-identifier">uid</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000203-source'><span class="ruby-comment cmt"># File lib/capricorn/system/process_user.rb, line 7</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_uid</span>(<span class="ruby-identifier">username</span>)&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">username</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Numeric</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">username</span>&#x000A;        <span class="ruby-constant">Etc</span>.<span class="ruby-identifier">getpwnam</span>(<span class="ruby-identifier">username</span>).<span class="ruby-identifier">uid</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000196'>
-                <a name='M000196'>      </a>
+              <div class='public-instance method' id='method-M000205'>
+                <a name='M000205'>      </a>
                 <div class='synopsis'>
                   <span class='name'>get_user_name</span>
                   <span class='arguments'>(uid=Process.uid)</span>
@@ -138,14 +138,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000196-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000205-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000196-source'><span class="ruby-comment cmt"># File lib/capricorn/system/process_user.rb, line 19</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_user_name</span>(<span class="ruby-identifier">uid</span>=<span class="ruby-constant">Process</span>.<span class="ruby-identifier">uid</span>)&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">uid</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">String</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">uid</span>&#x000A;        <span class="ruby-constant">Etc</span>.<span class="ruby-identifier">getpwuid</span>(<span class="ruby-identifier">uid</span>).<span class="ruby-identifier">name</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000205-source'><span class="ruby-comment cmt"># File lib/capricorn/system/process_user.rb, line 19</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_user_name</span>(<span class="ruby-identifier">uid</span>=<span class="ruby-constant">Process</span>.<span class="ruby-identifier">uid</span>)&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">uid</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">String</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">uid</span>&#x000A;        <span class="ruby-constant">Etc</span>.<span class="ruby-identifier">getpwuid</span>(<span class="ruby-identifier">uid</span>).<span class="ruby-identifier">name</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000199'>
-                <a name='M000199'>      </a>
+              <div class='public-instance method' id='method-M000208'>
+                <a name='M000208'>      </a>
                 <div class='synopsis'>
                   <span class='name'>is_group</span>
                   <span class='arguments'>(groupname)</span>
@@ -156,14 +156,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000199-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000208-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000199-source'><span class="ruby-comment cmt"># File lib/capricorn/system/process_user.rb, line 37</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_group</span>(<span class="ruby-identifier">groupname</span>)&#x000A;        <span class="ruby-identifier">gid</span> = <span class="ruby-identifier">get_gid</span>(<span class="ruby-identifier">groupname</span>)&#x000A;        <span class="ruby-constant">Process</span>.<span class="ruby-identifier">egid</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">gid</span> <span class="ruby-keyword kw">and</span> <span class="ruby-constant">Process</span>.<span class="ruby-identifier">gid</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">gid</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000208-source'><span class="ruby-comment cmt"># File lib/capricorn/system/process_user.rb, line 37</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_group</span>(<span class="ruby-identifier">groupname</span>)&#x000A;        <span class="ruby-identifier">gid</span> = <span class="ruby-identifier">get_gid</span>(<span class="ruby-identifier">groupname</span>)&#x000A;        <span class="ruby-constant">Process</span>.<span class="ruby-identifier">egid</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">gid</span> <span class="ruby-keyword kw">and</span> <span class="ruby-constant">Process</span>.<span class="ruby-identifier">gid</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">gid</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000198'>
-                <a name='M000198'>      </a>
+              <div class='public-instance method' id='method-M000207'>
+                <a name='M000207'>      </a>
                 <div class='synopsis'>
                   <span class='name'>is_user</span>
                   <span class='arguments'>(username)</span>
@@ -174,14 +174,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000198-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000207-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000198-source'><span class="ruby-comment cmt"># File lib/capricorn/system/process_user.rb, line 31</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_user</span>(<span class="ruby-identifier">username</span>)&#x000A;        <span class="ruby-identifier">uid</span> = <span class="ruby-identifier">get_uid</span>(<span class="ruby-identifier">username</span>)&#x000A;        <span class="ruby-constant">Process</span>.<span class="ruby-identifier">euid</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">uid</span> <span class="ruby-keyword kw">and</span> <span class="ruby-constant">Process</span>.<span class="ruby-identifier">uid</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">uid</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000207-source'><span class="ruby-comment cmt"># File lib/capricorn/system/process_user.rb, line 31</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_user</span>(<span class="ruby-identifier">username</span>)&#x000A;        <span class="ruby-identifier">uid</span> = <span class="ruby-identifier">get_uid</span>(<span class="ruby-identifier">username</span>)&#x000A;        <span class="ruby-constant">Process</span>.<span class="ruby-identifier">euid</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">uid</span> <span class="ruby-keyword kw">and</span> <span class="ruby-constant">Process</span>.<span class="ruby-identifier">uid</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">uid</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000200'>
-                <a name='M000200'>      </a>
+              <div class='public-instance method' id='method-M000209'>
+                <a name='M000209'>      </a>
                 <div class='synopsis'>
                   <span class='name'>switch_to_user</span>
                   <span class='arguments'>(username, groupname=nil)</span>
@@ -192,10 +192,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000200-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000209-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000200-source'><span class="ruby-comment cmt"># File lib/capricorn/system/process_user.rb, line 43</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">switch_to_user</span>(<span class="ruby-identifier">username</span>, <span class="ruby-identifier">groupname</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-identifier">different_uid</span> = (<span class="ruby-constant">Process</span>.<span class="ruby-identifier">euid</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">get_uid</span>(<span class="ruby-identifier">username</span>))&#x000A;        <span class="ruby-identifier">different_gid</span> = (<span class="ruby-constant">Process</span>.<span class="ruby-identifier">egid</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">get_gid</span>(<span class="ruby-identifier">groupname</span>)) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">groupname</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">groupname</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">different_gid</span>&#x000A;          <span class="ruby-constant">Process</span>.<span class="ruby-identifier">gid</span> = <span class="ruby-constant">Process</span>.<span class="ruby-identifier">egid</span> = <span class="ruby-identifier">get_gid</span>(<span class="ruby-identifier">groupname</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">different_uid</span>&#x000A;          <span class="ruby-constant">Process</span>.<span class="ruby-identifier">uid</span> = <span class="ruby-constant">Process</span>.<span class="ruby-identifier">euid</span> = <span class="ruby-identifier">get_uid</span>(<span class="ruby-identifier">username</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000209-source'><span class="ruby-comment cmt"># File lib/capricorn/system/process_user.rb, line 43</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">switch_to_user</span>(<span class="ruby-identifier">username</span>, <span class="ruby-identifier">groupname</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-identifier">different_uid</span> = (<span class="ruby-constant">Process</span>.<span class="ruby-identifier">euid</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">get_uid</span>(<span class="ruby-identifier">username</span>))&#x000A;        <span class="ruby-identifier">different_gid</span> = (<span class="ruby-constant">Process</span>.<span class="ruby-identifier">egid</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">get_gid</span>(<span class="ruby-identifier">groupname</span>)) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">groupname</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">groupname</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">different_gid</span>&#x000A;          <span class="ruby-constant">Process</span>.<span class="ruby-identifier">gid</span> = <span class="ruby-constant">Process</span>.<span class="ruby-identifier">egid</span> = <span class="ruby-identifier">get_gid</span>(<span class="ruby-identifier">groupname</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">different_uid</span>&#x000A;          <span class="ruby-constant">Process</span>.<span class="ruby-identifier">uid</span> = <span class="ruby-constant">Process</span>.<span class="ruby-identifier">euid</span> = <span class="ruby-identifier">get_uid</span>(<span class="ruby-identifier">username</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

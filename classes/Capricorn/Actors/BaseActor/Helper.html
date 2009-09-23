@@ -41,18 +41,18 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000078">ensure_presence_of_gem</a></li>
-              <li><a href="#M000074">gem_install</a></li>
-              <li><a href="#M000076">gem_installed</a></li>
-              <li><a href="#M000075">gem_refresh</a></li>
-              <li><a href="#M000077">gem_update</a></li>
+              <li><a href="#M000084">ensure_presence_of_gem</a></li>
+              <li><a href="#M000080">gem_install</a></li>
+              <li><a href="#M000082">gem_installed</a></li>
+              <li><a href="#M000081">gem_refresh</a></li>
+              <li><a href="#M000083">gem_update</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000078'>
-                <a name='M000078'>      </a>
+              <div class='public-instance method' id='method-M000084'>
+                <a name='M000084'>      </a>
                 <div class='synopsis'>
                   <span class='name'>ensure_presence_of_gem</span>
                   <span class='arguments'>(name, options={})</span>
@@ -63,14 +63,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000078-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000084-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000078-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/base_actor.rb, line 208</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ensure_presence_of_gem</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>={})&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">gem_installed</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>)&#x000A;            <span class="ruby-identifier">gem_install</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000084-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/base_actor.rb, line 250</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ensure_presence_of_gem</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>={})&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">gem_installed</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>)&#x000A;            <span class="ruby-identifier">gem_install</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000074'>
-                <a name='M000074'>      </a>
+              <div class='public-instance method' id='method-M000080'>
+                <a name='M000080'>      </a>
                 <div class='synopsis'>
                   <span class='name'>gem_install</span>
                   <span class='arguments'>(name, options={})</span>
@@ -81,14 +81,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000074-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000080-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000074-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/base_actor.rb, line 179</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">gem_install</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>={})&#x000A;          <span class="ruby-identifier">gem_cmd</span>(<span class="ruby-value str">'install'</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>)&#x000A;          <span class="ruby-identifier">gem_refresh</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000080-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/base_actor.rb, line 216</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">gem_install</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>={})&#x000A;          <span class="ruby-identifier">gem_cmd</span>(<span class="ruby-value str">'install'</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>)&#x000A;          <span class="ruby-identifier">gem_refresh</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000076'>
-                <a name='M000076'>      </a>
+              <div class='public-instance method' id='method-M000082'>
+                <a name='M000082'>      </a>
                 <div class='synopsis'>
                   <span class='name'>gem_installed</span>
                   <span class='arguments'>(name, options)</span>
@@ -99,27 +99,27 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000076-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000082-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000076-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/base_actor.rb, line 191</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">gem_installed</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>)&#x000A;          <span class="ruby-identifier">version</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:version</span>] <span class="ruby-operator">||</span> <span class="ruby-value str">'0.0.0'</span>&#x000A;          <span class="ruby-identifier">options</span> = { <span class="ruby-identifier">:version</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">version</span>, <span class="ruby-identifier">:installed</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span> }&#x000A;          (<span class="ruby-identifier">gem_cmd</span>(<span class="ruby-value str">'list'</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>).<span class="ruby-identifier">strip</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/true/</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000082-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/base_actor.rb, line 228</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">gem_installed</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>)&#x000A;          <span class="ruby-identifier">version</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:version</span>] <span class="ruby-operator">||</span> <span class="ruby-value str">'0.0.0'</span>&#x000A;          <span class="ruby-identifier">options</span> = { <span class="ruby-identifier">:version</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">version</span>, <span class="ruby-identifier">:installed</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span> }&#x000A;          (<span class="ruby-identifier">gem_cmd</span>(<span class="ruby-value str">'list'</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>).<span class="ruby-identifier">strip</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/true/</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000075'>
-                <a name='M000075'>      </a>
+              <div class='public-instance method' id='method-M000081'>
+                <a name='M000081'>      </a>
                 <div class='synopsis'>
                   <span class='name'>gem_refresh</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000075-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000081-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000075-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/base_actor.rb, line 184</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">gem_refresh</span>&#x000A;          <span class="ruby-identifier">original_paths</span> = [<span class="ruby-constant">Gem</span>.<span class="ruby-identifier">path</span>].<span class="ruby-identifier">flatten</span>&#x000A;          <span class="ruby-constant">Gem</span>.<span class="ruby-identifier">refresh</span>&#x000A;          <span class="ruby-constant">Gem</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">:set_paths</span>, <span class="ruby-identifier">original_paths</span>.<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">File</span><span class="ruby-operator">::</span><span class="ruby-constant">PATH_SEPARATOR</span>))&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000081-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/base_actor.rb, line 221</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">gem_refresh</span>&#x000A;          <span class="ruby-identifier">original_paths</span> = [<span class="ruby-constant">Gem</span>.<span class="ruby-identifier">path</span>].<span class="ruby-identifier">flatten</span>&#x000A;          <span class="ruby-constant">Gem</span>.<span class="ruby-identifier">refresh</span>&#x000A;          <span class="ruby-constant">Gem</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">:set_paths</span>, <span class="ruby-identifier">original_paths</span>.<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">File</span><span class="ruby-operator">::</span><span class="ruby-constant">PATH_SEPARATOR</span>))&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000077'>
-                <a name='M000077'>      </a>
+              <div class='public-instance method' id='method-M000083'>
+                <a name='M000083'>      </a>
                 <div class='synopsis'>
                   <span class='name'>gem_update</span>
                   <span class='arguments'>(name, options={})</span>
@@ -130,10 +130,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000077-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000083-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000077-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/base_actor.rb, line 198</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">gem_update</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>={})&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span>(<span class="ruby-identifier">gem_cmd</span>(<span class="ruby-value str">'update'</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>) <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/Nothing to update/</span>)&#x000A;            <span class="ruby-identifier">gem_refresh</span>&#x000A;            <span class="ruby-keyword kw">true</span>&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-keyword kw">false</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000083-source'><span class="ruby-comment cmt"># File lib/capricorn/actors/base_actor.rb, line 235</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">gem_update</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>={})&#x000A;          <span class="ruby-identifier">output</span> = <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:all</span>&#x000A;            <span class="ruby-identifier">gem_cmd</span>(<span class="ruby-value str">'update'</span>, <span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">options</span>)&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-identifier">gem_cmd</span>(<span class="ruby-value str">'update'</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span>(<span class="ruby-identifier">output</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/Nothing to update/</span>)&#x000A;            <span class="ruby-identifier">gem_refresh</span>&#x000A;            <span class="ruby-keyword kw">true</span>&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-keyword kw">false</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

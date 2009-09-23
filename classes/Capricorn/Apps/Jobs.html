@@ -36,7 +36,7 @@
         </ol>
         <div class='parent'>
           Parent:
-          <strong><a href="../../Thor.html">Thor</a></strong>
+          <strong>Thor</strong>
         </div>
       </div>
       <div id='content'>
@@ -45,51 +45,51 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000017">cancel</a></li>
-              <li><a href="#M000018">immediate</a></li>
-              <li><a href="#M000016">list</a></li>
+              <li><a href="#M000022">cancel</a></li>
+              <li><a href="#M000023">immediate</a></li>
+              <li><a href="#M000021">list</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000017'>
-                <a name='M000017'>      </a>
+              <div class='public-instance method' id='method-M000022'>
+                <a name='M000022'>      </a>
                 <div class='synopsis'>
                   <span class='name'>cancel</span>
                   <span class='arguments'>(id)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000017-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000022-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000017-source'><span class="ruby-comment cmt"># File lib/capricorn/apps/jobs.rb, line 23</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cancel</span>(<span class="ruby-identifier">id</span>)&#x000A;        <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">client</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:token</span>]).<span class="ruby-identifier">cancel_job</span>(<span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_i</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000022-source'><span class="ruby-comment cmt"># File lib/capricorn/apps/jobs.rb, line 30</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cancel</span>(<span class="ruby-identifier">id</span>)&#x000A;        <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">client</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:token</span>]).<span class="ruby-identifier">cancel_job</span>(<span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_i</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000018'>
-                <a name='M000018'>      </a>
+              <div class='public-instance method' id='method-M000023'>
+                <a name='M000023'>      </a>
                 <div class='synopsis'>
                   <span class='name'>immediate</span>
                   <span class='arguments'>(id)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000018-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000023-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000018-source'><span class="ruby-comment cmt"># File lib/capricorn/apps/jobs.rb, line 29</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">immediate</span>(<span class="ruby-identifier">id</span>)&#x000A;        <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">client</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:token</span>]).<span class="ruby-identifier">immediate_job</span>(<span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_i</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000023-source'><span class="ruby-comment cmt"># File lib/capricorn/apps/jobs.rb, line 35</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">immediate</span>(<span class="ruby-identifier">id</span>)&#x000A;        <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">client</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:token</span>]).<span class="ruby-identifier">immediate_job</span>(<span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_i</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000016'>
-                <a name='M000016'>      </a>
+              <div class='public-instance method' id='method-M000021'>
+                <a name='M000021'>      </a>
                 <div class='synopsis'>
                   <span class='name'>list</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000016-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000021-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000016-source'><span class="ruby-comment cmt"># File lib/capricorn/apps/jobs.rb, line 9</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">list</span>&#x000A;        <span class="ruby-identifier">queued_jobs</span> = <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">client</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:token</span>]).<span class="ruby-identifier">queued_jobs</span>&#x000A;        <span class="ruby-identifier">queued_jobs</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">id</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">canceled</span>, <span class="ruby-identifier">immediated</span>, <span class="ruby-identifier">running</span>, <span class="ruby-identifier">waiting</span>, <span class="ruby-identifier">delay</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">status</span> = []&#x000A;          <span class="ruby-identifier">status</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">canceled</span>   <span class="ruby-operator">?</span> <span class="ruby-value str">'c'</span> <span class="ruby-operator">:</span> <span class="ruby-value str">' '</span>&#x000A;          <span class="ruby-identifier">status</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">immediated</span> <span class="ruby-operator">?</span> <span class="ruby-value str">'i'</span> <span class="ruby-operator">:</span> <span class="ruby-value str">' '</span>&#x000A;          <span class="ruby-identifier">status</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">running</span>    <span class="ruby-operator">?</span> <span class="ruby-value str">'r'</span> <span class="ruby-operator">:</span> <span class="ruby-value str">' '</span>&#x000A;          <span class="ruby-identifier">status</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">waiting</span>    <span class="ruby-operator">?</span> <span class="ruby-value str">'w'</span> <span class="ruby-operator">:</span> <span class="ruby-value str">' '</span>&#x000A;          <span class="ruby-identifier">puts</span>(<span class="ruby-value str">&quot;% 8d  % 8d  % 8s  %s&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-identifier">id</span>, <span class="ruby-identifier">delay</span>.<span class="ruby-identifier">to_i</span>, <span class="ruby-identifier">status</span>.<span class="ruby-identifier">join</span>, <span class="ruby-identifier">name</span>])&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000021-source'><span class="ruby-comment cmt"># File lib/capricorn/apps/jobs.rb, line 17</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">list</span>&#x000A;        <span class="ruby-identifier">queued_jobs</span> = <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">client</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:token</span>]).<span class="ruby-identifier">queued_jobs</span>&#x000A;        <span class="ruby-identifier">queued_jobs</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">id</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">canceled</span>, <span class="ruby-identifier">immediated</span>, <span class="ruby-identifier">running</span>, <span class="ruby-identifier">waiting</span>, <span class="ruby-identifier">delay</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">status</span> = []&#x000A;          <span class="ruby-identifier">status</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">canceled</span>   <span class="ruby-operator">?</span> <span class="ruby-value str">'c'</span> <span class="ruby-operator">:</span> <span class="ruby-value str">' '</span>&#x000A;          <span class="ruby-identifier">status</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">immediated</span> <span class="ruby-operator">?</span> <span class="ruby-value str">'i'</span> <span class="ruby-operator">:</span> <span class="ruby-value str">' '</span>&#x000A;          <span class="ruby-identifier">status</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">running</span>    <span class="ruby-operator">?</span> <span class="ruby-value str">'r'</span> <span class="ruby-operator">:</span> <span class="ruby-value str">' '</span>&#x000A;          <span class="ruby-identifier">status</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">waiting</span>    <span class="ruby-operator">?</span> <span class="ruby-value str">'w'</span> <span class="ruby-operator">:</span> <span class="ruby-value str">' '</span>&#x000A;          <span class="ruby-identifier">puts</span>(<span class="ruby-value str">&quot;% 8d  % 8d  % 8s  %s&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-identifier">id</span>, <span class="ruby-identifier">delay</span>.<span class="ruby-identifier">to_i</span>, <span class="ruby-identifier">status</span>.<span class="ruby-identifier">join</span>, <span class="ruby-identifier">name</span>])&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

@@ -51,9 +51,9 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000144">connect</a></li>
-              <li><a href="#M000143">current</a></li>
-              <li><a href="#M000142">parse_uri</a></li>
+              <li><a href="#M000151">connect</a></li>
+              <li><a href="#M000150">current</a></li>
+              <li><a href="#M000149">parse_uri</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -63,8 +63,8 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000144'>
-                <a name='M000144'>      </a>
+              <div class='public-class method' id='method-M000151'>
+                <a name='M000151'>      </a>
                 <div class='synopsis'>
                   <span class='name'>connect</span>
                   <span class='arguments'>(token=nil)</span>
@@ -75,14 +75,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000144-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000151-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000144-source'><span class="ruby-comment cmt"># File lib/capricorn/client.rb, line 25</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">connect</span>(<span class="ruby-identifier">token</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-identifier">token</span> <span class="ruby-operator">||=</span> <span class="ruby-value str">'core.token'</span>&#x000A;      &#x000A;      [<span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_ROOT_SYSTEM_DIR</span>,&#x000A;       <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_USER_SYSTEM_DIR</span>,&#x000A;       <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_USER_SYSTEM_DIR</span>, <span class="ruby-value str">'tokens'</span>),&#x000A;       <span class="ruby-value str">'.'</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">token</span>))&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span> <span class="ruby-identifier">path</span>&#x000A;          <span class="ruby-identifier">token</span> = <span class="ruby-identifier">path</span>&#x000A;          <span class="ruby-keyword kw">break</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      &#x000A;      <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span> <span class="ruby-identifier">token</span>&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Unable to read the token at: #{token}&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      &#x000A;      <span class="ruby-identifier">token</span> = <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">Client</span><span class="ruby-operator">::</span><span class="ruby-constant">AuthToken</span>.<span class="ruby-identifier">load_file</span>(<span class="ruby-identifier">token</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-constant">String</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">token</span>&#x000A;      <span class="ruby-identifier">token</span>.<span class="ruby-identifier">connect</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">token</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000151-source'><span class="ruby-comment cmt"># File lib/capricorn/client.rb, line 25</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">connect</span>(<span class="ruby-identifier">token</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-identifier">token</span> <span class="ruby-operator">||=</span> <span class="ruby-value str">'core.token'</span>&#x000A;      &#x000A;      [<span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_ROOT_SYSTEM_DIR</span>,&#x000A;       <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_USER_SYSTEM_DIR</span>,&#x000A;       <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_USER_SYSTEM_DIR</span>, <span class="ruby-value str">'tokens'</span>),&#x000A;       <span class="ruby-value str">'.'</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">token</span>))&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span> <span class="ruby-identifier">path</span>&#x000A;          <span class="ruby-identifier">token</span> = <span class="ruby-identifier">path</span>&#x000A;          <span class="ruby-keyword kw">break</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      &#x000A;      <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span> <span class="ruby-identifier">token</span>&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Unable to read the token at: #{token}&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      &#x000A;      <span class="ruby-identifier">token</span> = <span class="ruby-constant">Capricorn</span><span class="ruby-operator">::</span><span class="ruby-constant">Client</span><span class="ruby-operator">::</span><span class="ruby-constant">AuthToken</span>.<span class="ruby-identifier">load_file</span>(<span class="ruby-identifier">token</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-constant">String</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">token</span>&#x000A;      <span class="ruby-identifier">token</span>.<span class="ruby-identifier">connect</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">token</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000143'>
-                <a name='M000143'>      </a>
+              <div class='public-class method' id='method-M000150'>
+                <a name='M000150'>      </a>
                 <div class='synopsis'>
                   <span class='name'>current</span>
                   <span class='arguments'>(token=nil)</span>
@@ -93,14 +93,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000143-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000150-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000143-source'><span class="ruby-comment cmt"># File lib/capricorn/client.rb, line 19</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">current</span>(<span class="ruby-identifier">token</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-ivar">@client</span> = <span class="ruby-identifier">connect</span>(<span class="ruby-identifier">token</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@client</span>&#x000A;      <span class="ruby-ivar">@client</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000150-source'><span class="ruby-comment cmt"># File lib/capricorn/client.rb, line 19</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">current</span>(<span class="ruby-identifier">token</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-ivar">@client</span> = <span class="ruby-identifier">connect</span>(<span class="ruby-identifier">token</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@client</span>&#x000A;      <span class="ruby-ivar">@client</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000142'>
-                <a name='M000142'>      </a>
+              <div class='public-class method' id='method-M000149'>
+                <a name='M000149'>      </a>
                 <div class='synopsis'>
                   <span class='name'>parse_uri</span>
                   <span class='arguments'>(uri)</span>
@@ -112,10 +112,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000142-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000149-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000142-source'><span class="ruby-comment cmt"># File lib/capricorn/client.rb, line 11</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">parse_uri</span>(<span class="ruby-identifier">uri</span>)&#x000A;      <span class="ruby-identifier">uri</span>     = <span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">uri</span>)&#x000A;      <span class="ruby-identifier">use_ssl</span> = (<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">scheme</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'ssl+capricorn'</span>)&#x000A;      <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">scheme</span> = <span class="ruby-value str">'druby'</span>&#x000A;      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">use_ssl</span>, <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">to_s</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000149-source'><span class="ruby-comment cmt"># File lib/capricorn/client.rb, line 11</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">parse_uri</span>(<span class="ruby-identifier">uri</span>)&#x000A;      <span class="ruby-identifier">uri</span>     = <span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">uri</span>)&#x000A;      <span class="ruby-identifier">use_ssl</span> = (<span class="ruby-identifier">uri</span>.<span class="ruby-identifier">scheme</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'ssl+capricorn'</span>)&#x000A;      <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">scheme</span> = <span class="ruby-value str">'druby'</span>&#x000A;      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">use_ssl</span>, <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">to_s</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

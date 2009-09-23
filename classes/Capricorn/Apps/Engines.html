@@ -36,7 +36,7 @@
         </ol>
         <div class='parent'>
           Parent:
-          <strong><a href="../../Thor.html">Thor</a></strong>
+          <strong>Thor</strong>
         </div>
       </div>
       <div id='content'>
@@ -45,51 +45,51 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000025">install</a></li>
-              <li><a href="#M000027">uninstall</a></li>
-              <li><a href="#M000026">update</a></li>
+              <li><a href="#M000031">install</a></li>
+              <li><a href="#M000033">uninstall</a></li>
+              <li><a href="#M000032">update</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000025'>
-                <a name='M000025'>      </a>
+              <div class='public-instance method' id='method-M000031'>
+                <a name='M000031'>      </a>
                 <div class='synopsis'>
                   <span class='name'>install</span>
                   <span class='arguments'>(domain, name)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000025-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000031-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000025-source'><span class="ruby-comment cmt"># File lib/capricorn/apps/engines.rb, line 9</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">install</span>(<span class="ruby-identifier">domain</span>, <span class="ruby-identifier">name</span>)&#x000A;        <span class="ruby-identifier">desc</span> = { <span class="ruby-identifier">:version</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:version</span>] }&#x000A;        <span class="ruby-identifier">desc</span>[<span class="ruby-identifier">:lib</span>]    = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:lib</span>]    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:lib</span>]&#x000A;        <span class="ruby-identifier">desc</span>[<span class="ruby-identifier">:source</span>] = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:source</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:source</span>]&#x000A;        <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">client</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:token</span>]).<span class="ruby-identifier">install_engine</span>(<span class="ruby-identifier">domain</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">desc</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000031-source'><span class="ruby-comment cmt"># File lib/capricorn/apps/engines.rb, line 41</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">install</span>(<span class="ruby-identifier">domain</span>, <span class="ruby-identifier">name</span>)&#x000A;        <span class="ruby-identifier">desc</span> = { <span class="ruby-identifier">:version</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:version</span>] }&#x000A;        <span class="ruby-identifier">desc</span>[<span class="ruby-identifier">:lib</span>]    = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:lib</span>]    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:lib</span>]&#x000A;        <span class="ruby-identifier">desc</span>[<span class="ruby-identifier">:source</span>] = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:source</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:source</span>]&#x000A;        <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">client</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:token</span>]).<span class="ruby-identifier">install_engine</span>(<span class="ruby-identifier">domain</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">desc</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:immediate</span>])&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000027'>
-                <a name='M000027'>      </a>
+              <div class='public-instance method' id='method-M000033'>
+                <a name='M000033'>      </a>
                 <div class='synopsis'>
                   <span class='name'>uninstall</span>
                   <span class='arguments'>(domain, name)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000027-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000033-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000027-source'><span class="ruby-comment cmt"># File lib/capricorn/apps/engines.rb, line 27</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">uninstall</span>(<span class="ruby-identifier">domain</span>, <span class="ruby-identifier">name</span>)&#x000A;        <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">client</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:token</span>]).<span class="ruby-identifier">uninstall_engine</span>(<span class="ruby-identifier">domain</span>, <span class="ruby-identifier">name</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000033-source'><span class="ruby-comment cmt"># File lib/capricorn/apps/engines.rb, line 57</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">uninstall</span>(<span class="ruby-identifier">domain</span>, <span class="ruby-identifier">name</span>)&#x000A;        <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">client</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:token</span>]).<span class="ruby-identifier">uninstall_engine</span>(<span class="ruby-identifier">domain</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:immediate</span>])&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000026'>
-                <a name='M000026'>      </a>
+              <div class='public-instance method' id='method-M000032'>
+                <a name='M000032'>      </a>
                 <div class='synopsis'>
                   <span class='name'>update</span>
                   <span class='arguments'>(domain, name)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000026-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000032-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000026-source'><span class="ruby-comment cmt"># File lib/capricorn/apps/engines.rb, line 18</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-identifier">domain</span>, <span class="ruby-identifier">name</span>)&#x000A;        <span class="ruby-identifier">desc</span> = { <span class="ruby-identifier">:version</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:version</span>] }&#x000A;        <span class="ruby-identifier">desc</span>[<span class="ruby-identifier">:lib</span>]    = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:lib</span>]    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:lib</span>]&#x000A;        <span class="ruby-identifier">desc</span>[<span class="ruby-identifier">:source</span>] = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:source</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:source</span>]&#x000A;        <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">client</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:token</span>]).<span class="ruby-identifier">update_engine</span>(<span class="ruby-identifier">domain</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">desc</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000032-source'><span class="ruby-comment cmt"># File lib/capricorn/apps/engines.rb, line 49</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-identifier">domain</span>, <span class="ruby-identifier">name</span>)&#x000A;        <span class="ruby-identifier">desc</span> = { <span class="ruby-identifier">:version</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:version</span>] }&#x000A;        <span class="ruby-identifier">desc</span>[<span class="ruby-identifier">:lib</span>]    = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:lib</span>]    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:lib</span>]&#x000A;        <span class="ruby-identifier">desc</span>[<span class="ruby-identifier">:source</span>] = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:source</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:source</span>]&#x000A;        <span class="ruby-constant">Capricorn</span>.<span class="ruby-identifier">client</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:token</span>]).<span class="ruby-identifier">update_engine</span>(<span class="ruby-identifier">domain</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">desc</span>, <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:immediate</span>])&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
