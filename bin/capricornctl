@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+module Capricorn
+  APP     = 'capricorn'
+  CMD     = 'capricornctl'
+  VERSION = '0.1'
+  
+  ROOT    = "lib/#{APP}-#{VERSION}/priv"
+  BASE    = File.expand_path(File.dirname(File.dirname(__FILE__)))
+  BIN     = File.join(BASE, ROOT, 'ctl', 'bin', CMD)
+  LIB     = File.join(BASE, ROOT, 'ctl', 'lib')
+  
+  VENDOR  = Dir.glob(File.join(BASE, ROOT, 'vendor', '*', 'lib'))
+  
+  PATHS   = VENDOR + [LIB]
+  
+  PATHS.each do |path|
+    $:.unshift(path)
+  end
+end
+
+load Capricorn::BIN
