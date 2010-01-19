@@ -50,6 +50,12 @@
 }).
 -type gem_ref() :: #gem_ref{}.
 
+-record(gem_id, {
+  name=undefined,
+  version=#version{}
+}).
+-type gem_id() :: #gem_id{}.
+
 -record(application, {
   id=undefined            :: 'undefined' | binary(),
   node=undefined          :: 'undefined' | atom(),
@@ -59,16 +65,11 @@
   www_user=undefined      :: 'undefined' | binary(),
   www_group=undefined     :: 'undefined' | binary(),
   root_path=undefined     :: 'undefined' | binary(),
-  installed_gems=[]       :: [gem_ref()],
+  installed_gems=[]       :: [gem_id()],
   required_gems=[]        :: [binary()],
   rvsn={rvsn, 0}
 }).
 -type application() :: #application{}.
-
--record(gem_id, {
-  name=undefined,
-  version=#version{}
-}).
 
 -record(gem, {
   id=#gem_id{},

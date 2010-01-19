@@ -83,8 +83,7 @@ class Capricorn::CLI::Applications < Thor
             q.prompt = 'choose a gem to remove: '
             q.choices(*app[10])
           end
-          idx = gems.index(g)
-          app[10].delete_at(idx)
+          app[10].delete(g)
         end
         
         q.choice('domain-add') do
@@ -159,6 +158,7 @@ private
   def show_app(app)
     app = app.to_a.dup
     app.shift
+    app.pop
     app.collect! do |v|
       case v
       when Array then v.join(', ')

@@ -32,7 +32,8 @@
     capricorn_sup,
     capricorn_util,
     capricorn_dets_updater,
-    capricorn_internal_api
+    capricorn_internal_api,
+    cap_service_users
   ]},
   {registered, [
     capricorn_config,

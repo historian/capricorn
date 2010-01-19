@@ -3,7 +3,7 @@
 -behaviour(gen_server).
 
 -export([start_link/1]).
--export([restart/1, relink/1, update/1, stop/1, start/1]).
+-export([restart/1, relink/1, update/1, stop/1, start/1, service/2, service/4]).
 -export([init/1, handle_call/3, handle_cast/2,
          handle_info/2, terminate/2, code_change/3]).
 
@@ -32,6 +32,14 @@ start(App) ->
   {ok, Appname} = get_proc_name(App),
   gen_server:cast(Appname, {start}).
 
+service(App, [M,F,A]) ->
+  service(App, M,F,A).
+
+service(App, M,F,A) ->
+  {ok, Appname} = get_proc_name(App),
+  gen_server:call(Appname, {service, M,F,A}, 6000).
+  
+
 get_proc_def(App) ->
   case get_proc_name(App) of
   {ok, L} when is_atom(L) -> {ok, {local, L}};
@@ -59,6 +67,14 @@ init([#application{}=App]) ->
   {ok, State1}.
  
 %%% Handle call messages
+handle_call({service, M,F,A}, _From, #state{runner=R}=State) ->
+  bertio:send(R, [M,F,A]),
+  try bertio:recv(R, 5000) of
+  {bert, Result} -> {reply, Result, State}
+  catch
+    error:timeout -> {reply, timeout, State}
+  end;
+
 handle_call({update, App}, _From, State) ->
   ?LOG_DEBUG("reconfiguring app ~s", [App#application.id]),
   case reconfigure_app(App) of
@@ -154,12 +170,12 @@ write_milkshake_gem_config(Config, [#gem_id{name=Name,version=Version}|Other]) -
   case Name of
   undefined -> % skip
     write_milkshake_gem_config(Config, Other);
-  _Else ->
+  _Else1 ->
     Config1 = lists:concat([Config, "  ", binary_to_list(Name), ":\n"]),
     Config2 =
     case Version of
     undefined -> lists:concat([Config1, "    version: \">= 0\"\n"]);
-    _Else     -> lists:concat([Config1, "    version: \"", capricorn_cluster_gems:version_to_string(Version), "\"\n"])
+    _Else2    -> lists:concat([Config1, "    version: \"", capricorn_cluster_gems:version_to_string(Version), "\"\n"])
     end,
     write_milkshake_gem_config(Config2, Other)
   end.

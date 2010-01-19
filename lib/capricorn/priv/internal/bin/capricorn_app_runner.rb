@@ -12,8 +12,8 @@ require File.expand_path('./config/environment')
 
 Erlang do |cmd|
   begin
-    if defined?(Capricorn) and defined?(Capricorn::Services)
-      Capricorn::Services.dispatch(self, cmd)
+    if defined?(LalalaCapricorn) and defined?(LalalaCapricorn::Services)
+      LalalaCapricorn::Services.dispatch(self, cmd)
     else
       send t[:error, :no_services]
     end

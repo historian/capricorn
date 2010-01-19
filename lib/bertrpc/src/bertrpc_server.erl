@@ -124,7 +124,7 @@ receive_berp(BERP_IN, C, Meta) ->
 
 handle_bert({call, sec, authenticate, A}, #connection{server=Server,user=undefined}=C, _Meta) ->
   try
-    gen_server:call(Server, {authenticate, A})
+    gen_server:call(Server, {authenticate, A}, 60000)
   of
     {ok, User} ->
       {send, {reply, {bert, true}}, C#connection{user=User}, #bertrpc_info{}};
@@ -145,7 +145,7 @@ handle_bert({call, M, F, A}, C, Meta) ->
   try
     Module = get_module(C, M),
     Meta1 = handle_stream(C, Meta),
-    gen_server:call(Module, {F, A, Meta1})
+    gen_server:call(Module, {F, A, Meta1}, 60000)
   of
     Result ->
       {send, Result, C, #bertrpc_info{}}
