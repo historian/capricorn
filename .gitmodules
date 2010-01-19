@@ -1,6 +1,6 @@
 [submodule "lib/capricorn/priv/vendor/bertrpc"]
 	path = lib/capricorn/priv/vendor/bertrpc
-	url = git://github.com/simonmenke/bertrpc.git
+	url = git://github.com/fd/bertrpc.git
 [submodule "lib/capricorn/priv/vendor/bert"]
 	path = lib/capricorn/priv/vendor/bert
 	url = git://github.com/mojombo/bert.git

@@ -6,7 +6,8 @@
    {modules, [
     libra_sys,
     libra_monitor,
-    libra_watcher
+    libra_watcher,
+    libra_conf
    ]},
    {registered,[]},
    {applications, [kernel, stdlib]}

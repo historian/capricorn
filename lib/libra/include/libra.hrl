@@ -26,9 +26,9 @@
   wdir,
   pid_path,
   
-  start_cmd,
+  start_cmd=none,
   stop_cmd="kill $PID",
-  restart_cmd,
+  restart_cmd=none,
   
   start_grace_time=3,
   stop_grace_time=3,
