@@ -31,7 +31,8 @@
     capricorn_external_machines_api,
     capricorn_sup,
     capricorn_util,
-    capricorn_dets_updater
+    capricorn_dets_updater,
+    capricorn_internal_api
   ]},
   {registered, [
     capricorn_config,
@@ -43,9 +44,10 @@
     capricorn_machine_apps_sup,
     capricorn_external_api,
     capricorn_cluster_gems,
-    capricorn_sup
+    capricorn_sup,
+    capricorn_internal_api
   ]},
-  {applications, [kernel, stdlib, inets, bertio, bertrpc]},
+  {applications, [kernel, stdlib, inets, bertio, bertrpc, gcd]},
   {included_applications, [sasl]},
   {mod, {capricorn_app, [
     "/etc/capricorn/default.ini",
