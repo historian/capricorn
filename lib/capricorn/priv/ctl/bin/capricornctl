@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+begin
+  require 'capricorn-client'
+rescue LoadError
+  $:.unshift(File.dirname(__FILE__)+'/../lib')
+  require 'capricorn-client'
+end
+
+case ARGV.shift
+when 'applications'
+  Capricorn::CLI::Applications.start
+when 'gems'
+  Capricorn::CLI::Gems.start
+when 'machines'
+  Capricorn::CLI::Machines.start
+else
+  puts <<-EOH
+Topics:
+  applications
+  # manage applications
+   
+  gems
+  # manage gems
+   
+  machines
+  # manage machines
+EOH
+end

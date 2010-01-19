@@ -1,0 +1,12 @@
+[submodule "lib/capricorn/priv/vendor/bertrpc"]
+	path = lib/capricorn/priv/vendor/bertrpc
+	url = git://github.com/simonmenke/bertrpc.git
+[submodule "lib/capricorn/priv/vendor/bert"]
+	path = lib/capricorn/priv/vendor/bert
+	url = git://github.com/mojombo/bert.git
+[submodule "lib/capricorn/priv/vendor/thor"]
+	path = lib/capricorn/priv/vendor/thor
+	url = git://github.com/wycats/thor.git
+[submodule "lib/capricorn/priv/vendor/highline"]
+	path = lib/capricorn/priv/vendor/highline
+	url = git://github.com/JEG2/highline.git
