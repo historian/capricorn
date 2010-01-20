@@ -3,7 +3,7 @@
 -behaviour(gen_server).
 
 -export([start_link/0]).
--export([add/4, add/5, update/3, update/4, all/0, all/1]).
+-export([add/4, add/5, update/3, update/4, fupdate/1, fupdate/2, all/0, all/1]).
 -export([init/1, handle_call/3, handle_cast/2,
          handle_info/2, terminate/2, code_change/3]).
 
@@ -28,6 +28,14 @@ update(Id, Domains, Gems) ->
 -spec update(atom(), binary(), [binary()], [binary()]) -> ok.
 update(Node, Id, Domains, Gems) ->
   gen_server:cast({capricorn_machine_apps, Node}, {update, Id, Domains, Gems}).
+
+-spec fupdate(binary()) -> ok.
+fupdate(Id) ->
+  gen_server:cast(capricorn_machine_apps, {fupdate, Id}).
+
+-spec fupdate(atom(), binary()) -> ok.
+fupdate(Node, Id) ->
+  gen_server:cast({capricorn_machine_apps, Node}, {fupdate, Id}).
 
 -spec all() -> [application()].
 all() ->
@@ -85,6 +93,10 @@ handle_cast({update, Id, Domains, Gems}, Ctx) ->
   it_update(Id, Domains, Gems, Ctx),
   {noreply, Ctx};
 
+handle_cast({fupdate, Id}, Ctx) ->
+  it_fupdate(Id, Ctx),
+  {noreply, Ctx};
+
 handle_cast(stop, Ctx) ->
   {stop, normal, Ctx};
 
@@ -121,9 +133,23 @@ it_update(Id, Domains, Gems, Ctx) ->
   try
     {ok, App1} = it_lookup_app(Id, Ctx),
     {ok, App2} = it_update_domains(App1, Domains, Ctx),
-    {ok, App3} = it_update_gems(App2, Gems,Ctx),
+    {ok, App3} = it_try_update_gems(App2, Gems,Ctx),
     {ok, App4} = it_save_app(App3, Ctx),
     {ok, App4}
+  catch
+    error:E ->
+      ?LOG_ERROR("error while updating app ~s: ~p", [Id, E]),
+      {error, E}
+  end.
+
+-spec it_fupdate(binary(),#ctx{}) -> {'error',_}|{'ok',application()}.
+it_fupdate(Id, Ctx) ->
+  ?LOG_INFO("force updating ~s", [Id]),
+  try
+    {ok, App1} = it_lookup_app(Id, Ctx),
+    {ok, App2} = it_update_gems(App1, App1#application.required_gems, Ctx),
+    {ok, App3} = it_save_app(App2, Ctx),
+    {ok, App3}
   catch
     error:E ->
       ?LOG_ERROR("error while updating app ~s: ~p", [Id, E]),
@@ -153,29 +179,32 @@ it_update_domains(App, Domains, #ctx{recipe=Recipe, scaffolder=P}) ->
   true -> {ok, App}
   end.
 
--spec it_update_gems(application(), [binary(),...], #ctx{}) -> {ok, application()}.
-it_update_gems(App, Gems, _Ctx) ->
+-spec it_try_update_gems(application(), [binary(),...], #ctx{}) -> {ok, application()}.
+it_try_update_gems(App, Gems, Ctx) ->
   if Gems /= App#application.required_gems ->
-    ?LOG_INFO("updating app gems ~p => ~p", [App#application.required_gems, Gems]),
-    App1 = App#application{required_gems=Gems,installed_gems=[]},
-    case capricorn_machine:ensure_gems_are_present_for_app(App1) of
-    {ok, App2} ->
-      ?LOG_INFO("relinking app ~s", [App#application.id]),
-      case capricorn_application:update(App2) of
-      ok -> 
-        ?LOG_DEBUG("relinked app ~s", [App#application.id]),
-        {ok, App2};
-      Error -> 
-        ?LOG_DEBUG("error ~p", [Error]),
-        Error
-      end;
+    it_update_gems(App, Gems, Ctx);
+  true ->
+    ?LOG_DEBUG("app gems are already updated", []),
+    {ok, App}
+  end.
+
+it_update_gems(App, Gems, _Ctx) ->
+  ?LOG_INFO("updating app gems ~p => ~p", [App#application.required_gems, Gems]),
+  App1 = App#application{required_gems=Gems,installed_gems=[]},
+  case capricorn_machine:ensure_gems_are_present_for_app(App1) of
+  {ok, App2} ->
+    ?LOG_INFO("relinking app ~s", [App#application.id]),
+    case capricorn_application:update(App2) of
+    ok -> 
+      ?LOG_DEBUG("relinked app ~s", [App#application.id]),
+      {ok, App2};
     Error -> 
       ?LOG_DEBUG("error ~p", [Error]),
       Error
     end;
-  true ->
-    ?LOG_DEBUG("app gems are already updated", []),
-    {ok, App}
+  Error -> 
+    ?LOG_DEBUG("error ~p", [Error]),
+    Error
   end.
 
 -spec it_add(application(), #ctx{}) -> ok | any().

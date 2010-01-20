@@ -212,6 +212,17 @@ it_install_gems([Dep|Rest], #ctx{cluster=Cluster}=Ctx) ->
   {error, not_found} -> {error, {missing_gem, Dep}}
   end.
 
+it_find_deep_deps(#gem{deps=Deps}=Spec, Acc1, Ctx) ->
+  Acc3 = lists:foldl(fun(Dep, Acc2) ->
+    it_find_deep_deps(Dep, Acc2, Ctx)
+  end, Acc1, Deps),
+  [Spec|Acc3];
+it_find_deep_deps(#dependency{}=Dep, Acc1, #ctx{cluster=Cluster}=Ctx) ->
+  case capricorn_cluster_gems:lookup(Cluster, Dep) of
+  {ok, Spec} -> it_find_deep_deps(Spec, Acc1, Ctx);
+  {error, not_found} -> {error, {missing_gem, Dep}}
+  end.
+
 it_is_gem_installed(#gem{}=Gem) ->
   Args = "list -i",
   case (Gem#gem.id)#gem_id.name of

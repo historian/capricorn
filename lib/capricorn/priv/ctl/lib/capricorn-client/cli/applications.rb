@@ -115,6 +115,12 @@ class Capricorn::CLI::Applications < Thor
     end
   end
   
+  desc "fupdate", "force update an application on MACHINE"
+  def fupdate
+    machine, id = *select_application
+    p client.call.applications.fupdate(machine.to_sym, id)
+  end
+  
   desc "relink", "relink an application on MACHINE"
   def relink
     machine, id = *select_application

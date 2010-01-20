@@ -77,6 +77,16 @@ bert_call(update, [Node, Id, NewDomains, NewGems], _, State) ->
     {error, Error} -> {error, Error, State}
   catch
     throw:T -> {error, T, State}
+  end;
+
+bert_call(fupdate, [Node, Id], _, State) ->
+  try
+    capricorn_machine_apps:fupdate(Node, Id)
+  of
+    ok -> {reply, true, State};
+    {error, Error} -> {error, Error, State}
+  catch
+    throw:T -> {error, T, State}
   end.
   
 
