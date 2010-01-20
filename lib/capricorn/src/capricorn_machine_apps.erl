@@ -188,6 +188,7 @@ it_try_update_gems(App, Gems, Ctx) ->
     {ok, App}
   end.
 
+-spec it_update_gems(application(), [binary(),...], #ctx{}) -> {ok, application()}.
 it_update_gems(App, Gems, _Ctx) ->
   ?LOG_INFO("updating app gems ~p => ~p", [App#application.required_gems, Gems]),
   App1 = App#application{required_gems=Gems,installed_gems=[]},
