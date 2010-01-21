@@ -1,4 +1,4 @@
-require 'rubygems'
+require File.dirname(File.expand_path(__FILE__))+'/../../minigems'
 require 'bert'
 
 module Helpers
