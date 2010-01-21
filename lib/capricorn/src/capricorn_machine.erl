@@ -30,7 +30,7 @@
 -record(ctx, {
   cluster,
   knows_cluster=false,
-  installed_gems,
+  installed_gems
 }).
 
 config(Node) ->
@@ -72,7 +72,7 @@ init([]) ->
   ("cluster", "node") -> ?MODULE:stop()
   end, self()),
   
-  InstalledGems = ets:new([set,private,{keypos,2}]),
+  InstalledGems = ets:new(gems, [set,private,{keypos,2}]),
   
   {ok, #ctx{
     knows_cluster  = KnowsCluster,
@@ -212,7 +212,8 @@ it_install_gems([Dep|Rest], #ctx{cluster=Cluster}=Ctx) ->
     case it_is_gem_installed(Spec, Ctx) of
     true  ->
       ?LOG_DEBUG("allready installed gem ~s", [Dep#dependency.name]),
-      it_install_gems(Rest, Ctx);
+      Deps = [Dep || Dep <- Spec#gem.deps],
+      it_install_gems(Deps++Rest, Ctx);
     false ->
       case it_install_gem(Spec, Ctx) of
       {ok, _Spec1} ->
