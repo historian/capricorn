@@ -83,6 +83,9 @@ start_server(IniFiles) ->
     throw({startup_error, Reason})
   end,
   
+  Cookie = list_to_atom(capricorn_config:get("capricorn", "cookie", "secret")),
+  erlang:set_cookie(node(), Cookie),
+  
   NodeType = list_to_atom(
     capricorn_config:get("capricorn", "node_type", "cluster")),
   LogLevel = capricorn_config:get("log", "level", "info"),
