@@ -28,8 +28,9 @@
 -export([ensure_gems_are_present_for_app/1]).
 
 -record(ctx, {
-  cluster=undefined,
-  knows_cluster=false
+  cluster,
+  knows_cluster=false,
+  installed_gems,
 }).
 
 config(Node) ->
@@ -71,7 +72,13 @@ init([]) ->
   ("cluster", "node") -> ?MODULE:stop()
   end, self()),
   
-  {ok, #ctx{knows_cluster=KnowsCluster,cluster=Node}}.
+  InstalledGems = ets:new([set,private,{keypos,2}]),
+  
+  {ok, #ctx{
+    knows_cluster  = KnowsCluster,
+    cluster        = Node,
+    installed_gems = InstalledGems
+  }}.
  
 %% @spec handle_call(_Request, _From, State) -> {reply, Reply, State}
 %% @doc Callback for synchronous requests
@@ -137,13 +144,17 @@ it_ensure_gem_for_app([], App, #ctx{}) -> {ok, App};
 it_ensure_gem_for_app([Gem|Rest], App, #ctx{cluster=Cluster}=Ctx) ->
   case capricorn_cluster_gems:lookup(Cluster, Gem) of
   {ok, Spec} -> 
+    
     ?LOG_DEBUG("found gem ~p", [Gem]),
-    case it_is_gem_installed(Spec) of
+    case it_is_gem_installed(Spec, Ctx) of
     true  ->
       ?LOG_DEBUG("gem already installed ~p", [Gem]),
+      Deps = [Dep || Dep <- Spec#gem.deps],
+      it_install_gems(Deps, Ctx),
       it_ensure_gem_for_app(Rest, App#application{
         installed_gems=[Spec#gem.id|App#application.installed_gems]
       }, Ctx);
+      
     false ->
       ?LOG_DEBUG("installing gem ~p", [Gem]),
       case it_install_gem(Spec, Ctx) of
@@ -152,11 +163,13 @@ it_ensure_gem_for_app([Gem|Rest], App, #ctx{cluster=Cluster}=Ctx) ->
         it_ensure_gem_for_app(Rest, App#application{
           installed_gems=[Spec1#gem.id|App#application.installed_gems]
         }, Ctx);
+        
       {error, E} ->
         ?LOG_DEBUG("error ~p", [E]),
         {error, E}
       end
     end;
+    
   {error, not_found} -> 
     ?LOG_DEBUG("error ~p", [{missing_gem, Gem}]),
     {error, {missing_gem, Gem}}
@@ -196,7 +209,7 @@ it_install_gems([Dep|Rest], #ctx{cluster=Cluster}=Ctx) ->
   case capricorn_cluster_gems:lookup(Cluster, Dep) of
   {ok, Spec} ->
     ?LOG_DEBUG("found gem ~s", [Dep#dependency.name]),
-    case it_is_gem_installed(Spec) of
+    case it_is_gem_installed(Spec, Ctx) of
     true  ->
       ?LOG_DEBUG("allready installed gem ~s", [Dep#dependency.name]),
       it_install_gems(Rest, Ctx);
@@ -223,22 +236,29 @@ it_find_deep_deps(#dependency{}=Dep, Acc1, #ctx{cluster=Cluster}=Ctx) ->
   {error, not_found} -> {error, {missing_gem, Dep}}
   end.
 
-it_is_gem_installed(#gem{}=Gem) ->
-  Args = "list -i",
-  case (Gem#gem.id)#gem_id.name of
-  undefined -> % skip
-    {error, badarg};
-  Name ->
-    Args1 = lists:concat([Args, "  ", binary_to_list(Name)]),
-    Args2 =
-    case (Gem#gem.id)#gem_id.version of
-    undefined -> Args1;
-    Version   -> lists:concat([Args1, " -v \"", capricorn_cluster_gems:version_to_string(Version), "\""])
-    end,
-    case gem_exec(Args2) of
-    "true\n" -> true;
-    _        -> false
-    end
+it_is_gem_installed(#gem{}=Gem, #ctx{installed_gems=T}) ->
+  case ets:lookup(T, Gem#gem.id) of
+  [] ->
+    Args = "list -i",
+    case (Gem#gem.id)#gem_id.name of
+    undefined -> % skip
+      {error, badarg};
+    Name ->
+      Args1 = lists:concat([Args, "  ", binary_to_list(Name)]),
+      Args2 =
+      case (Gem#gem.id)#gem_id.version of
+      undefined -> Args1;
+      Version   -> lists:concat([Args1, " -v \"",
+        capricorn_cluster_gems:version_to_string(Version), "\""])
+      end,
+      case gem_exec(Args2) of
+      "true\n" ->
+        ets:insert_new(T,Gem),
+        true;
+      _Else -> false
+      end
+    end;
+  _Else -> true
   end.
 
 gem_exec(Args) ->
