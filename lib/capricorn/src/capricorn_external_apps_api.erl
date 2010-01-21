@@ -19,9 +19,19 @@ bert_call(all, [Node], _, State) ->
     throw:T -> {error, T, State}
   end;
 
-bert_call(add, [Node, Name, Domains, Environment], _, State) ->
+bert_call(create, [Node, Name, Domains, Environment], _, State) ->
   try
-    capricorn_machine_apps:add(Node, Name, Domains, Environment, [])
+    capricorn_machine_apps:create(Node, Name, Domains, Environment, [])
+  of
+    ok -> {reply, true, State};
+    {error, Error} -> {error, Error, State}
+  catch
+    throw:T -> {error, T, State}
+  end;
+
+bert_call(import, [Node, Name, Domains, Environment, Root, Gems, Uid, Gid], _, State) ->
+  try
+    capricorn_machine_apps:import(Node, Name, Domains, Environment, Gems, Root, Uid, Gid)
   of
     ok -> {reply, true, State};
     {error, Error} -> {error, Error, State}

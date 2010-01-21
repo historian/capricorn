@@ -21,8 +21,8 @@ class Capricorn::CLI::Applications < Thor
     show_app(app)
   end
   
-  desc "add", "add an application on MACHINE"
-  def add
+  desc "create", "create an application on MACHINE"
+  def create
     machine     = select_machine
     name        = ui.ask("name: ") do |q|
       q.validate = /^.+$/
@@ -45,9 +45,87 @@ class Capricorn::CLI::Applications < Thor
     end
     
     domains = domains.flatten.compact
+    domains = domains.collect { |d| d.downcase.sub(/^www\./, '') }
+    domains = domains.uniq
+    
     environment = environment.to_sym
     
-    p client.call.applications.add(machine.to_sym, name, domains, environment)
+    p client.call.applications.create(machine.to_sym, name, domains, environment)
+  end
+  
+  desc "import", "import an application on MACHINE (only use this from an application dir)"
+  def import
+    root = File.expand_path(Dir.pwd)
+    
+    unless File.file?(File.join(root, "host/config/milkshake.yml"))
+      puts ui.color('This doesn\'t appear to be a milkshake app!', :red)
+      puts ui.color('no milkshake config was found', :red)
+      exit 1
+    end
+    
+    unless File.directory?(File.join(root, "shared"))
+      puts ui.color('This doesn\'t appear to be a milkshake app!', :red)
+      puts ui.color('no shared dir was found', :red)
+      exit 1
+    end
+    
+    gems = YAML.load_file(File.join(root, "host/config/milkshake.yml"))
+    gems = (gems['gems'].keys rescue [])
+    if gems.empty?
+      puts ui.color('This doesn\'t appear to be a milkshake app!', :red)
+      puts ui.color('no gems were found', :red)
+      exit 1
+    end
+    
+    stats = (File.stat(File.join(root, "host/config/environment.rb")) rescue nil)
+    unless stats
+      puts ui.color('This doesn\'t appear to be a milkshake app!', :red)
+      puts ui.color('no environment.rb was found', :red)
+      exit 1
+    end
+    
+    uid = (Etc.getpwuid(stats.uid).name rescue nil)
+    unless uid
+      puts ui.color('This doesn\'t appear to be a milkshake app!', :red)
+      puts ui.color('no uid was found', :red)
+      exit 1
+    end
+    
+    gid = (Etc.getgrgid(stats.gid).name rescue nil)
+    unless gid
+      puts ui.color('This doesn\'t appear to be a milkshake app!', :red)
+      puts ui.color('no gid was found', :red)
+      exit 1
+    end
+    
+    machine     = select_machine
+    name        = ui.ask("name: ") do |q|
+      q.validate = /^.+$/
+    end
+    environment = ui.choose do |q|
+      q.choices(*%w( production development staging testing ))
+      q.prompt = "environment: "
+      q.default = 'production'
+    end
+    domains = []
+    domains << ui.ask("domain: ") do |q|
+      q.validate  = /^[\w\d]+(\.[\w\d]+)*$/
+    end
+    loop do
+      domain = ui.ask("more:   ") do |q|
+        q.validate = /^([\w\d]+(\.[\w\d]+)*)?$/
+      end
+      break if domain.strip.empty?
+      domains << domain
+    end
+    
+    domains = domains.flatten.compact
+    domains = domains.collect { |d| d.downcase.sub(/^www\./, '') }
+    domains = domains.uniq
+    
+    environment = environment.to_sym
+    
+    p client.call.applications.import(machine.to_sym, name, domains, environment, root, gems, uid, gid)
   end
   
   desc "update", "update an application on MACHINE"

@@ -46,7 +46,7 @@ start_link() ->
   gen_server:start_link({local, capricorn_machine}, ?MODULE, [], []).
 
 ensure_gems_are_present_for_app(App) ->
-  gen_server:call(capricorn_machine, {ensure_gems_are_present_for_app, App}, 180000).
+  gen_server:call(capricorn_machine, {ensure_gems_are_present_for_app, App}, 900000).
 
 %%
 %% Genserver callback functions

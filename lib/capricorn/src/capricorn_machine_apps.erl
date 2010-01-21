@@ -3,7 +3,7 @@
 -behaviour(gen_server).
 
 -export([start_link/0]).
--export([add/4, add/5, update/3, update/4, fupdate/1, fupdate/2, all/0, all/1]).
+-export([create/4, create/5, import/7, import/8, update/3, update/4, fupdate/1, fupdate/2, all/0, all/1]).
 -export([init/1, handle_call/3, handle_cast/2,
          handle_info/2, terminate/2, code_change/3]).
 
@@ -13,13 +13,21 @@
 start_link() ->
   gen_server:start_link({local, capricorn_machine_apps}, ?MODULE, [], []).
 
--spec add(binary(),[binary()],atom(),[binary()]) -> 'ok'.
-add(Name, Domains, Environment, Gems) ->
+-spec create(binary(),[binary()],atom(),[binary()]) -> 'ok'.
+create(Name, Domains, Environment, Gems) ->
   gen_server:cast(capricorn_machine_apps, {create, Name, Domains, Environment, Gems}).
 
--spec add(atom(), binary(),[binary()],atom(),[binary()]) -> 'ok'.
-add(Node, Name, Domains, Environment, Gems) ->
+-spec create(atom(), binary(),[binary()],atom(),[binary()]) -> 'ok'.
+create(Node, Name, Domains, Environment, Gems) ->
   gen_server:cast({capricorn_machine_apps, Node}, {create, Name, Domains, Environment, Gems}).
+
+-spec import(binary(),[binary()],atom(),[binary()], binary(), binary(), binary()) -> 'ok'.
+import(Name, Domains, Environment, Gems, Root, Uid, Gid) ->
+  gen_server:cast(capricorn_machine_apps, {import, Name, Domains, Environment, Gems, Root, Uid, Gid}).
+
+-spec import(atom(), binary(),[binary()],atom(),[binary()], binary(), binary(), binary()) -> 'ok'.
+import(Node, Name, Domains, Environment, Gems, Root, Uid, Gid) ->
+  gen_server:cast({capricorn_machine_apps, Node}, {import, Name, Domains, Environment, Gems, Root, Uid, Gid}).
 
 -spec update(binary(), [binary()], [binary()]) -> ok.
 update(Id, Domains, Gems) ->
@@ -81,7 +89,28 @@ handle_cast({create, Name, [MainDomain|_]=Domains, Environment, Gems}, Ctx) ->
     required_gems=Gems},
   case valid_app(App) of
   true ->
-    R = it_add(App, Ctx),
+    R = it_create(App, Ctx),
+    ?LOG_ERROR("app: ~p", [R]),
+    {noreply, Ctx};
+  {false, E} -> 
+    ?LOG_ERROR("Invalid app: ~p", [E]),
+    {noreply, Ctx}
+  end;
+
+handle_cast({import, Name, [MainDomain|_]=Domains, Environment, Gems, Root, Uid, Gid}, Ctx) ->
+  App = #application{
+    id=MainDomain,
+    node=node(),
+    name=Name,
+    domains=Domains,
+    environment=Environment,
+    www_user=Uid,
+    www_group=Gid,
+    root_path=Root,
+    required_gems=Gems},
+  case valid_app(App) of
+  true ->
+    R = it_import(App, Ctx),
     ?LOG_ERROR("app: ~p", [R]),
     {noreply, Ctx};
   {false, E} -> 
@@ -208,8 +237,8 @@ it_update_gems(App, Gems, _Ctx) ->
     Error
   end.
 
--spec it_add(application(), #ctx{}) -> ok | any().
-it_add(App, #ctx{recipe=Recipe, apps=Apps, scaffolder=P}) ->
+-spec it_create(application(), #ctx{}) -> ok | any().
+it_create(App, #ctx{recipe=Recipe, apps=Apps, scaffolder=P}) ->
   bertio:send(P, {create, Recipe, App}),
   try bertio:recv(P, 25000) of
   {bert, {true, {User, Group, RootPath}}} ->
@@ -221,6 +250,12 @@ it_add(App, #ctx{recipe=Recipe, apps=Apps, scaffolder=P}) ->
   catch
     error:timeout -> {error, timeout}
   end.
+
+-spec it_import(application(), #ctx{}) -> ok | any().
+it_import(App, #ctx{apps=Apps}) ->
+  dets:insert_new(Apps, App),
+  capricorn_machine_apps_sup:start(App),
+  ok.
 
 -spec valid_app(application()) -> 'true' | {'false',binary()}.
 valid_app(#application{node=No,name=N,domains=D,environment=E,required_gems=G}) ->
