@@ -23,7 +23,7 @@ begin
   Etc.getpwnam(short_user)
 rescue ArgumentError
   short_user = short_user.succ
-  retry
+  # retry
 end
 
 ###############################################################################
@@ -34,6 +34,7 @@ begin
   box.bash(%{ /usr/local/psa/bin/domain -i #{basedomain} })
   httpdocs_path = "/var/www/vhosts/#{basedomain}/httpdocs"
   user = Etc.getpwuid(File.stat(httpdocs_path).uid).name
+  short_user = user
   
 rescue Rush::BashFailed
   ### try to create the base domain
@@ -153,5 +154,5 @@ box.bash %{ /usr/local/psa/admin/sbin/websrvmng --reconfigure-vhost --vhost-name
 box.bash %{ /etc/init.d/httpd restart }
 
 set :root_path, application_root.full_path.to_s
-set :www_user,  user.to_s
+set :www_user,  short_user.to_s
 set :www_group, 'psaserv'
