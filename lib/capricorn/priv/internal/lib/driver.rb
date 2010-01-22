@@ -1,6 +1,23 @@
 require File.dirname(File.expand_path(__FILE__))+'/../../minigems'
 require 'bert'
 
+unless Object.respond_to?(:instance_exec)
+  class Object
+    module InstanceExecHelper; end
+    include InstanceExecHelper
+    def instance_exec(*args, &block) # !> method redefined; discarding old instance_exec
+      mname = "__instance_exec_#{Thread.current.object_id.abs}_#{object_id.abs}"
+      InstanceExecHelper.module_eval{ define_method(mname, &block) }
+      begin
+        ret = __send__(mname, *args)
+      ensure
+        InstanceExecHelper.module_eval{ undef_method(mname) } rescue nil
+      end
+      ret
+    end
+  end
+end
+
 module Helpers
   def send(obj)
     berp = BERT.encode(obj)
