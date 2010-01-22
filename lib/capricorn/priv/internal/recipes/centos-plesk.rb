@@ -70,6 +70,8 @@ unless subdomain
   end
 end
 
+has_db = application_root['shared/settings/database.yml'].exists?
+
 ###############################################################################
 ### Create host app                                                         ###
 ###############################################################################
@@ -78,41 +80,43 @@ if application_root['host/'].exists?
 end
 application_root.bash %{ milkshake create.host "host" --git-data --shared-data "shared" }
 
-###############################################################################
-### Create Database                                                         ###
-###############################################################################
-begin
-  box.bash(%{ /usr/local/psa/bin/database -c #{db_name} -domain #{basedomain} -server localhost:3306 -add_user #{db_user} -passwd #{db_pswd} })
-rescue Rush::BashFailed
-  # ignore failure
+unless has_db
+  ###############################################################################
+  ### Create Database                                                         ###
+  ###############################################################################
+  begin
+    box.bash(%{ /usr/local/psa/bin/database -c #{db_name} -domain #{basedomain} -server localhost:3306 -add_user #{db_user} -passwd #{db_pswd} })
+  rescue Rush::BashFailed
+    # ignore failure
+  end
+  
+  ###############################################################################
+  ### Configure Database                                                      ###
+  ###############################################################################
+  database_conf = application_root['shared/settings/database.yml'].create
+  database_conf.write %{
+  default: &default
+    adapter: mysql
+    database: #{db_name}
+    username: #{db_user}
+    password: #{db_pswd}
+    host: localhost
+    encoding: utf8
+    socket: /var/lib/mysql/mysql.sock
+  
+  development:
+    <<: *default
+  
+  test:
+    <<: *default
+  
+  staging:
+    <<: *default
+   
+  production:
+    <<: *default
+  }
 end
-
-###############################################################################
-### Configure Database                                                      ###
-###############################################################################
-database_conf = application_root['shared/settings/database.yml'].create
-database_conf.write %{
-default: &default
-  adapter: mysql
-  database: #{db_name}
-  username: #{db_user}
-  password: #{db_pswd}
-  host: localhost
-  encoding: utf8
-  socket: /var/lib/mysql/mysql.sock
-
-development:
-  <<: *default
-
-test:
-  <<: *default
-
-staging:
-  <<: *default
- 
-production:
-  <<: *default
-}
 
 ###############################################################################
 ### Configure VHost                                                         ###
@@ -139,9 +143,9 @@ RewriteRule ^(.*)$ /$1 [R=503,L]
 ###############################################################################
 ### Set Owner of Host                                                       ###
 ###############################################################################
-box.bash %{ chown    #{user}:psaserv "#{application_root.full_path}" }
-box.bash %{ chown -R #{user}:psaserv "#{application_root.full_path}/host" }
-box.bash %{ chown -R #{user}:psaserv "#{application_root.full_path}/shared" }
+box.bash %{ chown    #{short_user}:psaserv "#{application_root.full_path}" }
+box.bash %{ chown -R #{short_user}:psaserv "#{application_root.full_path}/host" }
+box.bash %{ chown -R #{short_user}:psaserv "#{application_root.full_path}/shared" }
 
 ###############################################################################
 ### Reconfigure vhost in Plesk                                              ###
