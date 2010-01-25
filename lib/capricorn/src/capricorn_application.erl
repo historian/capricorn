@@ -82,6 +82,8 @@ handle_call({update, App}, _From, State) ->
     ?LOG_DEBUG("reconfigured app ~s", [App#application.id]),
     os:cmd("touch "++get_app_root(App, 'host/tmp/relink.txt')),
     os:cmd("touch "++get_app_root(App, 'host/tmp/restart.txt')),
+    app_chown(App, 'host/tmp/relink.txt'),
+    app_chown(App, 'host/tmp/restart.txt'),
     {reply, ok, restart_runner(State#state{restarts=0,app=App})};
   Error ->
     ?LOG_ERROR("Error while relinking app with new gems: ~p", [Error]),
@@ -98,15 +100,19 @@ handle_cast(stop, State) ->
 
 handle_cast({restart}, #state{app=App}=State) ->
   os:cmd("touch "++get_app_root(App, 'host/tmp/restart.txt')),
+  app_chown(App, 'host/tmp/restart.txt'),
   {noreply, restart_runner(State#state{restarts=0})};
 
 handle_cast({relink}, #state{app=App}=State) ->
   os:cmd("touch "++get_app_root(App, 'host/tmp/relink.txt')),
   os:cmd("touch "++get_app_root(App, 'host/tmp/restart.txt')),
+  app_chown(App, 'host/tmp/relink.txt'),
+  app_chown(App, 'host/tmp/restart.txt'),
   {noreply, restart_runner(State#state{restarts=0})};
 
 handle_cast({stop}, #state{app=App}=State) ->
   os:cmd("touch "++get_app_root(App, 'host/tmp/stop.txt')),
+  app_chown(App, 'host/tmp/stop.txt'),
   {noreply, State};
 
 handle_cast({start}, #state{app=App}=State) ->
@@ -161,7 +167,8 @@ write_milkshake_gem_config(#application{installed_gems=Gems}=App)  ->
   {ok, Config} ->
     ?LOG_DEBUG("config: ~s", [Config]),
     ?LOG_DEBUG("writing milkshake.yml to ~s", [get_app_root(App, 'host/config/milkshake.yml')]),
-    file:write_file(get_app_root(App, 'host/config/milkshake.yml'), Config);
+    file:write_file(get_app_root(App, 'host/config/milkshake.yml'), Config),
+    app_chown(App, 'host/config/milkshake.yml');
   Error -> Error
   end.
 
@@ -184,3 +191,8 @@ get_app_root(App, Sub) when is_atom(Sub) ->
   get_app_root(App, [atom_to_list(Sub)]);
 get_app_root(#application{root_path=Path}, Sub) ->
   filename:join([binary_to_list(Path)|Sub]).
+
+
+app_chown(#application{www_user=U,www_group=G}=App, Path) ->
+  os:cmd("chown "++binary_to_list(U)++":"++binary_to_list(G)++" "++get_app_root(App, Path)),
+  ok.
