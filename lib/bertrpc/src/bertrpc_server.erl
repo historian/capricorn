@@ -17,6 +17,7 @@
 }).
 
 start_link(Mod, Options) ->
+  process_flag(trap_exit, true),
   Port = proplists:get_value(port, Options, ?DEFAULT_PORT),
   ServerOptions = proplists:delete(port, Options),
   gen_server:start_link(?MODULE, {Mod, Port}, ServerOptions).
@@ -24,28 +25,38 @@ start_link(Mod, Options) ->
 init({Mod, Port}) ->
   case gen_tcp:listen(Port,[{active,false},binary,{reuseaddr,true}]) of
   {ok, LS} ->
-    spawn_link(?MODULE,accept_loop,[LS, self()]),
-    {ok, {Mod, [], LS}};
+    Pid = spawn_link(?MODULE,accept_loop,[LS, self()]),
+    {ok, {Mod, [], LS, Pid}};
   {error,Reason} -> {error,Reason}
   end.
 
-handle_call({authenticate, Args}, _From, {Mod, Modules, LS}) ->
+handle_call({authenticate, Args}, _From, {Mod, Modules, LS, Acceptor}) ->
   User = Mod:authenticate(Args),
-  {reply, User, {Mod, Modules, LS}};
+  {reply, User, {Mod, Modules, LS, Acceptor}};
 
-handle_call({set_modules, Modules}, _From, {Mod, _, LS}) ->
-  {reply, ok, {Mod, Modules, LS}};
+handle_call({set_modules, Modules}, _From, {Mod, _, LS, Acceptor}) ->
+  {reply, ok, {Mod, Modules, LS, Acceptor}};
 
-handle_call({get_module, M}, _From, {Mod, Modules, LS}) ->
+handle_call({get_module, M}, _From, {Mod, Modules, LS, Acceptor}) ->
   R = 
   case proplists:get_value(M, Modules) of
   undefined -> module_not_found;
   Pid       -> {ok, Pid}
   end,
-  {reply, R, {Mod, Modules, LS}}.
+  {reply, R, {Mod, Modules, LS, Acceptor}}.
 
 handle_cast(_Msg, State) ->
   {noreply, State}.
+
+
+handle_info({'EXIT', Acceptor, normal}, {Mod, Modules, LS, Acceptor}) ->
+  {noreply, {Mod, Modules, LS, Acceptor}};
+
+%% The current acceptor has died, wait a little and try again
+handle_info({'EXIT', Acceptor, _Abnormal}, {Mod, Modules, LS, Acceptor}) ->
+  timer:sleep(2000),
+  Pid = spawn_link(?MODULE,accept_loop,[LS, self()]),
+  {noreply, {Mod, Modules, LS, Pid}};
 
 handle_info(Info, State) ->
   io:format("E: ~p\n", [Info]),
