@@ -19,9 +19,19 @@ bert_call(all, [Node], _, State) ->
     throw:T -> {error, T, State}
   end;
 
-bert_call(add, [Node, Name, Domains, Environment], _, State) ->
+bert_call(create, [Node, Name, Domains, Environment], _, State) ->
   try
-    cap_machine_apps:add(Node, Name, Domains, Environment, [])
+    cap_machine_apps:create(Node, Name, Domains, Environment, [])
+  of
+    ok -> {reply, true, State};
+    {error, Error} -> {error, Error, State}
+  catch
+    throw:T -> {error, T, State}
+  end;
+
+bert_call(import, [Node, Name, Domains, Environment, Root, Gems, Uid, Gid], _, State) ->
+  try
+    cap_machine_apps:import(Node, Name, Domains, Environment, Gems, Root, Uid, Gid)
   of
     ok -> {reply, true, State};
     {error, Error} -> {error, Error, State}
@@ -72,6 +82,16 @@ bert_call(relink, [Node, Id], _, State) ->
 bert_call(update, [Node, Id, NewDomains, NewGems], _, State) ->
   try
     cap_machine_apps:update(Node, Id, NewDomains, NewGems)
+  of
+    ok -> {reply, true, State};
+    {error, Error} -> {error, Error, State}
+  catch
+    throw:T -> {error, T, State}
+  end;
+
+bert_call(fupdate, [Node, Id], _, State) ->
+  try
+    cap_machine_apps:fupdate(Node, Id)
   of
     ok -> {reply, true, State};
     {error, Error} -> {error, Error, State}

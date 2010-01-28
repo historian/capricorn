@@ -1,3 +1,4 @@
+require File.dirname(File.expand_path(__FILE__))+'/../../minigems'
 require 'rush'
 require 'mustache'
 

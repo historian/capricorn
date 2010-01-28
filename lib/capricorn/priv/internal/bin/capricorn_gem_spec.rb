@@ -11,7 +11,7 @@ Erlang do |path|
   
   begin
     format = Gem::Format.from_file_by_path(path)
-  rescue Gem::Exception => e
+  rescue Exception => e
     error :gem_error, e.message
   end
   

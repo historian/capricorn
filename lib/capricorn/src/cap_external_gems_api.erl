@@ -21,7 +21,11 @@ bert_call(push, _, #bertrpc_info{data=Data}, State) ->
   {ok,Missing} ->
     {reply, {ok,Missing}, State};
   {error,already_present} ->
-    {error, {user, 1, <<"CapricornGemError">>, <<"This gem is already present in the cluster.">>, []}, State}
+    {error, {user, 1, <<"CapricornGemError">>, <<"This gem is already present in the cluster.">>, []}, State};
+  {error,{[gem_error,ErrorMessage]}} ->
+    {error, {user, 1, <<"CapricornGemError">>, ErrorMessage, []}, State};
+  {error,{[not_found]}} ->
+    {error, {user, 1, <<"CapricornGemError">>, <<"Transfering failed!">>, []}, State}
   catch
     throw:T -> {error, T, State}
   end;

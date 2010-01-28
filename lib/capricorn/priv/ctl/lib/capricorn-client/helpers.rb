@@ -37,7 +37,10 @@ module Capricorn::Helpers
   end
   
   def client
-    @client ||= BERTRPC::Service.new('localhost', 3457)
+    cluster = Capricorn::Runner.cluster
+    host    = (cluster['host'] || 'localhost').to_s
+    port    = (cluster['port'] || 3457).to_i
+    @client ||= BERTRPC::Service.new(host, port)
   end
   
   def ui
