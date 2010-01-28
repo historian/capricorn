@@ -38,21 +38,24 @@
   node=undefined
 }).
 
--record(version, {
-  parts=[0] :: [pos_integer()|string(),...]
-}).
--type version() :: #version{}.
+
+-type version_part()  :: pos_integer() | string() .
+-type version_parts() :: [version_part(),...] .
+-type version()       :: {version_parts()} .
+-type requirement()   :: {'='|'!='|'<'|'>'|'>='|'<='|'~>', version()} .
+-type dependency()    :: {binary(), [requirement()]} .
+
 
 -record(gem_ref, {
-  name=undefined    :: 'undefined' | binary(),
-  version=undefined :: 'undefined' | version(),
-  lib=undefined     :: 'undefined' | binary()
+  name    :: binary(),
+  version :: 'undefined' | version(),
+  lib     :: 'undefined' | binary()
 }).
 -type gem_ref() :: #gem_ref{}.
 
 -record(gem_id, {
-  name=undefined,
-  version=#version{}
+  name    :: binary(),
+  version :: version()
 }).
 -type gem_id() :: #gem_id{}.
 
@@ -71,19 +74,12 @@
 }).
 -type application() :: #application{}.
 
+
 -record(gem, {
-  id=#gem_id{},
-  deps=[],
-  missing=[],
-  rvsn={rvsn, 0}
+  id             :: gem_id(),
+  deps=[]        :: [dependency()],
+  missing=[]     :: [dependency()],
+  rvsn={rvsn, 1}
 }).
+-type gem_spec() :: #gem{} .
 
--record(dependency, {
-  name=undefined,
-  reqs=[]
-}).
-
--record(requirement, {
-  op=(<<">=">>),
-  version=#version{}
-}).

@@ -163,14 +163,11 @@ reconfigure_app(App) ->
 write_milkshake_gem_config(#application{installed_gems=[]})        -> {ok, "gems: {}\n"};
 write_milkshake_gem_config(#application{installed_gems=Gems}=App)  ->
   Header = "gems:\n",
-  case write_milkshake_gem_config(Header, Gems) of
-  {ok, Config} ->
-    ?LOG_DEBUG("config: ~s", [Config]),
-    ?LOG_DEBUG("writing milkshake.yml to ~s", [get_app_root(App, 'host/config/milkshake.yml')]),
-    file:write_file(get_app_root(App, 'host/config/milkshake.yml'), Config),
-    app_chown(App, 'host/config/milkshake.yml');
-  Error -> Error
-  end.
+  {ok, Config} = write_milkshake_gem_config(Header, Gems),
+  ?LOG_DEBUG("config: ~s", [Config]),
+  ?LOG_DEBUG("writing milkshake.yml to ~s", [get_app_root(App, 'host/config/milkshake.yml')]),
+  file:write_file(get_app_root(App, 'host/config/milkshake.yml'), Config),
+  app_chown(App, 'host/config/milkshake.yml').
 
 write_milkshake_gem_config(Config, []) -> {ok, Config};
 write_milkshake_gem_config(Config, [#gem_id{name=Name,version=Version}|Other]) ->

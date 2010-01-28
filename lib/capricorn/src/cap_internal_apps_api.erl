@@ -1,6 +1,6 @@
 -module(cap_internal_apps_api).
 -behaviour(bertrpc_module).
--include("bertrpc.hrl").
+-include("bertrpc/include/bertrpc.hrl").
 
 -export([start_link/0]).
 -export([init/1, bert_call/4, bert_cast/4, terminate/2, code_change/3]).
@@ -12,9 +12,9 @@ init([]) ->
   {ok, state}.
 
 
-bert_call(cast, [Node, Id, Module, Function, Args], _, State) ->
+bert_call(call, [Node, Id, Module, Function, Args], _, State) ->
   try
-    cap_machine_apps:cast(Node, Id, Module, Function, Args)
+    cap_machine_apps:call(Node, Id, Module, Function, Args)
   of
     {ok, Result}   -> {reply, Result, State};
     {error, Error} -> {error, Error, State}

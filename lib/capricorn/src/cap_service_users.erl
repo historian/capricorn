@@ -1,6 +1,6 @@
 -module(cap_service_users).
 -behaviour(bertrpc_module).
--include("bertrpc.hrl").
+-include("bertrpc/include/bertrpc.hrl").
 -include("capricorn.hrl").
 
 -export([start_link/0]).

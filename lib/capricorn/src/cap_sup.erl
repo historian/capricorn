@@ -175,7 +175,7 @@ start_primary_services(cluster) ->
       worker,
       [cap_cluster_gems]},
     {cap_events,
-      {cap_events, start_link, []}
+      {cap_events, start_link, []},
       permanent,
       brutal_kill,
       worker,
@@ -227,7 +227,7 @@ start_primary_services(machine) ->
       worker,
       [cap_internal_api]},
     {cap_events,
-      {cap_events, start_link, []}
+      {cap_events, start_link, []},
       permanent,
       brutal_kill,
       worker,

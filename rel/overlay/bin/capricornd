@@ -9,7 +9,7 @@
 
 #### Fill in values for these variables ####
 REL_NAME=capricorn
-REL_VSN=0.1.0.0
+REL_VSN=0.2
 ERTS_VSN=5.7.4
 INVOCATION_SUFFIX=""
 ###########################################
@@ -43,7 +43,7 @@ SHUTDOWN=false
 STDERR_FILE=$PWD/var/log/capricorn/capricorn.stderr
 STDOUT_FILE=$PWD/var/log/capricorn/capricorn.stdout
 
-REL_DIR=$PREFIX/releases/$REL_NAME-$REL_VSN
+REL_DIR=$PREFIX/releases/$REL_VSN
 
 print_arguments=""
 start_arguments=""

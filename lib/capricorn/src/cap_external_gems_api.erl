@@ -1,6 +1,6 @@
 -module(cap_external_gems_api).
 -behaviour(bertrpc_module).
--include("bertrpc.hrl").
+-include("bertrpc/include/bertrpc.hrl").
 
 -export([start_link/0]).
 -export([init/1, bert_call/4, bert_cast/4, terminate/2, code_change/3]).

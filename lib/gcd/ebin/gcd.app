@@ -5,6 +5,8 @@
     gcd_app,
     gcd_sup,
     gcd_srv,
+    gcd_event,
+    gcd_server,
     gcd
   ]},
   {registered, [

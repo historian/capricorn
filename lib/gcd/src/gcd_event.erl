@@ -1,4 +1,5 @@
 -module(gcd_event).
+-include("gcd.hrl").
 
 
 -export([notify/2, sync_notify/2]).
@@ -10,7 +11,7 @@ notify(Pattern, Message) ->
     #service{location=Location} = Service,
     gen_event:notify(Location, Message)
   end ||
-  Service <- match_object(Pattern)].
+  Service <- gcd:match_object(Pattern)].
 
 
 sync_notify(Pattern, Message) ->
@@ -18,7 +19,7 @@ sync_notify(Pattern, Message) ->
     #service{location=Location} = Service,
     gen_event:sync_notify(Location, Message)
   end ||
-  Service <- match_object(Pattern)].
+  Service <- gcd:match_object(Pattern)].
 
 
 call(Pattern, Handler, Message) ->
@@ -26,7 +27,7 @@ call(Pattern, Handler, Message) ->
     #service{location=Location} = Service,
     gen_event:call(Location, Handler, Message)
   end ||
-  Service <- match_object(Pattern)].
+  Service <- gcd:match_object(Pattern)].
 
 
 call(Pattern, Handler, Message, Timeout) ->
@@ -34,5 +35,5 @@ call(Pattern, Handler, Message, Timeout) ->
     #service{location=Location} = Service,
     gen_event:call(Location, Handler, Message, Timeout)
   end ||
-  Service <- match_object(Pattern)].
+  Service <- gcd:match_object(Pattern)].
 

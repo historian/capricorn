@@ -23,11 +23,11 @@ Erlang do |path|
   dependencies = spec.runtime_dependencies.collect do |dep|
     version_requirements = dep.version_requirements.as_list.collect do |req|
       op, version = *req.split(/\s+/, 2)
-      BERT::Tuple[:requirement, op, version]
+      BERT::Tuple[op, version]
     end
-    BERT::Tuple[:dependency, dep.name, version_requirements]
+    BERT::Tuple[dep.name, version_requirements]
   end
   
-  send BERT::Tuple[:gem, spec.name, spec.version.to_s, dependencies]
+  send BERT::Tuple[spec.name, spec.version.to_s, dependencies]
   
 end

@@ -68,7 +68,7 @@ def Erlang(&block)
       ctx.extend Helpers
       ctx.instance_exec(cmd, &block)
     rescue InternalError => e
-      Helpers.send BERT::Tuple[:error, BERT::Tuple[e.args]]
+      Helpers.send BERT::Tuple[:error, BERT::Tuple[*e.args]]
     rescue RuntimeError => e
       Helpers.send BERT::Tuple[:error, BERT::Tuple[:runtime, e.class.to_s, e.message, e.backtrace]]
     rescue Exception => e

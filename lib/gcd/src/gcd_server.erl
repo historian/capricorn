@@ -1,4 +1,5 @@
 -module(gcd_server).
+-include("gcd.hrl").
 
 
 -export([cast/2]).
@@ -10,7 +11,7 @@ call(Pattern, Message) ->
     #service{location=Location} = Service,
     gen_server:call(Location, Message)
   end ||
-  Service <- match_object(Pattern)].
+  Service <- gcd:match_object(Pattern)].
 
 
 call(Pattern, Message, Timeout) ->
@@ -18,7 +19,7 @@ call(Pattern, Message, Timeout) ->
     #service{location=Location} = Service,
     gen_server:call(Location, Message, Timeout)
   end ||
-  Service <- match_object(Pattern)].
+  Service <- gcd:match_object(Pattern)].
 
 
 cast(Pattern, Message) ->
@@ -26,4 +27,4 @@ cast(Pattern, Message) ->
     #service{location=Location} = Service,
     gen_server:cast(Location, Message)
   end ||
-  Service <- match_object(Pattern)].
+  Service <- gcd:match_object(Pattern)].

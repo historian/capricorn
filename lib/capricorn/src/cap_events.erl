@@ -20,5 +20,5 @@ notify([Node|Rest], Msg) ->
   gen_event:notify({?MODULE, Node}, Msg),
   notify(Rest, Msg);
   
-notify([], Msg) ->
+notify([], _Msg) ->
   ok.

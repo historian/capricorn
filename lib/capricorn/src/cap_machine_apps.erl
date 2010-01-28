@@ -13,27 +13,27 @@
 start_link() ->
   gen_server:start_link({local, cap_machine_apps}, ?MODULE, [], []).
 
--spec create(binary(),[binary()],atom(),[binary()]) -> 'ok'.
+-spec create(binary(),[binary(),...],atom(),[binary()]) -> ok.
 create(Name, Domains, Environment, Gems) ->
   gen_server:cast(cap_machine_apps, {create, Name, Domains, Environment, Gems}).
 
--spec create(atom(), binary(),[binary()],atom(),[binary()]) -> 'ok'.
+-spec create(atom(), binary(),[binary(),...],atom(),[binary()]) -> ok.
 create(Node, Name, Domains, Environment, Gems) ->
   gen_server:cast({cap_machine_apps, Node}, {create, Name, Domains, Environment, Gems}).
 
--spec import(binary(),[binary()],atom(),[binary()], binary(), binary(), binary()) -> 'ok'.
+-spec import(binary(),[binary(),...],atom(),[binary()], binary(), binary(), binary()) -> 'ok'.
 import(Name, Domains, Environment, Gems, Root, Uid, Gid) ->
   gen_server:cast(cap_machine_apps, {import, Name, Domains, Environment, Gems, Root, Uid, Gid}).
 
--spec import(atom(), binary(),[binary()],atom(),[binary()], binary(), binary(), binary()) -> 'ok'.
+-spec import(atom(), binary(),[binary(),...],atom(),[binary()], binary(), binary(), binary()) -> 'ok'.
 import(Node, Name, Domains, Environment, Gems, Root, Uid, Gid) ->
   gen_server:cast({cap_machine_apps, Node}, {import, Name, Domains, Environment, Gems, Root, Uid, Gid}).
 
--spec update(binary(), [binary()], [binary()]) -> ok.
+-spec update(binary(), [binary(),...], [binary()]) -> ok.
 update(Id, Domains, Gems) ->
   gen_server:cast(cap_machine_apps, {update, Id, Domains, Gems}).
 
--spec update(atom(), binary(), [binary()], [binary()]) -> ok.
+-spec update(atom(), binary(), [binary(),...], [binary()]) -> ok.
 update(Node, Id, Domains, Gems) ->
   gen_server:cast({cap_machine_apps, Node}, {update, Id, Domains, Gems}).
 
@@ -258,17 +258,15 @@ it_import(App, #ctx{apps=Apps}) ->
   ok.
 
 -spec valid_app(application()) -> 'true' | {'false',binary()}.
-valid_app(#application{node=No,name=N,domains=D,environment=E,required_gems=G}) ->
+valid_app(#application{node=No,name=N,domains=D,required_gems=G}) ->
   if
   (not is_atom(No)) orelse No /= node() ->
     {false, <<"Invalid Node">>};
   (not is_binary(N) orelse size(N) == 0) ->
     {false, <<"Invalid Name">>};
-  (not is_list(D) orelse size(D) == 0) ->
+  (not is_list(D) orelse length(D) == 0) ->
     {false, <<"Please pass at least one domain">>};
-  (not is_atom(E)) ->
-    {false, <<"Invalid Environment">>};
-  (not is_list(G) orelse size(G) == 0) ->
+  (not is_list(G) orelse length(G) == 0) ->
     {false, <<"Please pass at least one gem">>};
   true ->
     true

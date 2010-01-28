@@ -1,6 +1,9 @@
-_build/
 etc/
 var/
+pkg/
+rel/capricorn
 
 *.log
 *.dump
+
+*.beam
