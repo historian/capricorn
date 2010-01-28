@@ -1,4 +1,4 @@
--module(capricorn_dets_updater).
+-module(cap_dets_updater).
 
 -export([update/2]).
 

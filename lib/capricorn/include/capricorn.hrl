@@ -15,13 +15,13 @@
 -define(l2b(V), list_to_binary(V)).
 
 -define(LOG_DEBUG(Format, Args),
-  case capricorn_log:debug_on() of
+  case cap_log:debug_on() of
   true -> error_logger:info_report(capricorn_debug, {Format, Args});
   false -> ok
   end).
 
 -define(LOG_INFO(Format, Args),
-  case capricorn_log:info_on() of
+  case cap_log:info_on() of
   true -> error_logger:info_report(capricorn_info, {Format, Args});
   false -> ok
   end).

@@ -1,4 +1,4 @@
--module(capricorn_external_machines_api).
+-module(cap_external_machines_api).
 -behaviour(bertrpc_module).
 
 -export([start_link/0]).

@@ -10,11 +10,9 @@
 % License for the specific language governing permissions and limitations under
 % the License.
 
--module(capricorn_util).
+-module(cap_util).
 
--export([priv_dir/0, start_driver/1,terminate_linked/1]).
--export([should_flush/0, should_flush/1, to_existing_atom/1]).
--export([implode/2, collate/2, collate/3]).
+-export([implode/2]).
 -export([abs_pathname/1,abs_pathname/2, trim/1, ascii_lower/1]).
 -export([encodeBase64/1, decodeBase64/1, encodeBase64Url/1, decodeBase64Url/1,
     to_hex/1,parse_term/1, dict_find/3]).
@@ -23,47 +21,6 @@
 
 -include("capricorn.hrl").
 -include_lib("kernel/include/file.hrl").
-
-% arbitrarily chosen amount of memory to use before flushing to disk
--define(FLUSH_MAX_MEM, 10000000).
-
-priv_dir() ->
-    case code:priv_dir(capricorn) of
-        {error, bad_name} ->
-            % small hack, in dev mode "app" is capricorn. Fixing requires
-            % renaming src/capricorn to src/capricorn. Not really worth the hassle.
-            % -Damien
-            code:priv_dir(capricorn);
-        Dir -> Dir
-    end.
-
-start_driver(LibDir) ->
-    case erl_ddll:load_driver(LibDir, "capricorn_icu_driver") of
-    ok ->
-        ok;
-    {error, already_loaded} ->
-        ok = erl_ddll:reload_driver(LibDir, "capricorn_icu_driver");
-    {error, Error} ->
-        exit(erl_ddll:format_error(Error))
-    end.
-
-% works like list_to_existing_atom, except can be list or binary and it
-% gives you the original value instead of an error if no existing atom.
-to_existing_atom(V) when is_list(V) ->
-    try list_to_existing_atom(V) catch _ -> V end;
-to_existing_atom(V) when is_binary(V) ->
-    try list_to_existing_atom(?b2l(V)) catch _ -> V end;
-to_existing_atom(V) when is_atom(V) ->
-    V.
-
-
-terminate_linked(normal) ->
-    terminate_linked(shutdown);
-terminate_linked(Reason) ->
-    {links, Links} = process_info(self(), links),
-    [catch exit(Pid, Reason) || Pid <- Links],
-    ok.
-
 
 to_hex([]) ->
     [];
@@ -164,49 +121,6 @@ implode([H], Sep, Acc) ->
     implode([], Sep, [H|Acc]);
 implode([H|T], Sep, Acc) ->
     implode(T, Sep, [Sep,H|Acc]).
-
-
-drv_port() ->
-    case get(capricorn_drv_port) of
-    undefined ->
-        Port = open_port({spawn, "capricorn_icu_driver"}, []),
-        put(capricorn_drv_port, Port),
-        Port;
-    Port ->
-        Port
-    end.
-
-collate(A, B) ->
-    collate(A, B, []).
-
-collate(A, B, Options) when is_binary(A), is_binary(B) ->
-    Operation =
-    case lists:member(nocase, Options) of
-        true -> 1; % Case insensitive
-        false -> 0 % Case sensitive
-    end,
-    SizeA = byte_size(A),
-    SizeB = byte_size(B),
-    Bin = <<SizeA:32/native, A/binary, SizeB:32/native, B/binary>>,
-    [Result] = erlang:port_control(drv_port(), Operation, Bin),
-    % Result is 0 for lt, 1 for eq and 2 for gt. Subtract 1 to return the
-    % expected typical -1, 0, 1
-    Result - 1.
-
-should_flush() ->
-    should_flush(?FLUSH_MAX_MEM).
-
-should_flush(MemThreshHold) ->
-    {memory, ProcMem} = process_info(self(), memory),
-    BinMem = lists:foldl(fun({_Id, Size, _NRefs}, Acc) -> Size+Acc end,
-        0, element(2,process_info(self(), binary))),
-    if ProcMem+BinMem > 2*MemThreshHold ->
-        garbage_collect(),
-        {memory, ProcMem2} = process_info(self(), memory),
-        BinMem2 = lists:foldl(fun({_Id, Size, _NRefs}, Acc) -> Size+Acc end,
-            0, element(2,process_info(self(), binary))),
-        ProcMem2+BinMem2 > MemThreshHold;
-    true -> false end.
 
 
 %%% Purpose : Base 64 encoding and decoding.

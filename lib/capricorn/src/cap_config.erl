@@ -4,7 +4,7 @@
 % ini file is specified, the last one is used to write changes that are made
 % with store/2 back to that ini file.
 
--module(capricorn_config).
+-module(cap_config).
 -behaviour(gen_server).
 
 -include("capricorn.hrl").
@@ -102,7 +102,7 @@ handle_call({set, Sec, Key, Val, Persist}, _From, Config) ->
   {true, undefined} ->
     ok;
   {true, FileName} ->
-    capricorn_config_writer:save_to_file({{Sec, Key}, Val}, FileName);
+    cap_config_writer:save_to_file({{Sec, Key}, Val}, FileName);
   _ ->
     ok
   end,
@@ -114,7 +114,7 @@ handle_call({delete, Sec, Key, Persist}, _From, Config) ->
   {true, undefined} ->
     ok;
   {true, FileName} ->
-    capricorn_config_writer:save_to_file({{Sec, Key}, ""}, FileName);
+    cap_config_writer:save_to_file({{Sec, Key}, ""}, FileName);
   _ ->
     ok
   end,
@@ -152,7 +152,7 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 parse_ini_file(IniFile) ->
-  IniFilename = capricorn_util:abs_pathname(IniFile),
+  IniFilename = cap_util:abs_pathname(IniFile),
   IniBin =
   case file:read_file(IniFilename) of
   {ok, IniBin0} ->
@@ -184,7 +184,7 @@ parse_ini_file(IniFile) ->
       [""|_LineValues] -> % line begins with "=", ignore
         {AccSectionName, AccValues};
       [ValueName|LineValues] -> % yeehaw, got a line!
-        RemainingLine = capricorn_util:implode(LineValues, "="),
+        RemainingLine = cap_util:implode(LineValues, "="),
         % removes comments
         case re:split(RemainingLine, " ;|\t;", [{return, list}]) of
         [[]] ->

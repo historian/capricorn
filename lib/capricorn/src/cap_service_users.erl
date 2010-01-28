@@ -16,7 +16,7 @@ init([]) ->
 
 bert_call(auth, [Addr, Login, Token], _, State) ->
   try
-    capricorn_application:service(Addr, [users, auth, [Login, Token]])
+    cap_application:service(Addr, [users, auth, [Login, Token]])
   of
     {error, Error} ->
       ?LOG_DEBUG("~s:~s(...) => ~p", [?MODULE, auth, Error]),
@@ -28,7 +28,7 @@ bert_call(auth, [Addr, Login, Token], _, State) ->
 
 bert_call(push, [Addr, Attributes], _, State) ->
   try
-    capricorn_application:service(Addr, [users, push, [Attributes]])
+    cap_application:service(Addr, [users, push, [Attributes]])
   of
     {error, Error} ->
       ?LOG_DEBUG("~s:~s(...) => ~p", [?MODULE, push, Error]),
@@ -40,7 +40,7 @@ bert_call(push, [Addr, Attributes], _, State) ->
 
 bert_call(remove, [Addr, Login], _, State) ->
   try
-    capricorn_application:service(Addr, [users, remove, [Login]])
+    cap_application:service(Addr, [users, remove, [Login]])
   of
     {error, Error} ->
       ?LOG_DEBUG("~s:~s(...) => ~p", [?MODULE, remove, Error]),

@@ -1,4 +1,4 @@
--module(capricorn_external_apps_api).
+-module(cap_external_apps_api).
 -behaviour(bertrpc_module).
 -include("bertrpc.hrl").
 
@@ -13,7 +13,7 @@ init([]) ->
 
 bert_call(all, [Node], _, State) ->
   try
-    All = capricorn_machine_apps:all(Node),
+    All = cap_machine_apps:all(Node),
     {reply, {ok,All}, State}
   catch
     throw:T -> {error, T, State}
@@ -21,7 +21,7 @@ bert_call(all, [Node], _, State) ->
 
 bert_call(create, [Node, Name, Domains, Environment], _, State) ->
   try
-    capricorn_machine_apps:create(Node, Name, Domains, Environment, [])
+    cap_machine_apps:create(Node, Name, Domains, Environment, [])
   of
     ok -> {reply, true, State};
     {error, Error} -> {error, Error, State}
@@ -31,7 +31,7 @@ bert_call(create, [Node, Name, Domains, Environment], _, State) ->
 
 bert_call(import, [Node, Name, Domains, Environment, Root, Gems, Uid, Gid], _, State) ->
   try
-    capricorn_machine_apps:import(Node, Name, Domains, Environment, Gems, Root, Uid, Gid)
+    cap_machine_apps:import(Node, Name, Domains, Environment, Gems, Root, Uid, Gid)
   of
     ok -> {reply, true, State};
     {error, Error} -> {error, Error, State}
@@ -41,7 +41,7 @@ bert_call(import, [Node, Name, Domains, Environment, Root, Gems, Uid, Gid], _, S
 
 bert_call(restart, [Node, Id], _, State) ->
   try
-    capricorn_application:restart({Node, Id})
+    cap_application:restart({Node, Id})
   of
     ok -> {reply, true, State};
     {error, Error} -> {error, Error, State}
@@ -51,7 +51,7 @@ bert_call(restart, [Node, Id], _, State) ->
 
 bert_call(start, [Node, Id], _, State) ->
   try
-    capricorn_application:start({Node, Id})
+    cap_application:start({Node, Id})
   of
     ok -> {reply, true, State};
     {error, Error} -> {error, Error, State}
@@ -61,7 +61,7 @@ bert_call(start, [Node, Id], _, State) ->
 
 bert_call(stop, [Node, Id], _, State) ->
   try
-    capricorn_application:stop({Node, Id})
+    cap_application:stop({Node, Id})
   of
     ok -> {reply, true, State};
     {error, Error} -> {error, Error, State}
@@ -71,7 +71,7 @@ bert_call(stop, [Node, Id], _, State) ->
 
 bert_call(relink, [Node, Id], _, State) ->
   try
-    capricorn_application:relink({Node, Id})
+    cap_application:relink({Node, Id})
   of
     ok -> {reply, true, State};
     {error, Error} -> {error, Error, State}
@@ -81,7 +81,7 @@ bert_call(relink, [Node, Id], _, State) ->
 
 bert_call(update, [Node, Id, NewDomains, NewGems], _, State) ->
   try
-    capricorn_machine_apps:update(Node, Id, NewDomains, NewGems)
+    cap_machine_apps:update(Node, Id, NewDomains, NewGems)
   of
     ok -> {reply, true, State};
     {error, Error} -> {error, Error, State}
@@ -91,7 +91,7 @@ bert_call(update, [Node, Id, NewDomains, NewGems], _, State) ->
 
 bert_call(fupdate, [Node, Id], _, State) ->
   try
-    capricorn_machine_apps:fupdate(Node, Id)
+    cap_machine_apps:fupdate(Node, Id)
   of
     ok -> {reply, true, State};
     {error, Error} -> {error, Error, State}

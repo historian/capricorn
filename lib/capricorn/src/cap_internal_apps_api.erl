@@ -1,4 +1,4 @@
--module(capricorn_internal_apps_api).
+-module(cap_internal_apps_api).
 -behaviour(bertrpc_module).
 -include("bertrpc.hrl").
 
@@ -14,7 +14,7 @@ init([]) ->
 
 bert_call(cast, [Node, Id, Module, Function, Args], _, State) ->
   try
-    capricorn_machine_apps:cast(Node, Id, Module, Function, Args)
+    cap_machine_apps:cast(Node, Id, Module, Function, Args)
   of
     {ok, Result}   -> {reply, Result, State};
     {error, Error} -> {error, Error, State}
@@ -23,7 +23,7 @@ bert_call(cast, [Node, Id, Module, Function, Args], _, State) ->
   end;
 bert_call(cast, [Node, Id, Module, Function, Args], _, State) ->
   try
-    capricorn_machine_apps:cast(Node, Id, Module, Function, Args)
+    cap_machine_apps:cast(Node, Id, Module, Function, Args)
   of
     {ok, Result}   -> {reply, Result, State};
     {error, Error} -> {error, Error, State}

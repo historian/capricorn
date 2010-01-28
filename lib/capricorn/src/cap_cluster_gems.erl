@@ -1,4 +1,4 @@
--module(capricorn_cluster_gems).
+-module(cap_cluster_gems).
 -behaviour(gen_server).
 -include("capricorn.hrl").
 
@@ -15,37 +15,37 @@ push({ok, Data}) ->
 push(Path) when is_list(Path) ->
   push(file:read_file(Path));
 push(Data) ->
-  gen_server:call(capricorn_cluster_gems, {push, Data}).
+  gen_server:call(cap_cluster_gems, {push, Data}).
 
 lookup(GemName) ->
-  gen_server:call(capricorn_cluster_gems, {lookup, GemName}).
+  gen_server:call(cap_cluster_gems, {lookup, GemName}).
 
 lookup(Node, GemName) ->
-  gen_server:call({capricorn_cluster_gems, Node}, {lookup, GemName}).
+  gen_server:call({cap_cluster_gems, Node}, {lookup, GemName}).
 
 pull(Spec) ->
-  gen_server:call(capricorn_cluster_gems, {pull, Spec}).
+  gen_server:call(cap_cluster_gems, {pull, Spec}).
 
 pull(Node, Spec) ->
-  gen_server:call({capricorn_cluster_gems, Node}, {pull, Spec}).
+  gen_server:call({cap_cluster_gems, Node}, {pull, Spec}).
 
 missing() ->
-  gen_server:call(capricorn_cluster_gems, {missing}).
+  gen_server:call(cap_cluster_gems, {missing}).
 
 all() ->
-  gen_server:call(capricorn_cluster_gems, {all}).
+  gen_server:call(cap_cluster_gems, {all}).
 
 check() ->
-  gen_server:cast(capricorn_cluster_gems, check).
+  gen_server:cast(cap_cluster_gems, check).
 
 start_link() ->
-  gen_server:start_link({local, capricorn_cluster_gems}, ?MODULE, [], []).
+  gen_server:start_link({local, cap_cluster_gems}, ?MODULE, [], []).
 
 init([]) ->
-  Root = capricorn_config:get("cluster", "database", "var/run/capricorn"),
+  Root = cap_config:get("cluster", "database", "var/run/capricorn"),
   
   TablePath = filename:join([Root, "gems.db"]),
-  {ok, Ref} = dets:open_file(capricorn_cluster_gems, [{file, TablePath}, {keypos, 2}]),
+  {ok, Ref} = dets:open_file(cap_cluster_gems, [{file, TablePath}, {keypos, 2}]),
   update_gems_table(Ref),
   
   GemPath = filename:join([Root, "gems"]),
@@ -417,7 +417,7 @@ normalize_gem_requirements([{requirement, Op, Version}|Rest], Acc) ->
 
 
 update_gems_table(Table) ->
-  capricorn_dets_updater:update(Table, fun
+  cap_dets_updater:update(Table, fun
   ({gem, _Id, _Deps, _Missing, {rvsn, 0}}) ->
     ok;
   ({gem, Id, Deps, Missing}) ->

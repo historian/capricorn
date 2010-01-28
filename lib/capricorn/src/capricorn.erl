@@ -37,9 +37,9 @@ restart() ->
   end.
 
 reload() ->
-  case supervisor:terminate_child(capricorn_sup, capricorn_config) of
+  case supervisor:terminate_child(cap_sup, cap_config) of
   ok ->
-    supervisor:restart_child(capricorn_sup, capricorn_config);
+    supervisor:restart_child(cap_sup, cap_config);
   {error, Reason} ->
     {error, Reason}
   end.
