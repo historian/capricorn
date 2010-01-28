@@ -1,4 +1,4 @@
--module(capricorn_machine_apps_sup).
+-module(cap_machine_apps_sup).
 -include("capricorn.hrl").
 -behaviour(supervisor).
 
@@ -7,29 +7,29 @@
 
 -spec start(application()) -> any().
 start(#application{id=Id}=App) ->
-  supervisor:start_child(capricorn_machine_apps_sup, 
+  supervisor:start_child(cap_machine_apps_sup, 
     {Id,
-      {capricorn_machine_apps_sup, start_app_link, [App]},
+      {cap_machine_apps_sup, start_app_link, [App]},
       permanent,
       infinity,
       supervisor,
-      [capricorn_machine_apps_sup]}).
+      [cap_machine_apps_sup]}).
 
 -spec stop(application()) -> any().
 stop(#application{id=Id}) ->
-  supervisor:terminate_child(capricorn_machine_apps_sup, Id),
-  supervisor:delete_child(capricorn_machine_apps_sup, Id).
+  supervisor:terminate_child(cap_machine_apps_sup, Id),
+  supervisor:delete_child(cap_machine_apps_sup, Id).
 
 -spec restart(application()) -> any().
 restart(#application{id=Id}) ->
-  supervisor:restart_child(capricorn_machine_apps_sup, Id).
+  supervisor:restart_child(cap_machine_apps_sup, Id).
 
 -spec start_link() -> 'ignore' | {'error',_} | {'ok',pid()}.
 start_link() ->
   Specs = {{one_for_one, 10, 3600},[]},
-  case supervisor:start_link({local, capricorn_machine_apps_sup}, ?MODULE, Specs) of
+  case supervisor:start_link({local, cap_machine_apps_sup}, ?MODULE, Specs) of
   {ok, Pid} -> 
-    start_children(capricorn_machine_apps:all()),
+    start_children(cap_machine_apps:all()),
     {ok, Pid};
   E -> E
   end.
@@ -37,12 +37,12 @@ start_link() ->
 -spec start_app_link(application()) -> 'ignore' | {'error',_} | {'ok',pid()}.
 start_app_link(App) ->
   Specs = {{one_for_one, 10, 3600},[
-    {capricorn_application,
-      {capricorn_application, start_link, [App]},
+    {cap_application,
+      {cap_application, start_link, [App]},
       permanent,
       1000,
       worker,
-      [capricorn_application]}
+      [cap_application]}
   ]},
   supervisor:start_link(?MODULE, Specs).
 

@@ -1,7 +1,7 @@
 %%
 %% Supervised worker process module
 %%
-%% File   : capricorn_cluster.erl
+%% File   : cap_cluster.erl
 %% Created: 2010-01-04
 %%
 %% @author simonmenke <simon.menke@gmail.com>
@@ -10,7 +10,7 @@
 %% @doc TODO make nice description
 %%
 
--module(capricorn_cluster).
+-module(cap_cluster).
 -author('simonmenke <simon.menke@gmail.com>').
 -include("capricorn.hrl").
 -behaviour(gen_server).
@@ -34,7 +34,7 @@
 %%
 
 %% @spec start_link() -> {ok, Pid}
-%% @doc Start the capricorn_cluster
+%% @doc Start the cap_cluster
 start_link() ->
   gen_server:start_link(?SERVER, ?MODULE, [], []).
 
@@ -58,33 +58,33 @@ restart_machine(Node) ->
 %%
 
 %% @spec init(State) -> {ok, State}
-%% @doc Callback for initialize the capricorn_cluster
+%% @doc Callback for initialize the cap_cluster
 init([]) ->
-  ets:new(capricorn_machines, [set, private, named_table]),
+  ets:new(cap_machines, [set, private, named_table]),
   net_kernel:monitor_nodes(true),
   {ok, #cluster_ctx{}}.
 
 handle_call({all_machines}, _From, State) ->
   MachineNodes = ets:foldl(fun({Node, _}, Acc) ->
     [Node|Acc]
-  end, [], capricorn_machines),
+  end, [], cap_machines),
   {reply, MachineNodes, State};
 
 handle_call({get_machine, Node}, _From, State) ->
-  case ets:lookup(capricorn_machines, Node) of
+  case ets:lookup(cap_machines, Node) of
   []           -> {reply, {error, not_found}, State};
   [{_,  Name}] -> {reply, {ok, {Node, Name}}, State}
   end;
 
 handle_call({rmv_machine, Node}, _From, State) ->
-  ets:delete(capricorn_machines, Node),
+  ets:delete(cap_machines, Node),
   {reply, ok, State};
 
 handle_call({restart_machine, _Node}, _From, State) ->
   {reply, ok, State};
 
 handle_call({add_machine, Name, Node}, _From, State) ->
-  ets:insert(capricorn_machines, {Node, Name}),
+  ets:insert(cap_machines, {Node, Name}),
   {reply, ok, State}.
 
 %% @spec handle_cast(stop, State) -> {stop, normal, State}

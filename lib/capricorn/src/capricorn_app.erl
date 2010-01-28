@@ -22,12 +22,12 @@
 start(_Type, DefaultIniFiles) ->
   IniFiles = get_ini_files(DefaultIniFiles),
   case start_apps([sasl]) of
-  ok              -> capricorn_sup:start_link(IniFiles);
+  ok              -> cap_sup:start_link(IniFiles);
   {error, Reason} -> {error, Reason}
   end.
 
 stop(_) ->
-  capricorn_sup:stop(),
+  cap_sup:stop(),
   ok.
 
 -spec get_ini_files([string()]) -> [string()].

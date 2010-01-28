@@ -1,4 +1,4 @@
--module(capricorn_application).
+-module(cap_application).
 -include("capricorn.hrl").
 -behaviour(gen_server).
 
@@ -175,7 +175,7 @@ write_milkshake_gem_config(Config, [#gem_id{name=Name,version=Version}|Other]) -
     Config2 =
     case Version of
     undefined -> lists:concat([Config1, "    version: \">= 0\"\n"]);
-    _Else2    -> lists:concat([Config1, "    version: \"", capricorn_cluster_gems:version_to_string(Version), "\"\n"])
+    _Else2    -> lists:concat([Config1, "    version: \"", cap_cluster_gems:version_to_string(Version), "\"\n"])
     end,
     write_milkshake_gem_config(Config2, Other)
   end.

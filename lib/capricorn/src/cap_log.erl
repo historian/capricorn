@@ -1,7 +1,7 @@
 %%
 %% Application module
 %%
-%% File   : capricorn_log.erl
+%% File   : cap_log.erl
 %% Created: 2010-01-04
 %%
 %% @author simonmenke <simon.menke@gmail.com>
@@ -10,7 +10,7 @@
 %% @doc TODO make nice description
 %%
 
--module(capricorn_log).
+-module(cap_log).
 -behaviour(gen_event).
 
 -export([start_link/0,stop/0]).
@@ -35,25 +35,25 @@ level_atom(?LEVEL_TMI)   -> tmi.
 
 
 start_link() ->
-  capricorn_event_sup:start_link({local, capricorn_log}, error_logger, capricorn_log, []).
+  cap_event_sup:start_link({local, cap_log}, error_logger, cap_log, []).
 
 stop() ->
-  capricorn_event_sup:stop(capricorn_log).
+  cap_event_sup:stop(cap_log).
 
 init([]) ->
   % read config and register for configuration changes
   
   % just stop if one of the config settings change. capricorn_server_sup
   % will restart us and then we will pick up the new settings.
-  ok = capricorn_config:register(fun
+  ok = cap_config:register(fun
   ("log", "file") ->
     ?MODULE:stop();
   ("log", "level") ->
     ?MODULE:stop()
   end),
   
-  Filename = capricorn_config:get("log", "file", "capricorn.log"),
-  Level = capricorn_config:get("log", "level", "info"),
+  Filename = cap_config:get("log", "file", "capricorn.log"),
+  Level = cap_config:get("log", "level", "info"),
   
   {ok, Fd} = file:open(Filename, [append]),
   {ok, {Fd, level_integer(list_to_atom(Level))}}.
@@ -71,10 +71,10 @@ get_level() ->
   level_atom(get_level_integer()).
 
 get_level_integer() ->
-  catch gen_event:call(error_logger, capricorn_log, get_level_integer).
+  catch gen_event:call(error_logger, cap_log, get_level_integer).
 
 set_level_integer(Int) ->
-  gen_event:call(error_logger, capricorn_log, {set_level_integer, Int}).
+  gen_event:call(error_logger, cap_log, {set_level_integer, Int}).
 
 handle_event({error_report, _, {Pid, capricorn_error, {Format, Args}}}, {Fd, _LogLevel}=State) ->
   log(Fd, Pid, error, Format, Args),

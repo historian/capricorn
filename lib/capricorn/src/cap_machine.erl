@@ -1,7 +1,7 @@
 %%
 %% Supervised worker process module
 %%
-%% File   : capricorn_machine.erl
+%% File   : cap_machine.erl
 %% Created: 2010-01-04
 %%
 %% @author simonmenke <simon.menke@gmail.com>
@@ -10,7 +10,7 @@
 %% @doc TODO make nice description
 %%
 
--module(capricorn_machine).
+-module(cap_machine).
 -author('simonmenke <simon.menke@gmail.com>').
 -include("capricorn.hrl").
 -behaviour(gen_server).
@@ -33,28 +33,28 @@
 }).
 
 config(Node) ->
-  lists:sort(gen_server:call({capricorn_config, Node}, all)).
+  lists:sort(gen_server:call({cap_config, Node}, all)).
 
 %%
 %% Operation & Maintenance API
 %%
 
 %% @spec start_link() -> {ok, Pid}
-%% @doc Start the capricorn_machine
+%% @doc Start the cap_machine
 start_link() ->
-  gen_server:start_link({local, capricorn_machine}, ?MODULE, [], []).
+  gen_server:start_link({local, cap_machine}, ?MODULE, [], []).
 
 ensure_gems_are_present_for_app(App) ->
-  gen_server:call(capricorn_machine, {ensure_gems_are_present_for_app, App}, 180000).
+  gen_server:call(cap_machine, {ensure_gems_are_present_for_app, App}, 180000).
 
 %%
 %% Genserver callback functions
 %%
 
 %% @spec init(State) -> {ok, State}
-%% @doc Callback for initialize the capricorn_machine
+%% @doc Callback for initialize the cap_machine
 init([]) ->
-  Node = list_to_atom(capricorn_config:get("cluster", "node", "cluster")),
+  Node = list_to_atom(cap_config:get("cluster", "node", "cluster")),
   KnowsCluster =
   case net_adm:ping(Node) of
   pong -> 
@@ -67,7 +67,7 @@ init([]) ->
     false
   end,
   
-  capricorn_config:register(fun
+  cap_config:register(fun
   ("cluster", "node") -> ?MODULE:stop()
   end, self()),
   
@@ -135,7 +135,7 @@ it_ensure_gem_for_app(App, Ctx) ->
   it_ensure_gem_for_app(App#application.required_gems, App, Ctx).
 it_ensure_gem_for_app([], App, #ctx{}) -> {ok, App};
 it_ensure_gem_for_app([Gem|Rest], App, #ctx{cluster=Cluster}=Ctx) ->
-  case capricorn_cluster_gems:lookup(Cluster, Gem) of
+  case cap_cluster_gems:lookup(Cluster, Gem) of
   {ok, Spec} -> 
     ?LOG_DEBUG("found gem ~p", [Gem]),
     case it_is_gem_installed(Spec) of
@@ -166,7 +166,7 @@ it_install_gem(#gem{deps=Deps}=Spec, #ctx{cluster=Cluster}=Ctx) ->
   case it_install_gems(Deps, Ctx) of
   ok ->
     ?LOG_DEBUG("pull gem ~s", [(Spec#gem.id)#gem_id.name]),
-    case capricorn_cluster_gems:pull(Cluster, Spec) of
+    case cap_cluster_gems:pull(Cluster, Spec) of
     {ok, Data} ->
       ?LOG_DEBUG("staging gem ~s", [(Spec#gem.id)#gem_id.name]),
       case file:write_file("/tmp/capricorn-gem.gem", Data) of
@@ -193,7 +193,7 @@ it_install_gem(#gem{deps=Deps}=Spec, #ctx{cluster=Cluster}=Ctx) ->
 
 it_install_gems([], _Ctx) -> ok;
 it_install_gems([Dep|Rest], #ctx{cluster=Cluster}=Ctx) ->
-  case capricorn_cluster_gems:lookup(Cluster, Dep) of
+  case cap_cluster_gems:lookup(Cluster, Dep) of
   {ok, Spec} ->
     ?LOG_DEBUG("found gem ~s", [Dep#dependency.name]),
     case it_is_gem_installed(Spec) of
@@ -222,7 +222,7 @@ it_is_gem_installed(#gem{}=Gem) ->
     Args2 =
     case (Gem#gem.id)#gem_id.version of
     undefined -> Args1;
-    Version   -> lists:concat([Args1, " -v \"", capricorn_cluster_gems:version_to_string(Version), "\""])
+    Version   -> lists:concat([Args1, " -v \"", cap_cluster_gems:version_to_string(Version), "\""])
     end,
     case gem_exec(Args2) of
     "true\n" -> true;

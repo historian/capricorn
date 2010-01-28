@@ -1,4 +1,4 @@
--module(capricorn_external_gems_api).
+-module(cap_external_gems_api).
 -behaviour(bertrpc_module).
 -include("bertrpc.hrl").
 
@@ -16,7 +16,7 @@ bert_call(push, _, #bertrpc_info{data=undefined}, State) ->
                     <<"This is not a gem">>, []}, State};
 bert_call(push, _, #bertrpc_info{data=Data}, State) ->
   try
-    capricorn_cluster_gems:push(Data)
+    cap_cluster_gems:push(Data)
   of
   {ok,Missing} ->
     {reply, {ok,Missing}, State};
@@ -27,14 +27,14 @@ bert_call(push, _, #bertrpc_info{data=Data}, State) ->
   end;
 bert_call(all, _, _, State) ->
   try
-    {ok,All} = capricorn_cluster_gems:all(),
+    {ok,All} = cap_cluster_gems:all(),
     {reply, {ok,All}, State}
   catch
     throw:T -> {error, T, State}
   end;
 bert_call(missing, _, _, State) ->
   try
-    {ok,Missing} = capricorn_cluster_gems:missing(),
+    {ok,Missing} = cap_cluster_gems:missing(),
     {reply, {ok,Missing}, State}
   catch
     throw:T -> {error, T, State}

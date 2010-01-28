@@ -3,8 +3,6 @@
 
 -export([start/0, stop/0]).
 
--export([cast/2, cast/3]).
--export([call/2, call/3]).
 -export([connect/1]).
 -export([register/2, unregister/0]).
 -export([monitor/1, demonitor/1]).
@@ -20,34 +18,6 @@ stop() ->
 
 
 %%% External API
-call(Pattern, Message) ->
-  [begin
-    #service{location=Location} = Service,
-    gen_server:call(Location, Message)
-  end ||
-  Service <- match_object(Pattern)].
-
-call(Pattern, Message, Timeout) ->
-  [begin
-    #service{location=Location} = Service,
-    gen_server:call(Location, Message, Timeout)
-  end ||
-  Service <- match_object(Pattern)].
-
-cast(Pattern, Message) ->
-  [begin
-    #service{location=Location} = Service,
-    gen_server:cast(Location, Message)
-  end ||
-  Service <- match_object(Pattern)].
-
-cast(Pattern, Message, Timeout) ->
-  [begin
-    #service{location=Location} = Service,
-    gen_server:cast(Location, Message, Timeout)
-  end ||
-  Service <- match_object(Pattern)].
-
 connect(Node) when is_atom(Node) -> 
   connect([Node]);
 connect([]) -> ok;

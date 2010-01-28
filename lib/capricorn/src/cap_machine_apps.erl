@@ -1,4 +1,4 @@
--module(capricorn_machine_apps).
+-module(cap_machine_apps).
 -include("capricorn.hrl").
 -behaviour(gen_server).
 
@@ -11,40 +11,40 @@
 
 %%% Start the server
 start_link() ->
-  gen_server:start_link({local, capricorn_machine_apps}, ?MODULE, [], []).
+  gen_server:start_link({local, cap_machine_apps}, ?MODULE, [], []).
 
 -spec add(binary(),[binary()],atom(),[binary()]) -> 'ok'.
 add(Name, Domains, Environment, Gems) ->
-  gen_server:cast(capricorn_machine_apps, {create, Name, Domains, Environment, Gems}).
+  gen_server:cast(cap_machine_apps, {create, Name, Domains, Environment, Gems}).
 
 -spec add(atom(), binary(),[binary()],atom(),[binary()]) -> 'ok'.
 add(Node, Name, Domains, Environment, Gems) ->
-  gen_server:cast({capricorn_machine_apps, Node}, {create, Name, Domains, Environment, Gems}).
+  gen_server:cast({cap_machine_apps, Node}, {create, Name, Domains, Environment, Gems}).
 
 -spec update(binary(), [binary()], [binary()]) -> ok.
 update(Id, Domains, Gems) ->
-  gen_server:cast(capricorn_machine_apps, {update, Id, Domains, Gems}).
+  gen_server:cast(cap_machine_apps, {update, Id, Domains, Gems}).
 
 -spec update(atom(), binary(), [binary()], [binary()]) -> ok.
 update(Node, Id, Domains, Gems) ->
-  gen_server:cast({capricorn_machine_apps, Node}, {update, Id, Domains, Gems}).
+  gen_server:cast({cap_machine_apps, Node}, {update, Id, Domains, Gems}).
 
 -spec all() -> [application()].
 all() ->
-  gen_server:call(capricorn_machine_apps, {all}).
+  gen_server:call(cap_machine_apps, {all}).
 
 -spec all(atom()) -> [application()].
 all(Node) ->
-  gen_server:call({capricorn_machine_apps, Node}, {all}).
+  gen_server:call({cap_machine_apps, Node}, {all}).
 
 
 %%% Initialize the server
 init([]) ->
-  Root   = capricorn_config:get("machine", "database", "var/run/capricorn"),
-  Recipe = capricorn_config:get("machine", "recipe", "macports"),
+  Root   = cap_config:get("machine", "database", "var/run/capricorn"),
+  Recipe = cap_config:get("machine", "recipe", "macports"),
   
   TablePath = filename:join([Root, "applications.db"]),
-  {ok, Ref} = dets:open_file(capricorn_machine_apps, [{file, TablePath}, {keypos, 2}]),
+  {ok, Ref} = dets:open_file(cap_machine_apps, [{file, TablePath}, {keypos, 2}]),
   update_apps_table(Ref),
   
   State  = #ctx{recipe=list_to_binary(Recipe), apps=Ref},
@@ -158,10 +158,10 @@ it_update_gems(App, Gems, _Ctx) ->
   if Gems /= App#application.required_gems ->
     ?LOG_INFO("updating app gems ~p => ~p", [App#application.required_gems, Gems]),
     App1 = App#application{required_gems=Gems,installed_gems=[]},
-    case capricorn_machine:ensure_gems_are_present_for_app(App1) of
+    case cap_machine:ensure_gems_are_present_for_app(App1) of
     {ok, App2} ->
       ?LOG_INFO("relinking app ~s", [App#application.id]),
-      case capricorn_application:update(App2) of
+      case cap_application:update(App2) of
       ok -> 
         ?LOG_DEBUG("relinked app ~s", [App#application.id]),
         {ok, App2};
@@ -185,7 +185,7 @@ it_add(App, #ctx{recipe=Recipe, apps=Apps, scaffolder=P}) ->
   {bert, {true, {User, Group, RootPath}}} ->
     App1 = App#application{www_user=User,www_group=Group,root_path=RootPath},
     dets:insert_new(Apps, App1),
-    capricorn_machine_apps_sup:start(App1),
+    cap_machine_apps_sup:start(App1),
     ok;
   {bert, R} -> R
   catch
@@ -210,7 +210,7 @@ valid_app(#application{node=No,name=N,domains=D,environment=E,required_gems=G}) 
   end.
 
 update_apps_table(Table) ->
-  capricorn_dets_updater:update(Table, fun
+  cap_dets_updater:update(Table, fun
   
   ({application, _Id, _Node, _Name, _Domains, _Environment, _User,
     _Group, _Root, _Installed, _Required, {rvsn, 1}}) ->
