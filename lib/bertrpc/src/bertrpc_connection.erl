@@ -1,22 +1,19 @@
 -module(bertrpc_connection).
--behaviour(gen_server).
+-behaviour(tcp_server).
 
 
 -export([call/4, call/5, cast/4, info/3]).
 
--export([start_link/3, start/3, start_link/1, start/1]).
--export([start_link/4, start/4, start_link/2, start/2]).
--export([stop/1]).
+-export([listen_link/4, listen_link/3, listen/4, listen/3]).
+-export([connect_link/3, connect_link/2, connect/3, connect/2]).
 
--export([init/1, handle_call/3, handle_cast/2,
+-export([behaviour_info/1]).
+-export([init/1, handle_call/3, handle_cast/2, handle_data/2,
          handle_info/2, terminate/2, code_change/3]).
--export([do_loop/2]).
 
 
 -record(state, {
-  pid,
-  sock,
-  handler,
+  callback,
   state,
   
   type,
@@ -27,6 +24,44 @@
   
   reply_to
 }).
+-define(SOCK_OPTS, [binary, {packet, 4}]).
+
+
+%%% Behaviour API
+behaviour_info(callbacks) ->
+  [{init,1}, {handle_call, 3}, {handle_cast, 2}, {handle_info, 2}, {terminate,2}, {code_change,3}];
+behaviour_info(_) ->
+  undefined.
+
+
+%%% Start the server
+listen_link(Name, Callback, Args, Port) ->
+  tcp_server:listen_link(Name, ?MODULE, {Callback, Args}, Port, ?SOCK_OPTS).
+
+listen_link(Callback, Args, Port) ->
+  tcp_server:listen_link(?MODULE, {Callback, Args}, Port, ?SOCK_OPTS).
+
+
+listen(Name, Callback, Args, Port) ->
+  tcp_server:listen(Name, ?MODULE, {Callback, Args}, Port, ?SOCK_OPTS).
+
+listen(Callback, Args, Port) ->
+  tcp_server:listen(?MODULE, {Callback, Args}, Port, ?SOCK_OPTS).
+
+
+%%% Start the client
+connect_link(Name, Host, Port) ->
+  tcp_server:connect_link(Name, ?MODULE, {}, Host, Port, ?SOCK_OPTS).
+
+connect_link(Host, Port) ->
+  tcp_server:connect_link(?MODULE, {}, Host, Port, ?SOCK_OPTS).
+
+
+connect(Name, Host, Port) ->
+  tcp_server:connect(Name, ?MODULE, {}, Host, Port, ?SOCK_OPTS).
+
+connect(Host, Port) ->
+  tcp_server:connect(?MODULE, {}, Host, Port, ?SOCK_OPTS).
 
 
 %%% External API
@@ -45,156 +80,85 @@ call(Pid, Module, Function, Arguments, Timeout) ->
   gen_server:call(Pid, {call, Module, Function, Arguments}, Timeout).
 
 
--spec call(pid(), atom(), atom(), [term()]) -> ok .
+-spec cast(pid(), atom(), atom(), [term()]) -> ok .
 cast(Pid, Module, Function, Arguments) ->
   gen_server:call(Pid, {cast, Module, Function, Arguments}).
 
 
-%%% Start the server
--spec connect({local, atom()} | {global, atom()}, string(), pos_integer()) ->
-  {ok, pid()} | {error, term()} .
-connect(Name, Host, Port) ->
-  gen_server:start(Name, ?MODULE, {connect, Host, Port, undefined, []}, []).
-
--spec connect_link({local, atom()} | {global, atom()}, string(), pos_integer()) ->
-  {ok, pid()} | {error, term()} .
-connect_link(Name, Host, Port) ->
-  gen_server:start_link(Name, ?MODULE, {connect, Host, Port, undefined, []}, []).
-
--spec connect({local, atom()} | {global, atom()}, string(), pos_integer(), atom(), term()) ->
-  {ok, pid()} | {error, term()} .
-connect(Name, Host, Port, Handler, Args) ->
-  gen_server:start(Name, ?MODULE, {connect, Host, Port, Handler, Args}, []).
-
--spec connect_link({local, atom()} | {global, atom()}, string(), pos_integer(), atom(), term()) ->
-  {ok, pid()} | {error, term()} .
-connect_link(Name, Host, Port, Handler, Args) ->
-  gen_server:start_link(Name, ?MODULE, {connect, Host, Port, Handler, Args}, []).
-
-
--spec connect(string(), pos_integer()) ->
-  {ok, pid()} | {error, term()} .
-connect(Host, Port) ->
-  gen_server:start(?MODULE, {connect, Host, Port, undefined, []}, []).
-
--spec connect_link(string(), pos_integer()) ->
-  {ok, pid()} | {error, term()} .
-connect_link(Host, Port) ->
-  gen_server:start_link(?MODULE, {connect, Host, Port, undefined, []}, []).
-
--spec connect(string(), pos_integer(), atom(), term()) ->
-  {ok, pid()} | {error, term()} .
-connect(Host, Port, Handler, Args) ->
-  gen_server:start(?MODULE, {connect, Host, Port, Handler, Args}, []).
-
--spec connect_link(string(), pos_integer(), atom(), term()) ->
-  {ok, pid()} | {error, term()} .
-connect_link(Host, Port, Handler, Args) ->
-  gen_server:start_link(?MODULE, {connect, Host, Port, Handler, Args}, []).
-
-
--spec listen({local, atom()} | {global, atom()}, pos_integer(), atom(), term()) ->
-  {ok, pid()} | {error, term()} .
-listen(Name, Port, Handler, Args) ->
-  gen_server:start(Name, ?MODULE, {listen, Port, Handler, Args}, []).
-
--spec listen_link({local, atom()} | {global, atom()}, pos_integer(), atom(), term()) ->
-  {ok, pid()} | {error, term()} .
-listen_link(Name, Port, Handler, Args) ->
-  gen_server:start_link(Name, ?MODULE, {listen, Port, Handler, Args}, []).
-
-
--spec listen(pos_integer(), atom(), term()) ->
-  {ok, pid()} | {error, term()} .
-listen(Port, Handler, Args) ->
-  gen_server:start(?MODULE, {listen, Port, Handler, Args}, []).
-
--spec listen_link(pos_integer(), atom(), term()) ->
-  {ok, pid()} | {error, term()} .
-listen_link(Port, Handler, Args) ->
-  gen_server:start_link(?MODULE, {listen, Port, Handler, Args}, []).
-
-
--spec stop(pid()) -> ok .
-stop(Pid) ->
-  gen_server:cast(Pid, stop).
-
-
 %%% Initialize the server
-init({connect, Host, Port, Handler, Args}) ->
-  {ok, Sock} = gen_tcp:connect(Host, Port, [binary, {packet, 4}, {active, true}]),
-  if Handler /= undefined ->
-    {ok, HandlerState} = Handler:init(Args),
-  true ->
-    ignore
-  end,
-  {ok, #state{sock=Sock, handler=Handler, state=HandlerState}};
+init({Callback, Args}) ->
+  {ok, SubState} = Callback:init(Args),
+  {ok, #state{callback=Callback, state=SubState}};
   
-init({listen, Port, Handler, Args}) ->
-  {ok, LSock} = gen_tcp:listen(Port, [binary, {packet, 4}, {active, true}]),
-  {ok, #state{sock=Sock, handler=Handler, state=HandlerState}}.
-% {tcp, Socket, Data}
-% {tcp_closed, Socket}
-% {tcp_error, Socket, Reason}
+init({}) ->
+  {ok, #state{}}.
 
 
 %%% Handle call messages
 handle_call({call, Module, Function, Arguments}, From, State) ->
-  #state{ sock = Sock } = State,
   
-  gen_tcp:send(Sock, bert:encode({call, Module, Function, Arguments})),
-  gen_server:cast(self(), {send_stream}),
+  tcp_server:send(self(), bert:encode({call, Module, Function, Arguments})),
+  tcp_server:cast(self(), {send_stream}),
   
-  {reply, ok, State#state{
+  {noreply, State#state{
     reply_to = From
   }};
 
 handle_call({cast, Module, Function, Arguments}, From, State) ->
-  #state{ sock = Sock } = State,
   
-  gen_tcp:send(Sock, bert:encode({cast, Module, Function, Arguments})),
-  gen_server:cast(self(), {send_stream}),
+  tcp_server:send(self(), bert:encode({cast, Module, Function, Arguments})),
+  tcp_server:cast(self(), {send_stream}),
   
-  {reply, ok, State#state{
+  {noreply, State#state{
     reply_to = From
   }}.
 
 
 %%% Handle cast messages
 handle_cast({info, stream, [Data]}, State) when is_binary(Data) ->
-  #state{ sock = Sock } = State,
   
-  gen_tcp:send(Sock, bert:encode({info, stream, []})),
+  tcp_server:send(self(), bert:encode({info, stream, []})),
   
   {noreply, State#state { data = Data }};
 
 handle_cast({info, stream, [Path]}, State) when is_list(Path) ->
-  #state{ sock = Sock } = State,
   
   {ok, Data} = file:read_file(Path),
-  gen_tcp:send(Sock, bert:encode({info, stream, []})),
+  tcp_server:send(self(), bert:encode({info, stream, []})),
   
   {noreply, State#state { data = Data }};
 
 handle_cast({info, Command, Options}, State) ->
-  #state{ sock = Sock } = State,
   
-  gen_tcp:send(Sock, bert:encode({info, Command, Options})),
+  tcp_server:send(self(), bert:encode({info, Command, Options})),
   
   {noreply, State};
 
 handle_cast({send_stream}, State) ->
-  #state{ sock = Sock, data=Data } = State,
+  #state{ data=Data } = State,
   
   if is_binary(Data) ->
-    gen_tcp:send(Sock, Data);
+    tcp_server:send(self(), Data);
   true ->
     ignore
   end,
   
   {noreply, State};
 
-handle_cast({recv, Data}, #state{mode=term}=State) ->
+handle_cast(stop, State) ->
+  {stop, normal, State};
+
+handle_cast(_Msg, State) ->
+  {noreply, State}.
+
+
+%%% Handle generic messages
+handle_info(_Info, State) ->
+  {noreply, State}.
+
+
+%%% Handle data messages
+handle_data(Data, #state{mode=term}=State) ->
   State1 = 
   case bert:decode(Data) of
   {call, Module, Function, Arguments} -> 
@@ -212,33 +176,20 @@ handle_cast({recv, Data}, #state{mode=term}=State) ->
   end,
   {noreply, State1};
 
-handle_cast({recv, <<"">>}, #state{mode=data}=State1) ->
+handle_data(<<"">>, #state{mode=data}=State1) ->
   State2 = do_handle_action(State1),
   {noreply, State2};
   
-handle_cast({recv, Data1}, #state{mode=data}=State1) ->
+handle_data(Data1, #state{mode=data}=State1) ->
   #state{ data = Data2 } = State1,
   State2 = State1#state{
     data = <<Data2/binary, Data1/binary>>
   },
   {noreply, State2};
 
-handle_cast(stop, State) ->
-  {stop, normal, State};
-
-handle_cast(_Msg, State) ->
-  {noreply, State}.
-
-
-%%% Handle generic messages
-handle_info(_Info, State) ->
-  {noreply, State}.
-
 
 %%% Before stopping the server
 terminate(_Reason, State) ->
-  #state{ sock = Sock } = State,
-  gen_tcp:close(Sock),
   ok.
 
 
@@ -248,19 +199,6 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 %%% Internal API
-
-do_loop(Owner, Sock) ->
-  case gen_tcp:recv(Sock, 0) of
-  {error, closed} ->
-    gen_tcp:close(Sock),
-    stop(Owner),
-    exit(normal);
-  {ok, Data} ->
-    gen_server:cast(Owner, {rscv, Data}),
-    do_loop(Owner, Sock)
-  end.
-
-
 do_handle_info(stream, [], State) ->
   State#state{ data = <<"">> };
 
@@ -302,7 +240,7 @@ do_handle_action(State) ->
 do_handle_call(Module, Function, Arguments, State) ->
   #state{
     sock=Sock,
-    handler=Handler,
+    callback=Handler,
     state=HandlerState,
     
     action={Module, Function, Arguments},
@@ -312,10 +250,10 @@ do_handle_call(Module, Function, Arguments, State) ->
   
   case Handler:handle_call(Module, Function, Arguments, {Infos, Data}, HandlerState) of
   {reply, Reply, NewHandlerState} ->
-    gen_tcp:send(Sock, bert:encode({reply, Reply})),
+    tcp_server:send(self(), bert:encode({reply, Reply})),
     do_reset_state(State, NewHandlerState);
   {error, Reason, NewHandlerState} ->
-    gen_tcp:send(Sock, bert:encode({error, Reason})),
+    tcp_server:send(self(), bert:encode({error, Reason})),
     do_reset_state(State, NewHandlerState)
   end.
 
@@ -323,7 +261,7 @@ do_handle_call(Module, Function, Arguments, State) ->
 do_handle_cast(Module, Function, Arguments, State) ->
   #state{
     sock=Sock,
-    handler=Handler,
+    callback=Handler,
     state=HandlerState,
     
     action={Module, Function, Arguments},
@@ -331,7 +269,7 @@ do_handle_cast(Module, Function, Arguments, State) ->
     data=Data
   } = State,
   
-  gen_tcp:send(Sock, bert:encode({noreply})),
+  tcp_server:send(self(), bert:encode({noreply})),
   
   case Handler:handle_cast(Module, Function, Arguments, {Infos, Data}, HandlerState) of
   {noreply, NewHandlerState} ->

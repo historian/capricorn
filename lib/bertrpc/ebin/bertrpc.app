@@ -6,7 +6,9 @@
    {modules, [bertrpc,
               bertrpc_module,
               bertrpc_server,
-              bertrpc_connection]},
+              bertrpc_connection,
+              bertrpc_tcp_server,
+              tcp_server]},
    {registered,[]},
    {applications, [kernel, stdlib, bert]}
 ]}.
