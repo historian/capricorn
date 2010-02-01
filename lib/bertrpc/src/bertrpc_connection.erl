@@ -29,60 +29,112 @@
 
 
 %%% External API
+-spec info(pid(), atom(), [term()]) -> ok .
 info(Pid, Command, Options) ->
   gen_server:cast(Pid, {info, Command, Options}).
 
 
+-spec call(pid(), atom(), atom(), [term()]) -> term() | {error, term()} .
 call(Pid, Module, Function, Arguments) ->
   gen_server:call(Pid, {call, Module, Function, Arguments}).
 
 
+-spec call(pid(), atom(), atom(), [term()], pos_integer()) -> term() | {error, term()} .
 call(Pid, Module, Function, Arguments, Timeout) ->
   gen_server:call(Pid, {call, Module, Function, Arguments}, Timeout).
 
 
+-spec call(pid(), atom(), atom(), [term()]) -> ok .
 cast(Pid, Module, Function, Arguments) ->
   gen_server:call(Pid, {cast, Module, Function, Arguments}).
 
 
 %%% Start the server
-start_link(Sock, Handler Args) ->
-  gen_server:start_link(?MODULE, {Sock, Handler, Args}, []).
+-spec connect({local, atom()} | {global, atom()}, string(), pos_integer()) ->
+  {ok, pid()} | {error, term()} .
+connect(Name, Host, Port) ->
+  gen_server:start(Name, ?MODULE, {connect, Host, Port, undefined, []}, []).
 
-start_link(Sock) ->
-  start_link(Sock, undefined, []).
+-spec connect_link({local, atom()} | {global, atom()}, string(), pos_integer()) ->
+  {ok, pid()} | {error, term()} .
+connect_link(Name, Host, Port) ->
+  gen_server:start_link(Name, ?MODULE, {connect, Host, Port, undefined, []}, []).
 
-start_link(Name, Sock, Handler Args) ->
-  gen_server:start_link(Name, ?MODULE, {Sock, Handler, Args}, []).
+-spec connect({local, atom()} | {global, atom()}, string(), pos_integer(), atom(), term()) ->
+  {ok, pid()} | {error, term()} .
+connect(Name, Host, Port, Handler, Args) ->
+  gen_server:start(Name, ?MODULE, {connect, Host, Port, Handler, Args}, []).
 
-start_link(Name, Sock) ->
-  start_link(Name, Sock, undefined, []).
+-spec connect_link({local, atom()} | {global, atom()}, string(), pos_integer(), atom(), term()) ->
+  {ok, pid()} | {error, term()} .
+connect_link(Name, Host, Port, Handler, Args) ->
+  gen_server:start_link(Name, ?MODULE, {connect, Host, Port, Handler, Args}, []).
 
-start(Sock, Handler, Args) ->
-  gen_server:start(?MODULE, {Sock, Handler, Args}, []).
 
-start(Sock) ->
-  start(Sock, undefined, []).
+-spec connect(string(), pos_integer()) ->
+  {ok, pid()} | {error, term()} .
+connect(Host, Port) ->
+  gen_server:start(?MODULE, {connect, Host, Port, undefined, []}, []).
 
-start(Name, Sock, Handler, Args) ->
-  gen_server:start(Name, ?MODULE, {Sock, Handler, Args}, []).
+-spec connect_link(string(), pos_integer()) ->
+  {ok, pid()} | {error, term()} .
+connect_link(Host, Port) ->
+  gen_server:start_link(?MODULE, {connect, Host, Port, undefined, []}, []).
 
-start(Name, Sock) ->
-  start(Name, Sock, undefined, []).
+-spec connect(string(), pos_integer(), atom(), term()) ->
+  {ok, pid()} | {error, term()} .
+connect(Host, Port, Handler, Args) ->
+  gen_server:start(?MODULE, {connect, Host, Port, Handler, Args}, []).
 
+-spec connect_link(string(), pos_integer(), atom(), term()) ->
+  {ok, pid()} | {error, term()} .
+connect_link(Host, Port, Handler, Args) ->
+  gen_server:start_link(?MODULE, {connect, Host, Port, Handler, Args}, []).
+
+
+-spec listen({local, atom()} | {global, atom()}, pos_integer(), atom(), term()) ->
+  {ok, pid()} | {error, term()} .
+listen(Name, Port, Handler, Args) ->
+  gen_server:start(Name, ?MODULE, {listen, Port, Handler, Args}, []).
+
+-spec listen_link({local, atom()} | {global, atom()}, pos_integer(), atom(), term()) ->
+  {ok, pid()} | {error, term()} .
+listen_link(Name, Port, Handler, Args) ->
+  gen_server:start_link(Name, ?MODULE, {listen, Port, Handler, Args}, []).
+
+
+-spec listen(pos_integer(), atom(), term()) ->
+  {ok, pid()} | {error, term()} .
+listen(Port, Handler, Args) ->
+  gen_server:start(?MODULE, {listen, Port, Handler, Args}, []).
+
+-spec listen_link(pos_integer(), atom(), term()) ->
+  {ok, pid()} | {error, term()} .
+listen_link(Port, Handler, Args) ->
+  gen_server:start_link(?MODULE, {listen, Port, Handler, Args}, []).
+
+
+-spec stop(pid()) -> ok .
 stop(Pid) ->
   gen_server:cast(Pid, stop).
 
 
 %%% Initialize the server
-init({Sock, undefined, []}) ->
-  {ok, Pid} = span_link(fun do_loop/2, [self(), Sock]),
-  {ok, #state{pid=Pid, sock=Sock, handler=Handler}}.
-
-init({Sock, Handler, Args}) ->
-  {ok, Pid} = span_link(fun do_loop/2, [self(), Sock]),
-  {ok, State} = Handler:init(Args),
-  {ok, #state{pid=Pid, sock=Sock, handler=Handler, state=State}}.
+init({connect, Host, Port, Handler, Args}) ->
+  {ok, Sock} = gen_tcp:connect(Host, Port, [binary, {packet, 4}, {active, true}]),
+  if Handler /= undefined ->
+    {ok, HandlerState} = Handler:init(Args),
+  true ->
+    ignore
+  end,
+  {ok, #state{sock=Sock, handler=Handler, state=HandlerState}};
+  
+init({listen, Port, Handler, Args}) ->
+  {ok, LSock} = gen_tcp:listen(Port, [binary, {packet, 4}, {active, true}]),
+  {ok, #state{sock=Sock, handler=Handler, state=HandlerState}}.
+% {tcp, Socket, Data}
+% {tcp_closed, Socket}
+% {tcp_error, Socket, Reason}
 
 
 %%% Handle call messages
