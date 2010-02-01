@@ -10,6 +10,7 @@
 
 -export([init/1, handle_call/3, handle_cast/2,
          handle_info/2, terminate/2, code_change/3]).
+-export([do_loop/2]).
 
 
 -record(state, {
@@ -46,13 +47,13 @@ cast(Pid, Module, Function, Arguments) ->
 
 
 %%% Start the server
-start_link(Sock, Handler Args) ->
+start_link(Sock, Handler, Args) ->
   gen_server:start_link(?MODULE, {Sock, Handler, Args}, []).
 
 start_link(Sock) ->
   start_link(Sock, undefined, []).
 
-start_link(Name, Sock, Handler Args) ->
+start_link(Name, Sock, Handler, Args) ->
   gen_server:start_link(Name, ?MODULE, {Sock, Handler, Args}, []).
 
 start_link(Name, Sock) ->
@@ -76,11 +77,11 @@ stop(Pid) ->
 
 %%% Initialize the server
 init({Sock, undefined, []}) ->
-  {ok, Pid} = span_link(fun do_loop/2, [self(), Sock]),
-  {ok, #state{pid=Pid, sock=Sock, handler=Handler}}.
+  Pid = spawn_link(?MODULE, do_loop, [self(), Sock]),
+  {ok, #state{pid=Pid, sock=Sock}};
 
 init({Sock, Handler, Args}) ->
-  {ok, Pid} = span_link(fun do_loop/2, [self(), Sock]),
+  Pid = spawn_link(?MODULE, do_loop, [self(), Sock]),
   {ok, State} = Handler:init(Args),
   {ok, #state{pid=Pid, sock=Sock, handler=Handler, state=State}}.
 
@@ -94,7 +95,7 @@ handle_call({call, Module, Function, Arguments}, From, State) ->
   
   {reply, ok, State#state{
     reply_to = From
-  }}.
+  }};
 
 handle_call({cast, Module, Function, Arguments}, From, State) ->
   #state{ sock = Sock } = State,
@@ -155,9 +156,9 @@ handle_cast({recv, Data}, #state{mode=term}=State) ->
   {error, Reason} -> 
     do_handle_error(Reason, State);
   {noreply} -> 
-    do_handle_noreply(State);
+    do_handle_noreply(State)
   end,
-  {noreply, State};
+  {noreply, State1};
 
 handle_cast({recv, <<"">>}, #state{mode=data}=State1) ->
   State2 = do_handle_action(State1),
@@ -165,7 +166,7 @@ handle_cast({recv, <<"">>}, #state{mode=data}=State1) ->
   
 handle_cast({recv, Data1}, #state{mode=data}=State1) ->
   #state{ data = Data2 } = State1,
-  State2 = State#state{
+  State2 = State1#state{
     data = <<Data2/binary, Data1/binary>>
   },
   {noreply, State2};
@@ -203,14 +204,15 @@ do_loop(Owner, Sock) ->
     stop(Owner),
     exit(normal);
   {ok, Data} ->
-    gen_server:cast(Owner, {rscv, Data})
-  end
+    gen_server:cast(Owner, {rscv, Data}),
+    do_loop(Owner, Sock)
+  end.
 
 
 do_handle_info(stream, [], State) ->
-  State#state{ data=<<"">> };
+  State#state{ data = <<"">> };
 
-do_handle_info(Command, Options, #state{request=Req}=State) ->
+do_handle_info(Command, Options, #state{}=State) ->
   #state{ infos = Infos } = State,
   State#state{
     infos = [{Command, Options}|Infos]
@@ -241,7 +243,7 @@ do_handle_action(State) ->
   
   case Type of
   call -> do_handle_call(Module, Function, Arguments, State);
-  cast -> do_handle_cast(Module, Function, Arguments, State);
+  cast -> do_handle_cast(Module, Function, Arguments, State)
   end.
 
 
@@ -282,7 +284,7 @@ do_handle_cast(Module, Function, Arguments, State) ->
   case Handler:handle_cast(Module, Function, Arguments, {Infos, Data}, HandlerState) of
   {noreply, NewHandlerState} ->
     do_reset_state(State, NewHandlerState);
-  {error, Reason, NewHandlerState} ->
+  {error, _Reason, NewHandlerState} ->
     %% log error
     do_reset_state(State, NewHandlerState)
   end.

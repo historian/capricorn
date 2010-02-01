@@ -5,7 +5,8 @@
    {vsn, "0.1.0"},
    {modules, [bertrpc,
               bertrpc_module,
-              bertrpc_server]},
+              bertrpc_server,
+              bertrpc_connection]},
    {registered,[]},
    {applications, [kernel, stdlib, bert]}
 ]}.

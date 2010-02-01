@@ -29,15 +29,6 @@
 -define(LOG_ERROR(Format, Args),
   error_logger:error_report(capricorn_error, {Format, Args})).
 
--record(cluster, {
-  node=undefined
-}).
-
--record(machine, {
-  name=undefined,
-  node=undefined
-}).
-
 
 -type version_part()  :: pos_integer() | string() .
 -type version_parts() :: [version_part(),...] .
