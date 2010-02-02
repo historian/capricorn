@@ -7,8 +7,8 @@
               bertrpc_module,
               bertrpc_server,
               bertrpc_connection,
-              bertrpc_tcp_server,
-              tcp_server]},
+              bertrpc_fd_tcp,
+              fd_tcp]},
    {registered,[]},
    {applications, [kernel, stdlib, bert]}
 ]}.

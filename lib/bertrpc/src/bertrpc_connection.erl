@@ -1,5 +1,5 @@
 -module(bertrpc_connection).
--behaviour(tcp_server).
+-behaviour(fd_tcp).
 
 
 -export([call/4, call/5, cast/4, info/3]).
@@ -12,18 +12,29 @@
          handle_info/2, terminate/2, code_change/3]).
 
 
--record(state, {
-  callback,
-  state,
-  
-  type,
-  action,
-  infos=[],
-  mode=term,
-  data,
-  
-  reply_to
+-type client_ref()   :: {pid(), ref()} .
+-type request_info() :: {atom(), [term()]} .
+-type action()       :: {'call' | 'cast', atom(), atom(), [term()]}
+-type response()     :: {'error', term()} | {'reply', term()} | {'noreply'} .
+
+-record(request, {
+  action    :: action(),
+  infos=[]  :: [request_info()],
+  client    :: client_ref()
 }).
+-type request() :: #request{} .
+
+-record(state, {
+  callback :: 'undefined' | atom(),
+  state    :: term(),
+  
+  req_in   :: 'undefined' | request(),
+  req_out  :: 'undefined' | request(),
+  queue    :: queue()
+}).
+-type state() :: #state{} .
+
+
 -define(SOCK_OPTS, [binary, {packet, 4}]).
 
 
@@ -36,32 +47,32 @@ behaviour_info(_) ->
 
 %%% Start the server
 listen_link(Name, Callback, Args, Port) ->
-  tcp_server:listen_link(Name, ?MODULE, {Callback, Args}, Port, ?SOCK_OPTS).
+  fd_tcp:listen_link(Name, ?MODULE, {Callback, Args}, Port, ?SOCK_OPTS).
 
 listen_link(Callback, Args, Port) ->
-  tcp_server:listen_link(?MODULE, {Callback, Args}, Port, ?SOCK_OPTS).
+  fd_tcp:listen_link(?MODULE, {Callback, Args}, Port, ?SOCK_OPTS).
 
 
 listen(Name, Callback, Args, Port) ->
-  tcp_server:listen(Name, ?MODULE, {Callback, Args}, Port, ?SOCK_OPTS).
+  fd_tcp:listen(Name, ?MODULE, {Callback, Args}, Port, ?SOCK_OPTS).
 
 listen(Callback, Args, Port) ->
-  tcp_server:listen(?MODULE, {Callback, Args}, Port, ?SOCK_OPTS).
+  fd_tcp:listen(?MODULE, {Callback, Args}, Port, ?SOCK_OPTS).
 
 
 %%% Start the client
 connect_link(Name, Host, Port) ->
-  tcp_server:connect_link(Name, ?MODULE, {}, Host, Port, ?SOCK_OPTS).
+  fd_tcp:connect_link(Name, ?MODULE, {}, Host, Port, ?SOCK_OPTS).
 
 connect_link(Host, Port) ->
-  tcp_server:connect_link(?MODULE, {}, Host, Port, ?SOCK_OPTS).
+  fd_tcp:connect_link(?MODULE, {}, Host, Port, ?SOCK_OPTS).
 
 
 connect(Name, Host, Port) ->
-  tcp_server:connect(Name, ?MODULE, {}, Host, Port, ?SOCK_OPTS).
+  fd_tcp:connect(Name, ?MODULE, {}, Host, Port, ?SOCK_OPTS).
 
 connect(Host, Port) ->
-  tcp_server:connect(?MODULE, {}, Host, Port, ?SOCK_OPTS).
+  fd_tcp:connect(?MODULE, {}, Host, Port, ?SOCK_OPTS).
 
 
 %%% External API
@@ -87,50 +98,50 @@ cast(Pid, Module, Function, Arguments) ->
 
 %%% Initialize the server
 init({Callback, Args}) ->
-  {ok, SubState} = Callback:init(Args),
-  {ok, #state{callback=Callback, state=SubState}};
+  case Callback:init(Args) of
+  {ok, SubState} ->
+    {ok, #state{callback=Callback, state=SubState, queue=queue:new()}};
+  
+  {ok, SubState, hibernate} ->
+    {ok, #state{callback=Callback, state=SubState, queue=queue:new()}, hibernate};
+  
+  {ok, SubState, Timeout} ->
+    {ok, #state{callback=Callback, state=SubState, queue=queue:new()}, Timeout};
+  
+  {stop, Reason} ->
+    {stop, Reason};
+  
+  ignore ->
+    ignore
+  end;
   
 init({}) ->
-  {ok, #state{}}.
+  {ok, #state{queue=queue:new()}}.
 
 
 %%% Handle call messages
-handle_call({call, Module, Function, Arguments}, From, State) ->
-  
-  tcp_server:send(self(), bert:encode({call, Module, Function, Arguments})),
-  tcp_server:cast(self(), {send_stream}),
-  
-  {noreply, State#state{
-    reply_to = From
-  }};
-
-handle_call({cast, Module, Function, Arguments}, From, State) ->
-  
-  tcp_server:send(self(), bert:encode({cast, Module, Function, Arguments})),
-  tcp_server:cast(self(), {send_stream}),
-  
-  {noreply, State#state{
-    reply_to = From
-  }}.
+-spec handle_call(request(), client_ref(), state()) -> {noreply, state()}.
+handle_call(#request{}=Request, From, #state{}=State) ->
+  {noreply, try_send_request({Request, From}, State)}.
 
 
 %%% Handle cast messages
 handle_cast({info, stream, [Data]}, State) when is_binary(Data) ->
   
-  tcp_server:send(self(), bert:encode({info, stream, []})),
+  fd_tcp:send(self(), bert:encode({info, stream, []})),
   
   {noreply, State#state { data = Data }};
 
 handle_cast({info, stream, [Path]}, State) when is_list(Path) ->
   
   {ok, Data} = file:read_file(Path),
-  tcp_server:send(self(), bert:encode({info, stream, []})),
+  fd_tcp:send(self(), bert:encode({info, stream, []})),
   
   {noreply, State#state { data = Data }};
 
 handle_cast({info, Command, Options}, State) ->
   
-  tcp_server:send(self(), bert:encode({info, Command, Options})),
+  fd_tcp:send(self(), bert:encode({info, Command, Options})),
   
   {noreply, State};
 
@@ -138,7 +149,7 @@ handle_cast({send_stream}, State) ->
   #state{ data=Data } = State,
   
   if is_binary(Data) ->
-    tcp_server:send(self(), Data);
+    fd_tcp:send(self(), Data);
   true ->
     ignore
   end,
@@ -199,109 +210,201 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 %%% Internal API
-do_handle_info(stream, [], State) ->
-  State#state{ data = <<"">> };
-
 do_handle_info(Command, Options, #state{}=State) ->
-  #state{ infos = Infos } = State,
+  #state{ req_in = Request } = State,
+  #request{ infos = Infos } = Request,
+  
   State#state{
-    infos = [{Command, Options}|Infos]
+    req_in = Request#request{ infos = [{Command, Options}|Infos] }
   }.
 
 
-do_handle_action(Type, Module, Function, Arguments, State) ->
-  #state{data=Data} = State,
-  if is_binary(Data) ->
-    State#state{
-      type=Type,
-      action={Module, Function, Arguments},
-      mode=data
-    };
-  true ->
-    do_handle_action(State#state{
-      type=Type,
-      action={Module, Function, Arguments}
-    })
-  end.
-
-
-do_handle_action(State) ->
-  #state{
-    type=Type,
-    action={Module, Function, Arguments}
-  } = State,
+do_handle_request(State) ->
+  #state{ req_in = Request } = State,
+  #request{ action = Action, infos = Infos } = Request,
+  {Type, Module, Function, Arguments} = Action
+  
+  #state{ callback = Callback, state = CallbackState } = State,
+  
+  % put socket in pasive mode
+  % <-
   
   case Type of
-  call -> do_handle_call(Module, Function, Arguments, State);
-  cast -> do_handle_cast(Module, Function, Arguments, State)
-  end.
-
-
-do_handle_call(Module, Function, Arguments, State) ->
-  #state{
-    sock=Sock,
-    callback=Handler,
-    state=HandlerState,
+  call ->
+    case Callback:handle_call({Module, Function, Arguments, Infos}, wire, CallbackState) of
+    {reply, {error, Reason}, NewState} ->
+      fd_tcp:send(self(), bert:encode({error, Reason})),
+      State2 = State#state{ req_in = undefined, state = NewState },
+      {noreply, State2};
     
-    action={Module, Function, Arguments},
-    infos=Infos,
-    data=Data
-  } = State,
-  
-  case Handler:handle_call(Module, Function, Arguments, {Infos, Data}, HandlerState) of
-  {reply, Reply, NewHandlerState} ->
-    tcp_server:send(self(), bert:encode({reply, Reply})),
-    do_reset_state(State, NewHandlerState);
-  {error, Reason, NewHandlerState} ->
-    tcp_server:send(self(), bert:encode({error, Reason})),
-    do_reset_state(State, NewHandlerState)
-  end.
-
-
-do_handle_cast(Module, Function, Arguments, State) ->
-  #state{
-    sock=Sock,
-    callback=Handler,
-    state=HandlerState,
+    {reply, Response, NewState} ->
+      fd_tcp:send(self(), bert:encode({reply, Response})),
+      State2 = State#state{ req_in = undefined, state = NewState },
+      {noreply, State2};
     
-    action={Module, Function, Arguments},
-    infos=Infos,
-    data=Data
-  } = State,
-  
-  tcp_server:send(self(), bert:encode({noreply})),
-  
-  case Handler:handle_cast(Module, Function, Arguments, {Infos, Data}, HandlerState) of
-  {noreply, NewHandlerState} ->
-    do_reset_state(State, NewHandlerState);
-  {error, _Reason, NewHandlerState} ->
-    %% log error
-    do_reset_state(State, NewHandlerState)
+    {reply, {error, Reason}, NewState, hibernate} ->
+      fd_tcp:send(self(), bert:encode({error, Reason})),
+      State2 = State#state{ req_in = undefined, state = NewState },
+      {noreply, State2, hibernate};
+    
+    {reply, Response, NewState, hibernate} ->
+      fd_tcp:send(self(), bert:encode({reply, Response})),
+      State2 = State#state{ req_in = undefined, state = NewState },
+      {noreply, State2, hibernate};
+    
+    {reply, {error, Reason}, NewState, Timeout} ->
+      fd_tcp:send(self(), bert:encode({error, Reason})),
+      State2 = State#state{ req_in = undefined, state = NewState },
+      {noreply, State2, Timeout};
+    
+    {reply, Response, NewState, Timeout} ->
+      fd_tcp:send(self(), bert:encode({reply, Response})),
+      State2 = State#state{ req_in = undefined, state = NewState },
+      {noreply, State2, Timeout};
+    
+    {noreply, NewState} ->
+      State2 = State#state{ state = NewState },
+      {noreply, State2};
+    
+    {noreply, NewState, hibernate} ->
+      State2 = State#state{ state = NewState },
+      {noreply, State2, hibernate};
+    
+    {noreply, NewState, Timeout} ->
+      State2 = State#state{ state = NewState },
+      {noreply, State2, Timeout};
+    
+    {stop, Reason, {error, E}, NewState} ->
+      fd_tcp:send(self(), bert:encode({error, E})),
+      State2 = State#state{ req_in = undefined, state = NewState },
+      {stop, Reason, State2};
+      
+    {stop, Reason, Reply, NewState} ->
+      fd_tcp:send(self(), bert:encode({reply, Reply})),
+      State2 = State#state{ req_in = undefined, state = NewState },
+      {stop, Reason, State2};
+    
+    {stop, Reason, NewState} ->
+      fd_tcp:send(self(), bert:encode({error, Reason})),
+      State2 = State#state{ req_in = undefined, state = NewState },
+      {stop, Reason, State2}
+    end
+  cast ->
+    fd_tcp:send(self(), bert:encode({noreply})),
+    
+    case Callback:handle_cast({Module, Function, Arguments, Infos}, CallbackState) of
+    {noreply, NewState} ->
+      State2 = State#state{ state = NewState },
+      {noreply, State2};
+    
+    {noreply, NewState, hibernate} ->
+      State2 = State#state{ state = NewState },
+      {noreply, State2, hibernate};
+    
+    {noreply, NewState, Timeout} ->
+      State2 = State#state{ state = NewState },
+      {noreply, State2, Timeout};
+    
+    {stop, Reason, NewState} ->
+      State2 = State#state{ req_in = undefined, state = NewState },
+      {stop, Reason, State2}
+    end
   end.
 
 
-do_reset_state(State) ->
-  State#state{action=undefined, infos=[], data=undefined, mode=term}.
+do_reset_out_state(State) ->
+  State#state{req_out=undefined}.
 
 
-do_reset_state(State, NewHandlerState) ->
-  do_reset_state(State#state{state=NewHandlerState}).
+do_handle_reply(Result, State1) ->
+  #state{ req_out = Request } = State1,
+  #request{ client = Client } = Request,
+  fd_tcp:reply(Client, {ok, Result}),
+  State2 = do_reset_out_state(State1),
+  try_send_request(queued, State2).
 
 
-do_handle_reply(Result, State) ->
-  #state{ reply_to = Client } = State,
-  gen_server:reply(Client, Result),
-  do_reset_state(State).
+do_handle_error(Reason, State1) ->
+  #state{ req_out = Request } = State1,
+  #request{ client = Client } = Request,
+  fd_tcp:reply(Client, {error, Reason}),
+  State2 = do_reset_out_state(State1),
+  try_send_request(queued, State2).
 
 
-do_handle_error(Reason, State) ->
-  #state{ reply_to = Client } = State,
-  gen_server:reply(Client, {error, Reason}),
-  do_reset_state(State).
+do_handle_noreply(State1) ->
+  #state{ req_out = Request } = State1,
+  #request{ client = Client } = Request,
+  fd_tcp:reply(Client, ok),
+  State2 = do_reset_out_state(State1),
+  try_send_request(queued, State2).
 
 
-do_handle_noreply(State) ->
-  #state{ reply_to = Client } = State,
-  gen_server:reply(Client, ok),
-  do_reset_state(State).
+try_send_request(queued, #state{req_out=undefined}=State) ->
+  #state{ queue = Queue1 } = State,
+  case queue:out(Queue1) of
+  {{value, Request}, Queue2} ->
+    #request { action = Action, infos = Infos } = Request,
+    
+    do_send_info(Infos),
+    do_send_action(Action),
+    do_send_stream(Infos),
+    
+    State#state{ queue = Queue2, req_out = Request };
+  {empty, _} ->
+    
+    State
+  end;
+
+try_send_request({Request, From}, #state{req_out=undefined}=State) ->
+  #request { action = Action, infos = Infos } = Request,
+  
+  do_send_info(Infos),
+  do_send_action(Action),
+  do_send_stream(Infos),
+  
+  State#state{
+    req_out = Request#request{ client = From }
+  };
+
+try_send_request({Request, From}, #state{}=State) ->
+  #state{ queue = Queue1 } = State,
+  
+  Request2 = Request#request{ client = From },
+  Queue2   = queue:in(Request2, Queue1),
+  
+  State#state{ queue = Queue2 }.
+
+
+do_send_info([]) ->
+  ok;
+
+do_send_info([{stream, [Data]}|Rest]) ->
+  fd_tcp:send(bert:encode({info, stream, []})),
+  do_send_info(Rest);
+
+do_send_info([{Command, Options}|Rest]) ->
+  fd_tcp:send(bert:encode({info, Command, Options})),
+  do_send_info(Rest).
+
+
+do_send_action(Action) ->
+  fd_tcp:send(bert:encode(Action)).
+
+
+do_send_stream([]) ->
+  ok;
+
+do_send_stream([{stream, [Data]}|Rest]) when is_binary(Data) ->
+  fd_tcp:send(Data),
+  fd_tcp:send(<<"">>),
+  do_send_stream(Rest);
+
+do_send_stream([{stream, [Data]}|Rest]) when is_list(Data) ->
+  [fd_tcp:send(Chunk) || Chunk <- Data],
+  fd_tcp:send(<<"">>),
+  do_send_stream(Rest);
+
+do_send_stream([_|Rest]) ->
+  do_send_stream(Rest);
 

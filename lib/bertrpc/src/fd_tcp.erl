@@ -1,4 +1,4 @@
--module(tcp_server).
+-module(fd_tcp).
 -behaviour(gen_server).
 
 
@@ -83,12 +83,12 @@ connect(Host, Port, Options) ->
 
 %%% Stop the server
 close(Pid) ->
-  gen_server:cast(Pid, tcp_server_stop).
+  gen_server:cast(Pid, fd_tcp_stop).
 
 
 %%% Send data over the connection
 send(Pid, Data) ->
-  gen_server:cast(Pid, {tcp_server_send, Data}).
+  gen_server:cast(Pid, {fd_tcp_send, Data}).
 
 call(Pid, Msg) ->
   gen_server:call(Pid, Msg).
@@ -122,11 +122,11 @@ reply(Pid, Msg) ->
 init({listen, Callback, Args, Port, Options}) ->
   {ok, LSock}    = gen_tcp:listen(Port, [{reuseaddr, true}|Options]),
   inet:setopts(LSock, [{active, false}]),
-  gen_server:cast(self(), tcp_server_accept),
+  gen_server:cast(self(), fd_tcp_accept),
   {ok, #server{sock=LSock, callback=Callback, args=Args, port=Port, options=Options}};
 
 init({accept, Server, LSock, Callback, Args}) ->
-  gen_server:cast(self(), tcp_server_accept),
+  gen_server:cast(self(), fd_tcp_accept),
   {ok, #accept{sock=LSock, pid=Server, callback=Callback, state=Args}};
 
 init({connect, Callback, Args, Host, Port, Options}) ->
@@ -153,67 +153,35 @@ init({connect, Callback, Args, Host, Port, Options}) ->
 %%% Handle call messages
 handle_call(Msg, From, #accept{}=State) ->
   #accept{ callback=Callback, state=CallbackState } = State,
-  case Callback:handle_call(Msg, From, CallbackState) of
-  {reply,Reply,NewState} ->
-    {reply,Reply,State#accept{ state=NewState }};
-  {reply,Reply,NewState,hibernate} ->
-    {reply,Reply,State#accept{ state=NewState },hibernate};
-  {reply,Reply,NewState,Timeout} ->
-    {reply,Reply,State#accept{ state=NewState },Timeout};
-  {noreply,NewState} ->
-    {noreply,State#accept{ state=NewState }};
-  {noreply,NewState,hibernate} ->
-    {noreply,State#accept{ state=NewState },hibernate};
-  {noreply,NewState,Timeout} ->
-    {noreply,State#accept{ state=NewState },Timeout};
-  {stop,Reason,Reply,NewState} ->
-    {stop,Reason,Reply,State#accept{ state=NewState }};
-  {stop,Reason,NewState} ->
-    {stop,Reason,State#accept{ state=NewState }}
-  end;
+  Response = Callback:handle_call(Msg, From, CallbackState),
+  do_handle_callback_response(Response, State);
 
 handle_call(_Msg, _From, #client{callback=undefined}=State) ->
   {reply, ok, State};
   
 handle_call(Msg, From, #client{}=State) ->
   #client{ callback=Callback, state=CallbackState } = State,
-  case Callback:handle_call(Msg, From, CallbackState) of
-  {reply,Reply,NewState} ->
-    {reply,Reply,State#client{ state=NewState }};
-  {reply,Reply,NewState,hibernate} ->
-    {reply,Reply,State#client{ state=NewState },hibernate};
-  {reply,Reply,NewState,Timeout} ->
-    {reply,Reply,State#client{ state=NewState },Timeout};
-  {noreply,NewState} ->
-    {noreply,State#client{ state=NewState }};
-  {noreply,NewState,hibernate} ->
-    {noreply,State#client{ state=NewState },hibernate};
-  {noreply,NewState,Timeout} ->
-    {noreply,State#client{ state=NewState },Timeout};
-  {stop,Reason,Reply,NewState} ->
-    {stop,Reason,Reply,State#client{ state=NewState }};
-  {stop,Reason,NewState} ->
-    {stop,Reason,State#client{ state=NewState }}
-  end;
+  Response = Callback:handle_call(Msg, From, CallbackState),
+  do_handle_callback_response(Response, State);
 
 handle_call(_Msg, _From, #server{}=State) ->
   {reply, ok, State}.
 
 
 %%% Handle cast messages
-handle_cast(tcp_server_stop, State) ->
+handle_cast(fd_tcp_stop, State) ->
   {stop, normal, State};
 
-handle_cast({tcp_server_send, Data}, #accept{}=State) ->
+handle_cast({fd_tcp_send, Data}, #accept{}=State) ->
   #accept{ sock=Sock } = State,
   gen_tcp:send(Sock, Data),
   {noreply, State};
 
-handle_cast(tcp_server_accept, #accept{}=State) ->
+handle_cast(fd_tcp_accept, #accept{}=State) ->
   #accept{sock=LSock, pid=Server, callback=Callback, state=Args} = State,
   {ok, Sock} = gen_tcp:accept(LSock),
   unlink(Server),
-  gen_server:cast(Server, tcp_server_accept),
+  gen_server:cast(Server, fd_tcp_accept),
   inet:setopts(Sock, [{active, true}]),
   case Callback:init(Args) of
   {ok,NewState} ->
@@ -225,23 +193,15 @@ handle_cast(tcp_server_accept, #accept{}=State) ->
   {stop,Reason} ->
     {stop, Reason, #accept{sock=Sock, pid=Server, callback=Callback, state=undefined}};
   ignore ->
-    {noreply, #accept{sock=Sock, pid=Server, callback=Callback, state=undefined}}
+    {stop, ignore, #accept{sock=Sock, pid=Server, callback=Callback, state=undefined}}
   end;
 
 handle_cast(Msg, #accept{}=State) ->
   #accept{ callback=Callback, state=CallbackState } = State,
-  case Callback:handle_cast(Msg, CallbackState) of
-  {noreply,NewCallbackState} ->
-    {noreply, State#accept{ state=NewCallbackState }};
-  {noreply,NewCallbackState,hibernate} ->
-    {noreply, State#accept{ state=NewCallbackState }, hibernate};
-  {noreply,NewCallbackState,Timeout} ->
-    {noreply, State#accept{ state=NewCallbackState }, Timeout};
-  {stop,Reason,NewCallbackState} ->
-    {stop,Reason, State#accept{ state=NewCallbackState }}
-  end;
+  Response = Callback:handle_cast(Msg, CallbackState)
+  do_handle_callback_response(Response, State);
 
-handle_cast({tcp_server_send, Data}, #client{}=State) ->
+handle_cast({fd_tcp_send, Data}, #client{}=State) ->
   #client{ sock=Sock } = State,
   gen_tcp:send(Sock, Data),
   {noreply, State};
@@ -251,18 +211,10 @@ handle_cast(_Msg, #client{callback=undefined}=State) ->
 
 handle_cast(Msg, #client{}=State) ->
   #client{ callback=Callback, state=CallbackState } = State,
-  case Callback:handle_cast(Msg, CallbackState) of
-  {noreply,NewCallbackState} ->
-    {noreply, State#client{ state=NewCallbackState }};
-  {noreply,NewCallbackState,hibernate} ->
-    {noreply, State#client{ state=NewCallbackState }, hibernate};
-  {noreply,NewCallbackState,Timeout} ->
-    {noreply, State#client{ state=NewCallbackState }, Timeout};
-  {stop,Reason,NewCallbackState} ->
-    {stop,Reason, State#client{ state=NewCallbackState }}
-  end;
+  Response = Callback:handle_cast(Msg, CallbackState),
+  do_handle_callback_response(Response, State);
 
-handle_cast(tcp_server_accept, #server{}=State) ->
+handle_cast(fd_tcp_accept, #server{}=State) ->
   #server{ sock=LSock, callback=Callback, args=Args } = State,
   {ok, AccPid} = gen_server:start_link(?MODULE, {accept, self(), LSock, Callback, Args}, []),
   {noreply, State#server{pid=AccPid}};
@@ -271,19 +223,11 @@ handle_cast(_Msg, #server{}=State) ->
   {noreply, State}.
 
 
-%%% Handle generic messages
+%%% Handle generic messages [ACCEPT]
 handle_info({tcp, Sock, Data}, #accept{sock=Sock}=State) ->
   #accept{ callback=Callback, state=CallbackState } = State,
-  case Callback:handle_data(Data, CallbackState) of
-  {noreply,NewCallbackState} ->
-    {noreply, State#accept{ state=NewCallbackState }};
-  {noreply,NewCallbackState,hibernate} ->
-    {noreply, State#accept{ state=NewCallbackState }, hibernate};
-  {noreply,NewCallbackState,Timeout} ->
-    {noreply, State#accept{ state=NewCallbackState }, Timeout};
-  {stop,Reason,NewCallbackState} ->
-    {stop,Reason, State#accept{ state=NewCallbackState }}
-  end;
+  Response = Callback:handle_data(Data, CallbackState),
+  do_handle_callback_response(Response, State);
 
 handle_info({tcp_closed, Sock}, #accept{sock=Sock}=State) ->
   {stop, normal, State};
@@ -293,32 +237,18 @@ handle_info({tcp_error, Sock, Reason}, #accept{sock=Sock}=State) ->
 
 handle_info(Info, #accept{}=State) ->
   #accept{ callback=Callback, state=CallbackState } = State,
-  case Callback:handle_info(Info, CallbackState) of
-  {noreply,NewCallbackState} ->
-    {noreply, State#accept{ state=NewCallbackState }};
-  {noreply,NewCallbackState,hibernate} ->
-    {noreply, State#accept{ state=NewCallbackState }, hibernate};
-  {noreply,NewCallbackState,Timeout} ->
-    {noreply, State#accept{ state=NewCallbackState }, Timeout};
-  {stop,Reason,NewCallbackState} ->
-    {stop,Reason, State#accept{ state=NewCallbackState }}
-  end;
+  Response = Callback:handle_info(Info, CallbackState),
+  do_handle_callback_response(Response, State);
 
+
+%%% Handle generic messages [CLIENT]
 handle_info({tcp, _Sock, _Data}, #client{callback=undefined}=State) ->
   {noreply, State};
 
 handle_info({tcp, Sock, Data}, #client{sock=Sock}=State) ->
   #client{ callback=Callback, state=CallbackState } = State,
-  case Callback:handle_data(Data, CallbackState) of
-  {noreply,NewCallbackState} ->
-    {noreply, State#client{ state=NewCallbackState }};
-  {noreply,NewCallbackState,hibernate} ->
-    {noreply, State#client{ state=NewCallbackState }, hibernate};
-  {noreply,NewCallbackState,Timeout} ->
-    {noreply, State#client{ state=NewCallbackState }, Timeout};
-  {stop,Reason,NewCallbackState} ->
-    {stop,Reason, State#client{ state=NewCallbackState }}
-  end;
+  Response = Callback:handle_data(Data, CallbackState),
+  do_handle_callback_response(Response, State);
 
 handle_info({tcp_closed, Sock}, #client{sock=Sock}=State) ->
   {stop, normal, State};
@@ -331,17 +261,11 @@ handle_info(_Info, #client{callback=undefined}=State) ->
 
 handle_info(Info, #client{}=State) ->
   #client{ callback=Callback, state=CallbackState } = State,
-  case Callback:handle_info(Info, CallbackState) of
-  {noreply,NewCallbackState} ->
-    {noreply, State#client{ state=NewCallbackState }};
-  {noreply,NewCallbackState,hibernate} ->
-    {noreply, State#client{ state=NewCallbackState }, hibernate};
-  {noreply,NewCallbackState,Timeout} ->
-    {noreply, State#client{ state=NewCallbackState }, Timeout};
-  {stop,Reason,NewCallbackState} ->
-    {stop,Reason, State#client{ state=NewCallbackState }}
-  end;
+  Response = Callback:handle_info(Info, CallbackState),
+  do_handle_callback_response(Response, State);
 
+
+%%% Handle generic messages [SERVER]
 handle_info({'EXIT',AccPid,_Reason}, #server{pid=AccPid}=State) ->
   gen_server:cast(self(), accept),
   {noreply, State#server{pid=undefined}};
@@ -386,3 +310,56 @@ code_change(OldVsn, #client{}=State, Extra) ->
 
 
 %%% Internal API
+do_handle_callback_response(Response, #client{}=State) ->
+  case Response of
+  {reply, Reply, NewCallbackState} ->
+    {reply, Reply, State#client{ state=NewCallbackState }};
+  
+  {reply, Reply, NewCallbackState, hibernate} ->
+    {reply, Reply, State#client{ state=NewCallbackState }, hibernate};
+  
+  {reply, Reply, NewCallbackState, Timeout} ->
+    {reply, Reply, State#client{ state=NewCallbackState }, Timeout};
+  
+  {noreply, NewCallbackState} ->
+    {noreply, State#client{ state=NewCallbackState }};
+  
+  {noreply, NewCallbackState, hibernate} ->
+    {noreply, State#client{ state=NewCallbackState }, hibernate};
+  
+  {noreply, NewCallbackState, Timeout} ->
+    {noreply, State#client{ state=NewCallbackState }, Timeout};
+  
+  {stop, Reason, Reply, NewCallbackState} ->
+    {stop, Reason, Reply, State#client{ state=NewCallbackState }};
+  
+  {stop, Reason, NewCallbackState} ->
+    {stop, Reason, State#client{ state=NewCallbackState }}
+  end;
+
+do_handle_callback_response(Response, #accept{}=State) ->
+  case Response of
+  {reply, Reply, NewCallbackState} ->
+    {reply, Reply, State#accept{ state=NewCallbackState }};
+  
+  {reply, Reply, NewCallbackState, hibernate} ->
+    {reply, Reply, State#accept{ state=NewCallbackState }, hibernate};
+  
+  {reply, Reply, NewCallbackState, Timeout} ->
+    {reply, Reply, State#accept{ state=NewCallbackState }, Timeout};
+  
+  {noreply, NewCallbackState} ->
+    {noreply, State#accept{ state=NewCallbackState }};
+  
+  {noreply, NewCallbackState, hibernate} ->
+    {noreply, State#accept{ state=NewCallbackState }, hibernate};
+  
+  {noreply, NewCallbackState, Timeout} ->
+    {noreply, State#accept{ state=NewCallbackState }, Timeout};
+  
+  {stop, Reason, Reply, NewCallbackState} ->
+    {stop, Reason, Reply, State#accept{ state=NewCallbackState }};
+  
+  {stop, Reason, NewCallbackState} ->
+    {stop, Reason, State#accept{ state=NewCallbackState }}
+  end.
