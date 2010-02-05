@@ -43,7 +43,7 @@ SHUTDOWN=false
 STDERR_FILE=$PWD/var/log/capricorn/capricorn.stderr
 STDOUT_FILE=$PWD/var/log/capricorn/capricorn.stdout
 
-REL_DIR=$PREFIX/releases/$REL_VSN
+REL_DIR=$PREFIX/releases/$REL_NAME-$REL_VSN
 
 print_arguments=""
 start_arguments=""
