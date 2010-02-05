@@ -5,7 +5,7 @@
 -export([listen_link/5, listen_link/4, listen/5, listen/4]).
 -export([connect_link/6, connect_link/5, connect/6, connect/5]).
 -export([connect_link/4, connect_link/3, connect/4, connect/3]).
--export([send/2, call/2, call/3, multi_call/2, multi_call/3, multi_call/4, cast/2, abcast/2, abcast/3, reply/2]).
+-export([send/1, recv/1, recv/2, call/2, call/3, multi_call/2, multi_call/3, multi_call/4, cast/2, abcast/2, abcast/3, reply/2]).
 -export([close/1]).
 
 -export([behaviour_info/1]).
@@ -87,8 +87,19 @@ close(Pid) ->
 
 
 %%% Send data over the connection
-send(Pid, Data) ->
-  gen_server:cast(Pid, {fd_tcp_send, Data}).
+send(Data) ->
+  Sock = get(fd_tcp_sock),
+  gen_tcp:send(Sock, Data).
+
+
+recv(Length) ->
+  Sock = get(fd_tcp_sock),
+  gen_tcp:recv(Sock, Length).
+
+recv(Length, Timeout) ->
+  Sock = get(fd_tcp_sock),
+  gen_tcp:recv(Sock, Length, Timeout).
+
 
 call(Pid, Msg) ->
   gen_server:call(Pid, Msg).
@@ -131,7 +142,8 @@ init({accept, Server, LSock, Callback, Args}) ->
 
 init({connect, Callback, Args, Host, Port, Options}) ->
   {ok, Sock} = gen_tcp:connect(Host, Port, Options),
-  inet:setopts(Sock, [{active, true}]),
+  inet:setopts(Sock, [{active, once}]),
+  put(fd_tcp_sock, Sock),
   if Callback /= undefined ->
     case Callback:init(Args) of
     {ok,State} ->
@@ -172,17 +184,13 @@ handle_call(_Msg, _From, #server{}=State) ->
 handle_cast(fd_tcp_stop, State) ->
   {stop, normal, State};
 
-handle_cast({fd_tcp_send, Data}, #accept{}=State) ->
-  #accept{ sock=Sock } = State,
-  gen_tcp:send(Sock, Data),
-  {noreply, State};
-
 handle_cast(fd_tcp_accept, #accept{}=State) ->
   #accept{sock=LSock, pid=Server, callback=Callback, state=Args} = State,
   {ok, Sock} = gen_tcp:accept(LSock),
   unlink(Server),
   gen_server:cast(Server, fd_tcp_accept),
-  inet:setopts(Sock, [{active, true}]),
+  inet:setopts(Sock, [{active, once}]),
+  put(fd_tcp_sock, Sock),
   case Callback:init(Args) of
   {ok,NewState} ->
     {noreply, #accept{sock=Sock, pid=Server, callback=Callback, state=NewState}};
@@ -198,13 +206,8 @@ handle_cast(fd_tcp_accept, #accept{}=State) ->
 
 handle_cast(Msg, #accept{}=State) ->
   #accept{ callback=Callback, state=CallbackState } = State,
-  Response = Callback:handle_cast(Msg, CallbackState)
+  Response = Callback:handle_cast(Msg, CallbackState),
   do_handle_callback_response(Response, State);
-
-handle_cast({fd_tcp_send, Data}, #client{}=State) ->
-  #client{ sock=Sock } = State,
-  gen_tcp:send(Sock, Data),
-  {noreply, State};
 
 handle_cast(_Msg, #client{callback=undefined}=State) ->
   {noreply, State};
@@ -225,9 +228,13 @@ handle_cast(_Msg, #server{}=State) ->
 
 %%% Handle generic messages [ACCEPT]
 handle_info({tcp, Sock, Data}, #accept{sock=Sock}=State) ->
-  #accept{ callback=Callback, state=CallbackState } = State,
-  Response = Callback:handle_data(Data, CallbackState),
-  do_handle_callback_response(Response, State);
+  try
+    #accept{ callback=Callback, state=CallbackState } = State,
+    Response = Callback:handle_data(Data, CallbackState),
+    do_handle_callback_response(Response, State)
+  after
+    inet:setopts(Sock, [{active, once}])
+  end;
 
 handle_info({tcp_closed, Sock}, #accept{sock=Sock}=State) ->
   {stop, normal, State};
@@ -246,9 +253,13 @@ handle_info({tcp, _Sock, _Data}, #client{callback=undefined}=State) ->
   {noreply, State};
 
 handle_info({tcp, Sock, Data}, #client{sock=Sock}=State) ->
-  #client{ callback=Callback, state=CallbackState } = State,
-  Response = Callback:handle_data(Data, CallbackState),
-  do_handle_callback_response(Response, State);
+  try
+    #client{ callback=Callback, state=CallbackState } = State,
+    Response = Callback:handle_data(Data, CallbackState),
+    do_handle_callback_response(Response, State)
+  after
+    inet:setopts(Sock, [{active, once}])
+  end;
 
 handle_info({tcp_closed, Sock}, #client{sock=Sock}=State) ->
   {stop, normal, State};
