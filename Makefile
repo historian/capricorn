@@ -28,7 +28,12 @@ package-faxien:
 	@rm -f  pkg/faxien/capricorn-$(REL_VSN)/releases/$(REL_VSN)/start_clean.*
 	@rm -f  pkg/faxien/capricorn-$(REL_VSN)/releases/start_erl.data
 	@mv     pkg/faxien/capricorn-$(REL_VSN)/releases/$(REL_VSN) pkg/faxien/capricorn-$(REL_VSN)/releases/capricorn-$(REL_VSN)
+	@(cd pkg/faxien/capricorn-$(REL_VSN)/lib ; for ez in *.ez ; do unzip $$ez; done ; rm *.ez)
 	@(cd pkg/faxien ; tar -czf ../tar/capricorn-$(REL_VSN).faxien.tar.gz capricorn-$(REL_VSN))
+
+install: package
+	@echo "Installing with faxien..."
+	@sudo faxien install-release pkg/tar/capricorn-$(REL_VSN).faxien.tar.gz
 
 clean:
 	@./rebar clean

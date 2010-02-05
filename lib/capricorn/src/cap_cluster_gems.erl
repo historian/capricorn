@@ -151,7 +151,7 @@ handle_info(Info, State) ->
 
 terminate(_Reason, #state{table=T,spec_reader=P}) ->
   dets:close(T),
-  bertio:port_close(P, stop),
+  bertio:port_close(P),
   ok.
 
 
@@ -358,7 +358,7 @@ normalize_gem({Name, Version, Deps1}) ->
     Reqs2 = [begin
       {Op, Version1} = Req1,
       Version2 = normalize_gem_version(Version1),
-      {?b2a(Op), {Version2}}
+      {?b2a(Op), Version2}
     end || Req1 <- Reqs1],
     {DepName, Reqs2}
   end || Dep1 <- Deps1],
@@ -384,8 +384,24 @@ normalize_gem_version(Version) ->
 
 update_gems_table(Table) ->
   cap_dets_updater:update(Table, fun
-  ({gem, _Id, _Deps, _Missing, {rvsn, 1}}) ->
+  ({gem, _Id, _Deps, _Missing, {rvsn, 2}}) ->
     ok;
+  
+  ({gem, Id1, Deps1, Missing1, {rvsn, 1}}) ->
+    UpVersion = fun
+      ({{Parts}}) -> {Parts};
+      ({Parts}) when is_list(Parts) -> {Parts}
+    end,
+    UpReq     = fun({Op, V})  -> {Op, UpVersion(V)}        end,
+    UpDep     = fun({Name, Reqs1}) ->
+      Reqs2 = [UpReq(Req) || Req <- Reqs1],
+      {Name, Reqs2}
+    end,
+    
+    Deps2    = [UpDep(Dep) || Dep <- Deps1],
+    Missing2 = [UpDep(Mis) || Mis <- Missing1],
+    
+    {update, {gem, Id1, Deps2, Missing2, {rvsn, 2}}};
   
   ({gem, Id1, Deps1, Missing1, {rvsn, 0}}) ->
     UpVersion = fun

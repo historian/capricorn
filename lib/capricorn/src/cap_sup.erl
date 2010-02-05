@@ -83,7 +83,7 @@ start_server(IniFiles) ->
     throw({startup_error, Reason})
   end,
   
-  Cookie = list_to_atom(capricorn_config:get("capricorn", "cookie", "secret")),
+  Cookie = list_to_atom(cap_config:get("capricorn", "cookie", "secret")),
   erlang:set_cookie(node(), Cookie),
   
   NodeType = list_to_atom(
