@@ -30,6 +30,7 @@
 -record(ctx, {
   cluster,
   knows_cluster=false,
+  gems_path,
   installed_gems
 }).
 
@@ -71,8 +72,11 @@ init([]) ->
     false
   end,
   
+  GemsPath = cap_config:get("capricorn", "gems_path", "/usr/lib/ruby/gems/1.8"),
+  
   cap_config:register(fun
-  ("cluster", "node") -> ?MODULE:stop()
+  ("cluster",   "node")      -> ?MODULE:stop();
+  ("capricorn", "gems_path") -> ?MODULE:stop()
   end, self()),
   
   InstalledGems = ets:new(gems, [set,private,{keypos,2}]),
@@ -80,6 +84,7 @@ init([]) ->
   {ok, #ctx{
     knows_cluster  = KnowsCluster,
     cluster        = Node,
+    gems_path      = GemsPath,
     installed_gems = InstalledGems
   }}.
  
@@ -242,24 +247,36 @@ it_install_gems([{DepName,_}=Dep|Rest], #ctx{cluster=Cluster}=Ctx) ->
 
 
 -spec it_is_gem_installed(gem_spec(), #ctx{}) -> true | false | {error, badarg} .
-it_is_gem_installed(#gem{}=Gem, #ctx{installed_gems=T}) ->
+it_is_gem_installed(#gem{}=Gem, #ctx{installed_gems=T, gems_path=GemsPath}) ->
   case ets:lookup(T, Gem#gem.id) of
   [] ->
-    Args = "list -i",
-    Name = (Gem#gem.id)#gem_id.name,
+    Name1    = (Gem#gem.id)#gem_id.name,
+    Name2    = binary_to_list(Name1),
     
-    Args1 = lists:concat([Args, "  ", binary_to_list(Name)]),
-    Args2 =
-    case (Gem#gem.id)#gem_id.version of
-    undefined -> Args1;
-    Version   -> lists:concat([Args1, " -v \"",
-      cap_cluster_gems:version_to_string(Version), "\""])
-    end,
-    case gem_exec(Args2) of
-    "true\n" ->
-      ets:insert_new(T,Gem),
-      true;
-    _Else -> false
+    Version1 = (Gem#gem.id)#gem_id.version,
+    case Version1 of
+    undefined ->
+      Version2 = "*",
+      Fullname = lists:flatten([Name2, "-", Version2]),
+      Path     = filename:join([GemsPath, "gems", Fullname]),
+      
+      case filelib:wildcard(Path) of
+      []    -> false;
+      _Else ->
+        ets:insert(T, Gem),
+        true
+      end;
+    _Else ->
+      Version2 = cap_cluster_gems:version_to_string(Version1),
+      Fullname = lists:flatten([Name2, "-", Version2]),
+      Path     = filename:join([GemsPath, "gems", Fullname]),
+      
+      case filelib:is_file(Path) of
+      false -> false;
+      true  ->
+        ets:insert(T, Gem),
+        true
+      end
     end;
   _Else -> true
   end.

@@ -1,54 +1,85 @@
 -module(cap_external_gems_api).
--behaviour(bertrpc_module).
--include("bertrpc/include/bertrpc.hrl").
+-export([handle_call/3, handle_cast/2]).
 
--export([start_link/0]).
--export([init/1, bert_call/4, bert_cast/4, terminate/2, code_change/3]).
 
-start_link() ->
-  bertrpc_module:start_link(?MODULE, [], []).
 
-init([]) ->
-  {ok, state}.
-
-bert_call(push, _, #bertrpc_info{data=undefined}, State) ->
-  {error, {user, 1, <<"CapricornGemError">>,
-                    <<"This is not a gem">>, []}, State};
-bert_call(push, _, #bertrpc_info{data=Data}, State) ->
-  try
-    cap_cluster_gems:push(Data)
-  of
-  {ok,Missing} ->
-    {reply, {ok,Missing}, State};
-  {error,already_present} ->
-    {error, {user, 1, <<"CapricornGemError">>, <<"This gem is already present in the cluster.">>, []}, State};
-  {error,{[gem_error,ErrorMessage]}} ->
-    {error, {user, 1, <<"CapricornGemError">>, ErrorMessage, []}, State};
-  {error,{[not_found]}} ->
-    {error, {user, 1, <<"CapricornGemError">>, <<"Transfering failed!">>, []}, State}
-  catch
-    throw:T -> {error, T, State}
+handle_call({push,
+            _, Info},
+            _From, State) ->
+  case proplists:get_value(stream, Info) of
+  undefined ->
+    Reason = {user, 1, <<"CapricornGemError">>,
+                       <<"This is not a gem">>, []},
+    {reply, {error, Reason}, State};
+  
+  _WeHaveAStream ->
+    try
+      {ok, Data} = collect_stream_data(sof, []),
+      cap_cluster_gems:push(Data)
+    of
+    {ok,Missing} ->
+      {reply, {ok,Missing}, State};
+      
+    {error,already_present} ->
+      Reason = {user, 1, <<"CapricornGemError">>,
+                         <<"This gem is already present in the cluster.">>, []},
+      {reply, {error, Reason}, State};
+      
+    {error,{[gem_error,ErrorMessage]}} ->
+      Reason = {user, 1, <<"CapricornGemError">>, ErrorMessage, []},
+      {reply, {error, Reason}, State};
+      
+    {error,{[not_found]}} ->
+      Reason = {user, 1, <<"CapricornGemError">>,
+                         <<"Transfering failed!">>, []},
+      {reply, {error, Reason}, State}
+      
+    catch
+      throw:T -> {reply, {error, T}, State}
+    end
   end;
-bert_call(all, _, _, State) ->
+
+
+
+handle_call({all,
+            _, _},
+            _From, State) ->
   try
-    {ok,All} = cap_cluster_gems:all(),
-    {reply, {ok,All}, State}
+    {ok, All} = cap_cluster_gems:all(),
+    {reply, {ok, All}, State}
   catch
-    throw:T -> {error, T, State}
+    throw:T -> {reply, {error, T}, State}
   end;
-bert_call(missing, _, _, State) ->
+
+
+
+handle_call({missing,
+            _, _},
+            _From, State) ->
   try
-    {ok,Missing} = cap_cluster_gems:missing(),
-    {reply, {ok,Missing}, State}
+    {ok, Missing} = cap_cluster_gems:missing(),
+    {reply, {ok, Missing}, State}
   catch
-    throw:T -> {error, T, State}
+    throw:T -> {reply, {error, T}, State}
   end.
 
-bert_cast(_, _, _Extra, State) ->
+
+
+handle_cast(_, State) ->
   {noreply, State}.
 
-terminate(_Reason, _State) ->
-  ok.
 
-code_change(_OldVsn, State, _Extra) ->
-  {ok, State}.
+
+collect_stream_data(sof, Acc) ->
+  collect_stream_data(bertrpc:stream(), Acc);
+
+collect_stream_data({ok, eof}, Acc) ->
+  {ok, list_to_binary(lists:reverse(Acc))};
+
+collect_stream_data({error, Reason}, _) ->
+  {error, Reason};
+
+collect_stream_data({ok, Data}, Acc) ->
+  collect_stream_data(bertrpc:stream(), [Data|Acc]).
+
+

@@ -1,36 +1,43 @@
 -module(bertrpc_hello_world).
--behaviour(bertrpc_connection).
+-behaviour(bertrpc).
 
 
--export([listen_link/1, connect_link/2, hello/2, greet/2, how/2, howl/1]).
+
+-export([listen_link/1, connect_link/2, hello/2, greet/2, how/2, howl/1, transfer_gem/2]).
 -export([init/1, handle_call/3, handle_cast/2,
          handle_info/2, terminate/2, code_change/3]).
 
 -export([test/0]).
 
 
+
 hello(Pid, Name) ->
-  bertrpc_connection:call(Pid, hello_world, hello, [Name]).
+  bertrpc:call(Pid, hello_world, hello, [Name]).
 greet(Pid, Name) ->
-  bertrpc_connection:call(Pid, hello_world, greet, [Name]).
+  bertrpc:call(Pid, hello_world, greet, [Name]).
 how(Pid, Name) ->
   gen_server:cast(Pid, {greet, Name}).
 howl(Pid) ->
-  bertrpc_connection:cast(Pid, wolf, howl, []).
+  bertrpc:cast(Pid, wolf, howl, []).
+transfer_gem(Pid, Chunks) ->
+  bertrpc:cast(Pid, gems, transfer, [], [{stream, []}], Chunks).
+
 
 
 %%% Start the server
 listen_link(Port) ->
-  bertrpc_connection:listen_link({local, bertrpc_hello_world}, ?MODULE, [], Port).
+  bertrpc:listen_link({local, bertrpc_hello_world}, ?MODULE, [], Port).
 
 connect_link(Host, Port) ->
-  bertrpc_connection:connect_link(Host, Port).
+  bertrpc:connect_link(Host, Port).
+
 
 
 %%% Initialize the server
 init([]) ->
   State = [],
   {ok, State}.
+
 
 
 %%% Handle call messages
@@ -52,6 +59,7 @@ handle_call(Request, _From, State) ->
   {reply, ok, State}.
 
 
+
 %%% Handle cast messages
 handle_cast({wolf, howl, [], _}, State) ->
   io:format("Ohh , the werewolf, the werewolf...\n"),
@@ -59,8 +67,12 @@ handle_cast({wolf, howl, [], _}, State) ->
 
 handle_cast({greet, How}=Request, {Who, From}) ->
   io:format("cast: -> ~p\n", [Request]),
-  bertrpc_connection:reply(From, <<How/binary, Who/binary>>),
+  bertrpc:reply(From, <<How/binary, Who/binary>>),
   io:format("cast: <- ~p\n", [{noreply, []}]),
+  {noreply, []};
+
+handle_cast({gems, transfer, _, [{stream, []}]}, _) ->
+  do_handle_stream(sos),
   {noreply, []};
 
 handle_cast(stop, State) ->
@@ -71,17 +83,37 @@ handle_cast(Msg, State) ->
   {noreply, State}.
 
 
+
 %%% Handle generic messages
 handle_info(_Info, State) ->
   {noreply, State}.
+
+
 
 %%% Before stopping the server
 terminate(_Reason, _State) ->
   ok.
 
+
+
 %%% Code Changes
 code_change(_OldVsn, State, _Extra) ->
   {ok, State}.
+
+
+
+do_handle_stream(sos) ->
+  do_handle_stream(bertrpc:stream());
+
+do_handle_stream({ok, eof}) ->
+  ok;
+
+do_handle_stream({error, Reason}) ->
+  io:format("~p\n", [{error, Reason}]);
+
+do_handle_stream({ok, Chunk}) ->
+  io:format("chunk: ~p\n", [binary_to_term(Chunk)]),
+  do_handle_stream(bertrpc:stream()).
 
 
 test() ->
@@ -101,5 +133,16 @@ test() ->
   io:format("C1: ~p\n", [bertrpc_hello_world:howl(C1)]),
   io:format("C2: ~p\n", [bertrpc_hello_world:howl(C2)]),
   
+  io:format("C1: ~p\n", [bertrpc_hello_world:transfer_gem(C1, [
+    term_to_binary("hello adrian!"),
+    term_to_binary("hello simon!"),
+    term_to_binary("hello yves!"),
+    term_to_binary("hello bram!"),
+    term_to_binary("hello hans!"),
+    term_to_binary("hello fred!"),
+    term_to_binary("hello inge!")
+  ])]),
+  
   erlang:halt().
+
 

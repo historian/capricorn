@@ -144,12 +144,9 @@ start_server(IniFiles) ->
 start_primary_services(cluster) ->
   ExternalApi = [
     begin
-      {ok, {Module, Fun, Args}} = cap_util:parse_term(SpecStr),
+      {ok, Module} = cap_util:parse_term(SpecStr),
       
-      {list_to_atom(Name),
-        {Module, Fun, Args},
-        permanent,
-        brutal_kill}
+      {list_to_atom(Name), Module}
     end
     || {Name, SpecStr}
     <- cap_config:get("external_api"), SpecStr /= ""],
@@ -190,12 +187,9 @@ start_primary_services(cluster) ->
 start_primary_services(machine) ->
   InternalApi = [
     begin
-      {ok, {Module, Fun, Args}} = cap_util:parse_term(SpecStr),
+      {ok, Module} = cap_util:parse_term(SpecStr),
       
-      {list_to_atom(Name),
-        {Module, Fun, Args},
-        permanent,
-        brutal_kill}
+      {list_to_atom(Name), Module}
     end
     || {Name, SpecStr}
     <- cap_config:get("internal_api"), SpecStr /= ""],
