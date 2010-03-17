@@ -18,13 +18,10 @@
  
 -export([start/2, stop/1]).
 
--spec start(_,[string()]) -> {'error','already_started' | {'app_would_not_start','sasl'}} | {'ok',pid()}.
+-spec start(_,_) -> {'error','already_started' | {'ok',pid()}.
 start(_Type, _) ->
   NodeType = get_ini_node_type(),
-  case start_apps([sasl]) of
-  ok              -> cap_sup:start_link(NodeType);
-  {error, Reason} -> {error, Reason}
-  end.
+  cap_sup:start_link(NodeType).
 
 stop(_) ->
   cap_sup:stop(),
@@ -36,13 +33,4 @@ get_ini_node_type() ->
   error          -> machine;
   {ok, [[]]}     -> machine;
   {ok, [[Type]]} -> list_to_atom(Type)
-  end.
-
-start_apps([]) ->
-  ok;
-start_apps([App|Rest]) ->
-  case application:start(App) of
-  ok                              -> start_apps(Rest);
-  {error, {already_started, App}} -> start_apps(Rest);
-  {error, _Reason}                -> {error, {app_would_not_start, App}}
   end.
