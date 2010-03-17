@@ -19,7 +19,7 @@ handle_call({create,
             [Node, Name, Domains, Env], _},
             _From, State) ->
   try
-    ok = cap_machine_apps:create(Node, Name, Domains, Env, []),
+    ok = cap_machine_apps:create(Node, Name, Domains, Env, [<<"my_gem">>]),
     {reply, true, State}
   catch
     throw:T -> {reply, {error, T}, State}

@@ -37,7 +37,7 @@ service(App, [M,F,A]) ->
 
 service(App, M,F,A) ->
   {ok, Appname} = get_proc_name(App),
-  gen_server:call(Appname, {service, M,F,A}, 6000).
+  gen_server:call(Appname, {service, M,F,A}, 12000).
   
 
 get_proc_def(App) ->
@@ -69,7 +69,7 @@ init([#application{}=App]) ->
 %%% Handle call messages
 handle_call({service, M,F,A}, _From, #state{runner=R}=State) ->
   bertio:send(R, [M,F,A]),
-  try bertio:recv(R, 5000) of
+  try bertio:recv(R, 11000) of
   {bert, Result} -> {reply, Result, State}
   catch
     error:timeout -> {reply, timeout, State}

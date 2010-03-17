@@ -43,13 +43,9 @@ private
   def clean_missing(deps)
     deps = deps.last if deps and deps.first == :ok
     return [] if deps.nil? or deps.empty?
-    deps = deps.collect do |dep|
-      dep.to_a[1..-1]
-    end
     deps.sort! { |a,b| a.first <=> b.first }
     deps.collect do |dep|
       reqs = dep.last.collect do |req|
-        req.shift
         op = req.shift
         version = req.shift.to_a.last.join('.')
         "#{op} #{version}"

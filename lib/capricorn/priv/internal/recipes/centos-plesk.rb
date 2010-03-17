@@ -36,7 +36,7 @@ begin
   user = Etc.getpwuid(File.stat(httpdocs_path).uid).name
   short_user = user
   
-rescue Rush::BashFailed
+rescue Rush::BashFailed, Errno::ENOENT
   ### try to create the base domain
   box.bash(%{ /usr/local/psa/bin/domain -c #{basedomain} -clogin #{client} -status enabled -hosting true -hst_type phys -dns true -www true -login #{short_user} -passwd #{passwd} -shell /bin/bash })
 end
