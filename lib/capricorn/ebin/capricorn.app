@@ -54,8 +54,5 @@
   ]},
   {applications, [kernel, stdlib, inets, bertio, bertrpc, gcd]},
   {included_applications, [sasl]},
-  {mod, {capricorn_app, [
-    "/etc/capricorn/default.ini",
-    "/etc/capricorn/local.ini"
-  ]}}
+  {mod, {capricorn_app, []}}
 ]}.
