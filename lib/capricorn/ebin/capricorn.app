@@ -52,6 +52,6 @@
     cap_secondary_services,
     cap_sup
   ]},
-  {applications, [kernel, stdlib, sasl, inets, bertio, bertrpc, gcd]},
+  {applications, [kernel, stdlib, inets, bertio, bertrpc, gcd]},
   {mod, {capricorn_app, []}}
 ]}.
