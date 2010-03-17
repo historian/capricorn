@@ -17,7 +17,7 @@
 
 %% operation & maintenance api
 % -export([start_link/0]).
--export([start_link/1,stop/0, cap_config_start_link_wrapper/2,
+-export([start_link/1,stop/0,
          start_primary_services/1,start_secondary_services/0,
          restart_core_server/0]).
 
@@ -32,17 +32,16 @@
 %%
 
 
-start_link(IniFiles) ->
+start_link(NodeType) ->
   case whereis(cap_sup) of
   undefined ->
-    start_server(IniFiles);
+    start_server(NodeType);
   _Else ->
     {error, already_started}
   end.
 
 restart_core_server() ->
-  NodeType = list_to_atom(
-    cap_config:get("capricorn", "node_type", "cluster")),
+  NodeType = cap_config:get(node_type),
   restart_core_server(NodeType).
 restart_core_server(cluster) ->
   supervisor:terminate_child(cap_primary_services, cap_cluster),
@@ -55,40 +54,8 @@ restart_core_server(machine) ->
 
 
 
-cap_config_start_link_wrapper(IniFiles, FirstConfigPid) ->
-  case is_process_alive(FirstConfigPid) of
-  true ->
-    link(FirstConfigPid),
-    {ok, FirstConfigPid};
-  false -> cap_config:start_link(IniFiles)
-  end.
-
-start_server(IniFiles) ->
-  case init:get_argument(pidfile) of
-  {ok, [PidFile]} ->
-    case file:write_file(PidFile, os:getpid()) of
-    ok -> ok;
-    Error -> io:format("Failed to write PID file ~s, error: ~p", [PidFile, Error])
-    end;
-  _ -> ok
-  end,
-  
-  {ok, ConfigPid} = cap_config:start_link(IniFiles),
-  
-  Node = list_to_atom(cap_config:get("capricorn", "node", "cluster")),
-  case net_kernel:start([Node]) of
-  {ok, _NetPid} -> ok;
-  {error, Reason} ->
-    ?LOG_ERROR("~s~n", [Reason]),
-    throw({startup_error, Reason})
-  end,
-  
-  Cookie = list_to_atom(cap_config:get("capricorn", "cookie", "secret")),
-  erlang:set_cookie(node(), Cookie),
-  
-  NodeType = list_to_atom(
-    cap_config:get("capricorn", "node_type", "cluster")),
-  LogLevel = cap_config:get("log", "level", "info"),
+start_server(NodeType) ->
+  LogLevel = cap_config:get(log, level, info),
   
   % announce startup
   io:format("Capricorn (LogLevel=~s, Node=~s, Type=~s) is starting.~n", [
@@ -97,22 +64,8 @@ start_server(IniFiles) ->
     atom_to_list(NodeType)
   ]),
   
-  case LogLevel of
-  "debug" ->
-    io:format("Configuration Settings ~p:~n", [IniFiles]),
-    [io:format("  [~s] ~s=~p~n", [Module, Variable, Value])
-        || {{Module, Variable}, Value} <- cap_config:all()];
-  _ -> ok
-  end,
-  
   BaseChildSpecs =
   {{one_for_all, 10, 3600},[
-    {cap_config,
-      {cap_sup, cap_config_start_link_wrapper, [IniFiles, ConfigPid]},
-      permanent,
-      brutal_kill,
-      worker,
-      [cap_config]},
     {cap_primary_services,
       {cap_sup, start_primary_services, [NodeType]},
       permanent,
@@ -129,27 +82,12 @@ start_server(IniFiles) ->
   
   {ok, Pid} = supervisor:start_link({local, cap_sup}, cap_sup, BaseChildSpecs),
   
-  cap_config:register(fun
-  ("daemons", _       ) -> ?MODULE:stop();
-  ("event_handlers", _) -> ?MODULE:stop();
-  ("capricorn", "node") -> ?MODULE:stop()
-  end, Pid),
-  
-  unlink(ConfigPid),
-  
   io:format("Capricorn has started. Time to relax.~n"),
   
   {ok, Pid}.
 
 start_primary_services(cluster) ->
-  ExternalApi = [
-    begin
-      {ok, Module} = cap_util:parse_term(SpecStr),
-      
-      {list_to_atom(Name), Module}
-    end
-    || {Name, SpecStr}
-    <- cap_config:get("external_api"), SpecStr /= ""],
+  ExternalApi = cap_config:get(external_api),
   
   supervisor:start_link({local, cap_primary_services}, cap_sup,
   {{one_for_one, 10, 3600},[
@@ -185,14 +123,7 @@ start_primary_services(cluster) ->
       [cap_external_api]}
   ]});
 start_primary_services(machine) ->
-  InternalApi = [
-    begin
-      {ok, Module} = cap_util:parse_term(SpecStr),
-      
-      {list_to_atom(Name), Module}
-    end
-    || {Name, SpecStr}
-    <- cap_config:get("internal_api"), SpecStr /= ""],
+  InternalApi = cap_config:get(internal_api),
   
   supervisor:start_link({local, cap_primary_services}, cap_sup,
   {{one_for_one, 10, 3600},[
@@ -237,37 +168,32 @@ start_primary_services(machine) ->
 start_secondary_services() ->
   DaemonChildSpecs = [
     begin
-      {ok, {Module, Fun, Args}} = cap_util:parse_term(SpecStr),
-      
-      {list_to_atom(Name),
+      {Name,
           {Module, Fun, Args},
           permanent,
           brutal_kill,
           worker,
           [Module]}
     end
-    || {Name, SpecStr}
-    <- cap_config:get("daemons"), SpecStr /= ""],
+    || {Name, {Module, Fun, Args}}
+    <- cap_config:get(daemons)],
   
   EventHandlerSpecs = [
     begin
-      {ok, {Module, Args}} = cap_util:parse_term(SpecStr),
-      
-      {list_to_atom(Name),
+      {Name,
           {cap_event_sup, start_link, [cap_events, Module, Args]},
           permanent,
           brutal_kill,
           worker,
           [Module]}
     end
-    || {Name, SpecStr}
-    <- cap_config:get("event_handlers"), SpecStr /= ""],
+    || {Name, {Module, Args}}
+    <- cap_config:get(event_handlers)],
   
   supervisor:start_link({local, cap_secondary_services}, cap_sup,
     {{one_for_one, 10, 3600}, DaemonChildSpecs++EventHandlerSpecs}).
 
 stop() ->
-  catch net_kernel:stop(), 
   catch exit(whereis(cap_sup), normal).
 
 init(ChildSpecs) ->

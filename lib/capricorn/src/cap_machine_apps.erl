@@ -56,8 +56,8 @@ all(Node) ->
 
 %%% Initialize the server
 init([]) ->
-  Root   = cap_config:get("machine", "database", "var/run/capricorn"),
-  Recipe = cap_config:get("machine", "recipe", "macports"),
+  Root   = cap_config:get(machine, database, "var/run/capricorn"),
+  Recipe = cap_config:get(machine, recipe, "macports"),
   
   TablePath = filename:join([Root, "applications.db"]),
   {ok, Ref} = dets:open_file(cap_machine_apps, [{file, TablePath}, {keypos, 2}]),

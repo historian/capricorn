@@ -59,7 +59,7 @@ ensure_gems_are_present_for_app(App) ->
 %% @spec init(State) -> {ok, State}
 %% @doc Callback for initialize the cap_machine
 init([]) ->
-  Node = list_to_atom(cap_config:get("cluster", "node", "cluster")),
+  Node = cap_config:get(machine, cluster, cluster),
   KnowsCluster =
   case net_adm:ping(Node) of
   pong -> 
@@ -72,12 +72,7 @@ init([]) ->
     false
   end,
   
-  GemsPath = cap_config:get("capricorn", "gems_path", "/usr/lib/ruby/gems/1.8"),
-  
-  cap_config:register(fun
-  ("cluster",   "node")      -> ?MODULE:stop();
-  ("capricorn", "gems_path") -> ?MODULE:stop()
-  end, self()),
+  GemsPath = cap_config:get(machine, gems_path, "/usr/lib/ruby/gems/1.8"),
   
   InstalledGems = ets:new(gems, [set,private,{keypos,2}]),
   

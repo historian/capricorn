@@ -19,10 +19,10 @@
 -export([start/2, stop/1]).
 
 -spec start(_,[string()]) -> {'error','already_started' | {'app_would_not_start','sasl'}} | {'ok',pid()}.
-start(_Type, DefaultIniFiles) ->
-  IniFiles = get_ini_files(DefaultIniFiles),
+start(_Type, _) ->
+  NodeType = get_ini_node_type(),
   case start_apps([sasl]) of
-  ok              -> cap_sup:start_link(IniFiles);
+  ok              -> cap_sup:start_link(NodeType);
   {error, Reason} -> {error, Reason}
   end.
 
@@ -30,12 +30,12 @@ stop(_) ->
   cap_sup:stop(),
   ok.
 
--spec get_ini_files([string()]) -> [string()].
-get_ini_files(Default) ->
-  case init:get_argument(capricorn_ini) of
-  error          -> Default;
-  {ok, [[]]}     -> Default;
-  {ok, [Values]} -> Values
+-spec get_ini_node_type() -> machine | cluster .
+get_ini_node_type() ->
+  case init:get_argument(node_type) of
+  error          -> machine;
+  {ok, [[]]}     -> machine;
+  {ok, [[Type]]} -> list_to_atom(Type)
   end.
 
 start_apps([]) ->

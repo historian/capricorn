@@ -45,18 +45,12 @@ init([]) ->
   
   % just stop if one of the config settings change. capricorn_server_sup
   % will restart us and then we will pick up the new settings.
-  ok = cap_config:register(fun
-  ("log", "file") ->
-    ?MODULE:stop();
-  ("log", "level") ->
-    ?MODULE:stop()
-  end),
   
-  Filename = cap_config:get("log", "file", "capricorn.log"),
-  Level = cap_config:get("log", "level", "info"),
+  Filename = cap_config:get(log, file, "var/log/capricorn.log"),
+  Level = cap_config:get(log, level, info),
   
   {ok, Fd} = file:open(Filename, [append]),
-  {ok, {Fd, level_integer(list_to_atom(Level))}}.
+  {ok, {Fd, level_integer(Level)}}.
 
 debug_on() ->
   get_level_integer() =< ?LEVEL_DEBUG.

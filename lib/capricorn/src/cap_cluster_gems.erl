@@ -63,7 +63,7 @@ start_link() ->
 
 
 init([]) ->
-  Root = cap_config:get("cluster", "database", "var/run/capricorn"),
+  Root = cap_config:get(cluster, database, "var/run/capricorn"),
   
   TablePath = filename:join([Root, "gems.db"]),
   {ok, Ref} = dets:open_file(cap_cluster_gems, [{file, TablePath}, {keypos, 2}]),
