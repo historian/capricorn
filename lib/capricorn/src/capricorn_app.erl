@@ -18,7 +18,7 @@
  
 -export([start/2, stop/1]).
 
--spec start(_,_) -> {'error','already_started' | {'ok',pid()}.
+-spec start(_,_) -> {'error','already_started'} | {'ok',pid()} .
 start(_Type, _) ->
   NodeType = get_ini_node_type(),
   cap_sup:start_link(NodeType).
