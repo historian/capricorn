@@ -3,8 +3,9 @@
 RUNNER_SCRIPT_DIR=$(cd ${0%/*} && pwd)
 
 RUNNER_BASE_DIR=${RUNNER_SCRIPT_DIR%/*}
+RUNNER_SRC_DIR=${RUNNER_SCRIPT_DIR%/*}
 RUNNER_ETC_DIR=$RUNNER_BASE_DIR/etc/capricorn
-RUNNER_LOG_DIR=$RUNNER_BASE_DIR/log
+RUNNER_LOG_DIR=$RUNNER_BASE_DIR/var/log
 PIPE_DIR=/tmp/$RUNNER_BASE_DIR/
 RUNNER_USER=
 
@@ -44,12 +45,12 @@ fi
 SCRIPT=`basename $0`
 
 # Parse out release and erts info
-START_ERL=`cat $RUNNER_BASE_DIR/releases/start_erl.data`
+START_ERL=`cat $RUNNER_SRC_DIR/releases/start_erl.data`
 ERTS_VSN=${START_ERL% *}
 APP_VSN=${START_ERL#* }
 
 # Add ERTS bin dir to our path
-ERTS_PATH=$RUNNER_BASE_DIR/erts-$ERTS_VSN/bin
+ERTS_PATH=$RUNNER_SRC_DIR/erts-$ERTS_VSN/bin
 
 # Setup command to control the node
 NODETOOL="$ERTS_PATH/escript $ERTS_PATH/nodetool $NAME_ARG $COOKIE_ARG"
@@ -70,7 +71,7 @@ case "$1" in
 
     stop)
         # Wait for the node to completely stop...
-        PID=`ps -ef|grep "$RUNNER_BASE_DIR/.*/[b]eam.smp|awk '{print $2}'"`
+        PID=`ps -ef|grep "$RUNNER_SRC_DIR/.*/[b]eam.smp|awk '{print $2}'"`
         $NODETOOL stop
         while `kill -0 $PID 2>/dev/null`;
         do
@@ -112,11 +113,11 @@ case "$1" in
             exit 1
         fi
         # Setup beam-required vars
-        ROOTDIR=$RUNNER_BASE_DIR
+        ROOTDIR=$RUNNER_SRC_DIR
         BINDIR=$ROOTDIR/erts-$ERTS_VSN/bin
         EMU=beam
         PROGNAME=`echo $0 | sed 's/.*\///'`
-        CMD="$BINDIR/erlexec -boot $RUNNER_BASE_DIR/releases/$APP_VSN/capricorn -embedded -config $RUNNER_ETC_DIR/app.config -args_file $RUNNER_ETC_DIR/$NODETYPE-vm.args -node_type $NODETYPE -- ${1+"$@"}"
+        CMD="$BINDIR/erlexec -boot $RUNNER_SRC_DIR/releases/$APP_VSN/capricorn -embedded -config $RUNNER_ETC_DIR/app.config -args_file $RUNNER_ETC_DIR/$NODETYPE-vm.args -node_type $NODETYPE -- ${1+"$@"}"
         export EMU
         export ROOTDIR
         export BINDIR
