@@ -73,7 +73,7 @@ start_server(NodeType) ->
       supervisor,
       [cap_sup]},
     {cap_secondary_services,
-      {cap_sup, start_secondary_services, []},
+      {cap_sup, start_secondary_services, [NodeType]},
       permanent,
       infinity,
       supervisor,
@@ -87,7 +87,7 @@ start_server(NodeType) ->
   {ok, Pid}.
 
 start_primary_services(cluster) ->
-  ExternalApi = cap_config:get(external_api),
+  ExternalApi = cap_config:get(cluster, api),
   
   supervisor:start_link({local, cap_primary_services}, cap_sup,
   {{one_for_one, 10, 3600},[
@@ -123,7 +123,7 @@ start_primary_services(cluster) ->
       [cap_external_api]}
   ]});
 start_primary_services(machine) ->
-  InternalApi = cap_config:get(internal_api),
+  InternalApi = cap_config:get(machine, api),
   
   supervisor:start_link({local, cap_primary_services}, cap_sup,
   {{one_for_one, 10, 3600},[
@@ -165,7 +165,7 @@ start_primary_services(machine) ->
       [cap_machine_apps_sup]}
   ]}).
 
-start_secondary_services() ->
+start_secondary_services(NodeType) ->
   DaemonChildSpecs = [
     begin
       {Name,
@@ -176,7 +176,7 @@ start_secondary_services() ->
           [Module]}
     end
     || {Name, {Module, Fun, Args}}
-    <- cap_config:get(daemons)],
+    <- cap_config:get(NodeType, daemons, [])],
   
   EventHandlerSpecs = [
     begin
@@ -188,7 +188,7 @@ start_secondary_services() ->
           [Module]}
     end
     || {Name, {Module, Args}}
-    <- cap_config:get(event_handlers)],
+    <- cap_config:get(NodeType, event_handlers, [])],
   
   supervisor:start_link({local, cap_secondary_services}, cap_sup,
     {{one_for_one, 10, 3600}, DaemonChildSpecs++EventHandlerSpecs}).
