@@ -9,6 +9,7 @@ release: build
 
 package: clean
 	@echo "Building release: $(REL_VSN)"
+	@git tag -a -m "Version $(REL_VSN)" $(REL_VSN)
 	@mkdir -p pkg/capricorn-$(REL_VSN)
 	@cp .gitignore   pkg/capricorn-$(REL_VSN)/.gitignore
 	@cp Makefile     pkg/capricorn-$(REL_VSN)/Makefile
