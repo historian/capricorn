@@ -2,56 +2,93 @@
 -include("capricorn.hrl").
 -behaviour(gen_server).
 
+
+
 -export([start_link/0]).
 -export([create/4, create/5, import/7, import/8, update/3, update/4, fupdate/1, fupdate/2, all/0, all/1]).
 -export([init/1, handle_call/3, handle_cast/2,
          handle_info/2, terminate/2, code_change/3]).
 
+
+
 -record(ctx, {recipe :: binary(),apps,scaffolder}).
+
+
 
 %%% Start the server
 start_link() ->
   gen_server:start_link({local, cap_machine_apps}, ?MODULE, [], []).
 
+
+
 -spec create(binary(),[binary(),...],atom(),[binary()]) -> ok.
+
 create(Name, Domains, Environment, Gems) ->
   gen_server:cast(cap_machine_apps, {create, Name, Domains, Environment, Gems}).
 
+
+
 -spec create(atom(), binary(),[binary(),...],atom(),[binary()]) -> ok.
+
 create(Node, Name, Domains, Environment, Gems) ->
   gen_server:cast({cap_machine_apps, Node}, {create, Name, Domains, Environment, Gems}).
 
+
+
 -spec import(binary(),[binary(),...],atom(),[binary()], binary(), binary(), binary()) -> 'ok'.
+
 import(Name, Domains, Environment, Gems, Root, Uid, Gid) ->
   gen_server:cast(cap_machine_apps, {import, Name, Domains, Environment, Gems, Root, Uid, Gid}).
 
+
+
 -spec import(atom(), binary(),[binary(),...],atom(),[binary()], binary(), binary(), binary()) -> 'ok'.
+
 import(Node, Name, Domains, Environment, Gems, Root, Uid, Gid) ->
   gen_server:cast({cap_machine_apps, Node}, {import, Name, Domains, Environment, Gems, Root, Uid, Gid}).
 
+
+
 -spec update(binary(), [binary(),...], [binary()]) -> ok.
+
 update(Id, Domains, Gems) ->
   gen_server:cast(cap_machine_apps, {update, Id, Domains, Gems}).
 
+
+
 -spec update(atom(), binary(), [binary(),...], [binary()]) -> ok.
+
 update(Node, Id, Domains, Gems) ->
   gen_server:cast({cap_machine_apps, Node}, {update, Id, Domains, Gems}).
 
+
+
 -spec fupdate(binary()) -> ok.
+
 fupdate(Id) ->
   gen_server:cast(cap_machine_apps, {fupdate, Id}).
 
+
+
 -spec fupdate(atom(), binary()) -> ok.
+
 fupdate(Node, Id) ->
   gen_server:cast({cap_machine_apps, Node}, {fupdate, Id}).
 
+
+
 -spec all() -> [application()].
+
 all() ->
   gen_server:call(cap_machine_apps, {all}).
 
+
+
 -spec all(atom()) -> [application()].
+
 all(Node) ->
   gen_server:call({cap_machine_apps, Node}, {all}).
+
 
 
 %%% Initialize the server
@@ -69,6 +106,7 @@ init([]) ->
   {ok, State1}.
 
 
+
 %%% Handle call messages
 handle_call({all}, _From, #ctx{apps=Apps}=State) ->
   All = dets:foldl(fun(App, Acc) -> [App|Acc] end, [], Apps),
@@ -76,6 +114,7 @@ handle_call({all}, _From, #ctx{apps=Apps}=State) ->
 
 handle_call(_Request, _From, State) ->
   {reply, ok, State}.
+
 
 
 %%% Handle cast messages
@@ -89,7 +128,7 @@ handle_cast({create, Name, [MainDomain|_]=Domains, Environment, Gems}, Ctx) ->
     required_gems=Gems},
   case valid_app(App) of
   true ->
-    R = it_create(App, Ctx),
+    R = do_create(App, Ctx),
     ?LOG_ERROR("app: ~p", [R]),
     {noreply, Ctx};
   {false, E} -> 
@@ -110,7 +149,7 @@ handle_cast({import, Name, [MainDomain|_]=Domains, Environment, Gems, Root, Uid,
     required_gems=Gems},
   case valid_app(App) of
   true ->
-    R = it_import(App, Ctx),
+    R = do_import(App, Ctx),
     ?LOG_ERROR("app: ~p", [R]),
     {noreply, Ctx};
   {false, E} -> 
@@ -119,11 +158,11 @@ handle_cast({import, Name, [MainDomain|_]=Domains, Environment, Gems, Root, Uid,
   end;
 
 handle_cast({update, Id, Domains, Gems}, Ctx) ->
-  it_update(Id, Domains, Gems, Ctx),
+  do_update(Id, Domains, Gems, Ctx),
   {noreply, Ctx};
 
 handle_cast({fupdate, Id}, Ctx) ->
-  it_fupdate(Id, Ctx),
+  do_fupdate(Id, Ctx),
   {noreply, Ctx};
 
 handle_cast(stop, Ctx) ->
@@ -140,14 +179,19 @@ handle_info({Port, {exit_status, _Status}}, #ctx{scaffolder=Port}=State) ->
 handle_info(_Info, State) ->
   {noreply, State}.
 
+
+
 %%% Before stopping the server
 terminate(_Reason, #ctx{apps=Apps}) ->
   dets:close(Apps),
   ok.
 
+
+
 %%% Code Changes
 code_change(_OldVsn, State, _Extra) ->
   {ok, State}.
+
 
 
 start_scaffolder(State) ->
@@ -156,14 +200,17 @@ start_scaffolder(State) ->
   Port = bertio:open_port({spawn_executable, Cmd}, [exit_status, Args]),
   State#ctx{scaffolder=Port}.
 
--spec it_update(binary(),[binary(),...],[binary(),...],#ctx{}) -> {'error',_}|{'ok',application()}.
-it_update(Id, Domains, Gems, Ctx) ->
+
+
+-spec do_update(binary(),[binary(),...],[binary(),...],#ctx{}) -> {'error',_}|{'ok',application()}.
+
+do_update(Id, Domains, Gems, Ctx) ->
   ?LOG_INFO("updating ~s => ~p", [Id, {Domains, Gems}]),
   try
-    {ok, App1} = it_lookup_app(Id, Ctx),
-    {ok, App2} = it_update_domains(App1, Domains, Ctx),
-    {ok, App3} = it_try_update_gems(App2, Gems,Ctx),
-    {ok, App4} = it_save_app(App3, Ctx),
+    {ok, App1} = do_lookup_app(Id, Ctx),
+    {ok, App2} = do_update_domains(App1, Domains, Ctx),
+    {ok, App3} = do_try_update_gems(App2, Gems,Ctx),
+    {ok, App4} = do_save_app(App3, Ctx),
     {ok, App4}
   catch
     error:E ->
@@ -171,13 +218,16 @@ it_update(Id, Domains, Gems, Ctx) ->
       {error, E}
   end.
 
--spec it_fupdate(binary(),#ctx{}) -> {'error',_}|{'ok',application()}.
-it_fupdate(Id, Ctx) ->
+
+
+-spec do_fupdate(binary(),#ctx{}) -> {'error',_}|{'ok',application()}.
+
+do_fupdate(Id, Ctx) ->
   ?LOG_INFO("force updating ~s", [Id]),
   try
-    {ok, App1} = it_lookup_app(Id, Ctx),
-    {ok, App2} = it_update_gems(App1, App1#application.required_gems, Ctx),
-    {ok, App3} = it_save_app(App2, Ctx),
+    {ok, App1} = do_lookup_app(Id, Ctx),
+    {ok, App2} = do_update_gems(App1, App1#application.required_gems, Ctx),
+    {ok, App3} = do_save_app(App2, Ctx),
     {ok, App3}
   catch
     error:E ->
@@ -185,20 +235,29 @@ it_fupdate(Id, Ctx) ->
       {error, E}
   end.
 
--spec it_lookup_app(binary(), #ctx{}) -> {ok, application()}.
-it_lookup_app(Id, #ctx{apps=Apps}) ->
+
+
+-spec do_lookup_app(binary(), #ctx{}) -> {ok, application()}.
+
+do_lookup_app(Id, #ctx{apps=Apps}) ->
   case dets:lookup(Apps, Id) of
   [] -> throw(not_found);
   [App] -> {ok, App}
   end.
 
--spec it_save_app(application(), #ctx{}) -> {ok, application()}.
-it_save_app(App, #ctx{apps=Apps}) ->
+
+
+-spec do_save_app(application(), #ctx{}) -> {ok, application()}.
+
+do_save_app(App, #ctx{apps=Apps}) ->
   dets:insert(Apps, App),
   {ok, App}.
 
--spec it_update_domains(application(), [binary(),...], #ctx{}) -> {ok, application()}.
-it_update_domains(App, Domains, #ctx{recipe=Recipe, scaffolder=P}) ->
+
+
+-spec do_update_domains(application(), [binary(),...], #ctx{}) -> {ok, application()}.
+
+do_update_domains(App, Domains, #ctx{recipe=Recipe, scaffolder=P}) ->
   if Domains /= App#application.domains ->
     bertio:send(P, {update, Recipe, App}),
     receive
@@ -208,23 +267,31 @@ it_update_domains(App, Domains, #ctx{recipe=Recipe, scaffolder=P}) ->
   true -> {ok, App}
   end.
 
--spec it_try_update_gems(application(), [binary(),...], #ctx{}) -> {ok, application()}.
-it_try_update_gems(App, Gems, Ctx) ->
+
+
+-spec do_try_update_gems(application(), [binary(),...], #ctx{}) -> {ok, application()}.
+
+do_try_update_gems(App, Gems, Ctx) ->
   if Gems /= App#application.required_gems ->
-    it_update_gems(App, Gems, Ctx);
+    do_update_gems(App, Gems, Ctx);
   true ->
     ?LOG_DEBUG("app gems are already updated", []),
     {ok, App}
   end.
 
--spec it_update_gems(application(), [binary(),...], #ctx{}) -> {ok, application()}.
-it_update_gems(App, Gems, _Ctx) ->
+
+
+-spec do_update_gems(application(), [binary(),...], #ctx{}) -> {ok, application()}.
+
+do_update_gems(App, Gems, _Ctx) ->
   ?LOG_INFO("updating app gems ~p => ~p", [App#application.required_gems, Gems]),
+  
   App1 = App#application{required_gems=Gems,installed_gems=[]},
-    case cap_machine:ensure_gems_are_present_for_app(App1) of
+  
+  case cap_machine:ensure_gems_are_present_for_app(App1) of
   {ok, App2} ->
     ?LOG_INFO("relinking app ~s", [App#application.id]),
-      case cap_application:update(App2) of
+    case cap_application:update(App2) of
     ok -> 
       ?LOG_DEBUG("relinked app ~s", [App#application.id]),
       {ok, App2};
@@ -237,8 +304,11 @@ it_update_gems(App, Gems, _Ctx) ->
     Error
   end.
 
--spec it_create(application(), #ctx{}) -> ok | any().
-it_create(App, #ctx{recipe=Recipe, apps=Apps, scaffolder=P}) ->
+
+
+-spec do_create(application(), #ctx{}) -> ok | any().
+
+do_create(App, #ctx{recipe=Recipe, apps=Apps, scaffolder=P}) ->
   bertio:send(P, {create, Recipe, App}),
   try bertio:recv(P, 25000) of
   {bert, {true, {User, Group, RootPath}}} ->
@@ -251,13 +321,19 @@ it_create(App, #ctx{recipe=Recipe, apps=Apps, scaffolder=P}) ->
     error:timeout -> {error, timeout}
   end.
 
--spec it_import(application(), #ctx{}) -> ok | any().
-it_import(App, #ctx{apps=Apps}) ->
+
+
+-spec do_import(application(), #ctx{}) -> ok | any().
+
+do_import(App, #ctx{apps=Apps}) ->
   dets:insert_new(Apps, App),
   cap_machine_apps_sup:start(App),
   ok.
 
+
+
 -spec valid_app(application()) -> 'true' | {'false',binary()}.
+
 valid_app(#application{node=No,name=N,domains=D,required_gems=G}) ->
   if
   (not is_atom(No)) orelse No /= node() ->
@@ -271,6 +347,8 @@ valid_app(#application{node=No,name=N,domains=D,required_gems=G}) ->
   true ->
     true
   end.
+
+
 
 update_apps_table(Table) ->
   cap_dets_updater:update(Table, fun
@@ -291,3 +369,5 @@ update_apps_table(Table) ->
       User, Group, Root, Installed, Required, {rvsn, 0}}}
   
   end).
+
+

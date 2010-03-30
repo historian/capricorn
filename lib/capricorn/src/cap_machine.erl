@@ -86,7 +86,7 @@ init([]) ->
 %% @spec handle_call(_Request, _From, State) -> {reply, Reply, State}
 %% @doc Callback for synchronous requests
 handle_call({ensure_gems_are_present_for_app, App}, _From, State) ->
-  R = it_ensure_gem_for_app(App, State),
+  R = do_ensure_gem_for_app(App, State),
   {reply, R, State};
 handle_call(_Request, _From, State) ->
   Reply = ok,
@@ -141,108 +141,140 @@ monitor_cluster(Node, Owner) ->
     gen_server:cast(Owner, {cluster_down, Node})
   end.
 
-it_ensure_gem_for_app(App, Ctx) ->
-  it_ensure_gem_for_app(App#application.required_gems, App, Ctx).
-it_ensure_gem_for_app([], App, #ctx{}) -> {ok, App};
-it_ensure_gem_for_app([Gem|Rest], App, #ctx{cluster=Cluster}=Ctx) ->
-  case cap_cluster_gems:lookup(Cluster, Gem) of
-  {ok, Spec} -> 
-    
-    ?LOG_DEBUG("found gem ~p", [Gem]),
-    GemIsInstalled = it_is_gem_installed(Spec, Ctx),
-    if GemIsInstalled == true ->
-      ?LOG_DEBUG("gem already installed ~p", [Gem]),
-      Deps = [Dep || Dep <- Spec#gem.deps],
-      it_install_gems(Deps, Ctx),
-      it_ensure_gem_for_app(Rest, App#application{
-        installed_gems=[Spec#gem.id|App#application.installed_gems]
-      }, Ctx);
-      
-    true ->
-      ?LOG_DEBUG("installing gem ~p", [Gem]),
-      case it_install_gem(Spec, Ctx) of
-      {ok, Spec1} ->
-        ?LOG_DEBUG("installed gem ~p", [Gem]),
-        it_ensure_gem_for_app(Rest, App#application{
-          installed_gems=[Spec1#gem.id|App#application.installed_gems]
-        }, Ctx);
-        
-      {error, E} ->
-        ?LOG_DEBUG("error ~p", [E]),
-        {error, E}
-      end
-    end;
-    
-  {error, not_found} -> 
-    ?LOG_DEBUG("error ~p", [{missing_gem, Gem}]),
-    {error, {missing_gem, Gem}}
+
+
+do_ensure_gem_for_app(App, Ctx) ->
+  RequiredGems = App#application.required_gems,
+  case do_install_gems(RequiredGems, Ctx) of
+  {ok, Installed} ->
+    {ok, App#application{
+      installed_gems = uniq_list(Installed)
+    }};
+  Error -> Error
   end.
 
-it_install_gem(#gem{deps=Deps}=Spec, #ctx{cluster=Cluster}=Ctx) ->
-  case it_install_gems(Deps, Ctx) of
-  ok ->
-    ?LOG_DEBUG("pull gem ~s", [(Spec#gem.id)#gem_id.name]),
-    case cap_cluster_gems:pull(Cluster, Spec) of
-    {ok, Data} ->
-      ?LOG_DEBUG("staging gem ~s", [(Spec#gem.id)#gem_id.name]),
-      case file:write_file("/tmp/capricorn-gem.gem", Data) of
-      ok ->
-        ?LOG_INFO("installing gem ~s", [(Spec#gem.id)#gem_id.name]),
-        case gem_exec("install --no-rdoc --no-ri --local --no-update-sources /tmp/capricorn-gem.gem") of
-        "Successfully"++_ -> {ok, Spec};
-        Error ->
-          ?LOG_DEBUG("error ~p", [Error]),
-          {error, {install_failed, (Spec#gem.id)#gem_id.name}}
-        end;
-      Error -> 
-        ?LOG_DEBUG("error ~p", [Error]),
-        Error
-      end;
-    {error, E} -> 
-      ?LOG_DEBUG("error ~p", [E]),
-      {error, E}
-    end;
-  {error, E} ->
-    ?LOG_DEBUG("error ~p", [E]),
-    {error, E}
-  end.
 
-it_install_gems([], _Ctx) -> ok;
-it_install_gems([{DepName,_}=Dep|Rest], #ctx{cluster=Cluster}=Ctx) ->
+
+do_install_gems(Gems, Ctx) ->
+  lists:foldl(fun
+  (Gem, {ok, Acc}) ->
+    case do_install_gem(Gem, Ctx) of
+    {ok, Installed} ->
+      {ok, Acc ++ Installed};
+    Error -> Error
+    end;
+  (_, Error) ->
+    Error
+  end, {ok, []}, Gems).
+
+do_install_gem(#gem{}=Spec, Ctx) ->
+  do_install_gem(deps, Spec, Ctx);
+
+do_install_gem(NameOrDep, Ctx) ->
+  do_install_gem(lookup, NameOrDep, Ctx).
+
+do_install_gem(lookup, {DepName,_}=Dep, #ctx{cluster=Cluster}=Ctx) ->
   case cap_cluster_gems:lookup(Cluster, Dep) of
   {ok, Spec} ->
     ?LOG_DEBUG("found gem ~s", [DepName]),
-    case it_is_gem_installed(Spec, Ctx) of
-    true  ->
-      ?LOG_DEBUG("allready installed gem ~s", [DepName]),
-      Deps = [Dep1 || Dep1 <- Spec#gem.deps],
-      it_install_gems(Deps++Rest, Ctx);
-    false ->
-      case it_install_gem(Spec, Ctx) of
-      {ok, _Spec1} ->
-        it_install_gems(Rest, Ctx);
-      {error, E} -> 
-        ?LOG_DEBUG("error ~p", [E]),
-        {error, E}
-      end
+    do_install_gem(deps, Spec, Ctx);
+    
+  {error, not_found} ->
+    ?LOG_DEBUG("error ~p", [{missing_gem, DepName}]),
+    {error, {missing_gem, Dep}}
+  end;
+
+do_install_gem(lookup, GemName, #ctx{cluster=Cluster}=Ctx) ->
+  case cap_cluster_gems:lookup(Cluster, GemName) of
+  {ok, Spec} ->
+    ?LOG_DEBUG("found gem ~s", [GemName]),
+    do_install_gem(deps, Spec, Ctx);
+    
+  {error, not_found} ->
+    ?LOG_DEBUG("error ~p", [{missing_gem, GemName}]),
+    {error, {missing_gem, GemName}}
+  end;
+
+do_install_gem(deps, #gem{deps=Deps}=Spec, Ctx) ->
+  Installed = lists:foldl(fun
+  (Dep, Acc) when is_list(Acc) ->
+    case do_install_gem(lookup, Dep, Ctx) of
+    {ok, CurrentInstalled} ->
+      Acc ++ CurrentInstalled;
+    Error -> Error
     end;
-  {error, not_found} -> {error, {missing_gem, Dep}}
+  (_, Error) ->
+    Error
+  end, [], Deps),
+  
+  case Installed of
+  Installed when is_list(Installed) ->
+    case do_install_gem(check, Spec, Ctx) of
+    {ok, Installed2} ->
+      {ok, Installed ++ Installed2};
+    Error -> Error
+    end;
+    
+  Error ->
+    ?LOG_DEBUG("error ~p", [Error]),
+    Error
+  end;
+
+do_install_gem(check, #gem{}=Spec, Ctx) ->
+  GemName = (Spec#gem.id)#gem_id.name,
+  case do_is_gem_installed(Spec, Ctx) of
+  true  ->
+    ?LOG_DEBUG("allready installed gem ~s", [GemName]),
+    {ok, [Spec#gem.id]};
+  false ->
+    do_install_gem(pull, Spec, Ctx);
+  {error, E} ->
+    ?LOG_DEBUG("error ~p", [E]),
+    {error, E}
+  end;
+
+do_install_gem(pull, #gem{}=Spec, #ctx{cluster=Cluster}=Ctx) ->
+  GemName = (Spec#gem.id)#gem_id.name,
+  ?LOG_DEBUG("pull gem ~s", [GemName]),
+  case cap_cluster_gems:pull(Cluster, Spec) of
+  {ok, Data} ->
+    
+    ?LOG_DEBUG("staging gem ~s", [GemName]),
+    case file:write_file("/tmp/capricorn-gem.gem", Data) of
+    ok ->
+      
+      do_install_gem(install, Spec, Ctx);
+      
+    Error -> 
+      ?LOG_DEBUG("error ~p", [Error]),
+      Error
+    end;
+    
+  Error -> 
+    ?LOG_DEBUG("error ~p", [Error]),
+    Error
+  end;
+
+do_install_gem(install, #gem{}=Spec, Ctx) ->
+  GemName = (Spec#gem.id)#gem_id.name,
+  Cmd = "install --no-rdoc --no-ri --local --no-update-sources "++
+        "/tmp/capricorn-gem.gem",
+  
+  ?LOG_INFO("installing gem ~s", [GemName]),
+  
+  case gem_exec(Cmd) of
+  "Successfully"++_ ->
+    {ok, [Spec#gem.id]};
+    
+  Error ->
+    ?LOG_DEBUG("error ~p", [Error]),
+    {error, {install_failed, GemName}}
   end.
 
-% it_find_deep_deps(#gem{deps=Deps}=Spec, Acc1, Ctx) ->
-%   Acc3 = lists:foldl(fun(Dep, Acc2) ->
-%     it_find_deep_deps(Dep, Acc2, Ctx)
-%   end, Acc1, Deps),
-%   [Spec|Acc3];
-% it_find_deep_deps(#dependency{}=Dep, Acc1, #ctx{cluster=Cluster}=Ctx) ->
-%   case cap_cluster_gems:lookup(Cluster, Dep) of
-%   {ok, Spec} -> it_find_deep_deps(Spec, Acc1, Ctx);
-%   {error, not_found} -> {error, {missing_gem, Dep}}
-%   end.
 
 
--spec it_is_gem_installed(gem_spec(), #ctx{}) -> true | false | {error, badarg} .
-it_is_gem_installed(#gem{}=Gem, #ctx{installed_gems=T, gems_path=GemsPath}) ->
+-spec do_is_gem_installed(gem_spec(), #ctx{}) -> true | false | {error, badarg} .
+do_is_gem_installed(#gem{}=Gem, #ctx{installed_gems=T, gems_path=GemsPath}) ->
   case ets:lookup(T, Gem#gem.id) of
   [] ->
     Name1    = (Gem#gem.id)#gem_id.name,
@@ -290,3 +322,15 @@ gem_exe() ->
       GemPath
     end
   end.
+
+
+
+uniq_list(List) ->
+  lists:foldl(fun(Elem, Acc) ->
+    case lists:member(Elem, Acc) of
+    true  -> Acc;
+    false -> Acc ++ [Elem]
+    end
+  end, [], List).
+
+

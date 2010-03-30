@@ -85,7 +85,7 @@ handle_call({push, Data}, _From, #state{stage_path=Stage,tmp_id=TmpId}=State) ->
   StageGemPath = filename:join([Stage, integer_to_list(TmpId) ++ ".gem"]),
   R = file:write_file(StageGemPath, Data),
   ?LOG_INFO("G: ~p ~p", [StageGemPath, R]),
-  case it_push(StageGemPath, State) of
+  case do_push(StageGemPath, State) of
   {ok, Missing} ->
     {reply, {ok, Missing}, State#state{tmp_id=TmpId+1}};
   {error, Reason} -> 
@@ -113,13 +113,13 @@ handle_call({all}, _From, #state{table=T}=State) ->
   {reply, {ok, lists:usort(All)}, State};
 
 handle_call({lookup, {_,_}=Dep}, _From, State) ->
-  case it_find_last_consistent_gem(Dep, State) of
+  case do_find_last_consistent_gem(Dep, State) of
   not_found -> {reply, {error, not_found}, State};
   GemSpec   -> {reply, {ok,    GemSpec},   State}
   end;
 
 handle_call({lookup, GemName}, _From, State) ->
-  case it_find_last_consistent_gem(GemName, State) of
+  case do_find_last_consistent_gem(GemName, State) of
   not_found -> {reply, {error, not_found}, State};
   GemSpec   -> {reply, {ok,    GemSpec},   State}
   end;
@@ -130,7 +130,7 @@ handle_call(Msg, _From, State) ->
 
 
 handle_cast(check, State) ->
-  it_check(State),
+  do_check(State),
   {noreply, State};
 
 handle_cast(stop, State) ->
@@ -167,8 +167,8 @@ start_spec_reader(State) ->
   State#state{spec_reader=SpecReader}.
 
 
--spec it_find_last_consistent_gem(dependency() | binary(), state()) -> not_found | gem_spec() .
-it_find_last_consistent_gem({Name, Reqs}, #state{table=T}) ->
+-spec do_find_last_consistent_gem(dependency() | binary(), state()) -> not_found | gem_spec() .
+do_find_last_consistent_gem({Name, Reqs}, #state{table=T}) ->
   dets:foldl(fun
   (#gem{missing=[]}=Spec, #gem{}=Acc) ->
     if      ((Spec#gem.id)#gem_id.name == Name)
@@ -192,7 +192,7 @@ it_find_last_consistent_gem({Name, Reqs}, #state{table=T}) ->
   (#gem{missing=_}, Acc) -> Acc
   end, not_found, T);
 
-it_find_last_consistent_gem(Gem, #state{table=T}) ->
+do_find_last_consistent_gem(Gem, #state{table=T}) ->
   dets:foldl(fun
   (#gem{missing=[]}=Spec, #gem{}=Acc) ->
     if      ((Spec#gem.id)#gem_id.name == Gem)
@@ -211,7 +211,7 @@ it_find_last_consistent_gem(Gem, #state{table=T}) ->
   end, not_found, T).
 
 
-% it_find_last_gem(Gem, #state{table=T}) ->
+% do_find_last_gem(Gem, #state{table=T}) ->
 %   dets:foldl(fun
 %   (#gem{}=Spec, #gem{}=Acc) ->
 %     if      ((Spec#gem.id)#gem_id.name == Gem)
@@ -223,9 +223,9 @@ it_find_last_consistent_gem(Gem, #state{table=T}) ->
 %   end, not_found, T).
 
 
--spec it_push(string() | binary(), state()) -> {ok, [dependency()]} |  {error, already_present} | {error, timeout | {not_found} | {gem_error, binary()}} .
-it_push(StageGemPath, #state{table=T}=Ctx) ->
-  case it_spec(StageGemPath, Ctx) of
+-spec do_push(string() | binary(), state()) -> {ok, [dependency()]} |  {error, already_present} | {error, timeout | {not_found} | {gem_error, binary()}} .
+do_push(StageGemPath, #state{table=T}=Ctx) ->
+  case do_spec(StageGemPath, Ctx) of
   #gem{id=Id,deps=Deps}=Spec ->
     case dets:member(T,Id) of
     false ->
@@ -245,10 +245,10 @@ it_push(StageGemPath, #state{table=T}=Ctx) ->
   end.
 
 
--spec it_spec(string() | binary(), state()) -> gem_spec() | {error, timeout | {not_found} | {gem_error, binary()}} .
-it_spec(GemPath, Ctx) when is_list(GemPath) ->
-  it_spec(list_to_binary(GemPath),Ctx);
-it_spec(GemPath, #state{spec_reader=P}) ->
+-spec do_spec(string() | binary(), state()) -> gem_spec() | {error, timeout | {not_found} | {gem_error, binary()}} .
+do_spec(GemPath, Ctx) when is_list(GemPath) ->
+  do_spec(list_to_binary(GemPath),Ctx);
+do_spec(GemPath, #state{spec_reader=P}) ->
   bertio:send(P, GemPath),
   try bertio:recv(P) of
     {bert, {_, _, _}=Gem} -> normalize_gem(Gem);
@@ -257,8 +257,8 @@ it_spec(GemPath, #state{spec_reader=P}) ->
     error:timeout -> {error, timeout}
   end.
 
--spec it_check(state()) -> ok .
-it_check(#state{table=T}=Ctx) ->
+-spec do_check(state()) -> ok .
+do_check(#state{table=T}=Ctx) ->
   dets:foldl(fun(Spec, Acc) ->
     mark_gem_as_found(Spec, [], Ctx),
     Acc

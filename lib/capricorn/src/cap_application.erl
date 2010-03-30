@@ -161,8 +161,9 @@ reconfigure_app(App) ->
   write_milkshake_gem_config(App).
 
 write_milkshake_gem_config(#application{installed_gems=[]})        -> {ok, "gems: {}\n"};
-write_milkshake_gem_config(#application{installed_gems=Gems}=App)  ->
+write_milkshake_gem_config(App) ->
   Header = "gems:\n",
+  Gems = select_required_installed_gems(App),
   {ok, Config} = write_milkshake_gem_config(Header, Gems),
   ?LOG_DEBUG("config: ~s", [Config]),
   ?LOG_DEBUG("writing milkshake.yml to ~s", [get_app_root(App, 'host/config/milkshake.yml')]),
@@ -170,7 +171,8 @@ write_milkshake_gem_config(#application{installed_gems=Gems}=App)  ->
   app_chown(App, 'host/config/milkshake.yml').
 
 write_milkshake_gem_config(Config, []) -> {ok, Config};
-write_milkshake_gem_config(Config, [#gem_id{name=Name,version=Version}|Other]) ->
+write_milkshake_gem_config(Config, [#gem_id{}=Id|Other]) ->
+  #gem_id{name=Name,version=Version} = Id,
   case Name of
   undefined -> % skip
     write_milkshake_gem_config(Config, Other);
@@ -183,6 +185,16 @@ write_milkshake_gem_config(Config, [#gem_id{name=Name,version=Version}|Other]) -
     end,
     write_milkshake_gem_config(Config2, Other)
   end.
+
+select_required_installed_gems(App) ->
+  #application{installed_gems=Installed, required_gems=Required} = App,
+  lists:foldl(fun
+  (#gem_id{name=Name}=Id, Acc) ->
+    case lists:member(Name, Required) of
+    true  -> Acc ++ [Id];
+    false -> Acc
+    end
+  end, [], Installed).
 
 get_app_root(App, Sub) when is_atom(Sub) ->
   get_app_root(App, [atom_to_list(Sub)]);
