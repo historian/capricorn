@@ -255,7 +255,7 @@ do_install_gem(pull, #gem{}=Spec, #ctx{cluster=Cluster}=Ctx) ->
     Error
   end;
 
-do_install_gem(install, #gem{}=Spec, Ctx) ->
+do_install_gem(install, #gem{}=Spec, _Ctx) ->
   GemName = (Spec#gem.id)#gem_id.name,
   Cmd = "install --no-rdoc --no-ri --local --no-update-sources "++
         "/tmp/capricorn-gem.gem",

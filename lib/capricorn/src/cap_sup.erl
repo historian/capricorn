@@ -18,7 +18,7 @@
 %% operation & maintenance api
 % -export([start_link/0]).
 -export([start_link/1,stop/0,
-         start_primary_services/1,start_secondary_services/0,
+         start_primary_services/1,start_secondary_services/1,
          restart_core_server/0]).
 
 %% supervisor callback
