@@ -10,7 +10,8 @@ ENV["RAILS_ENV"] = (ARGV[0] || "development").dup
 
 require File.expand_path('./config/environment')
 
-Helpers.send(:booted)
+ErlangHelpers.setup
+ErlangHelpers.send(:booted)
 
 Erlang do |cmd|
   begin

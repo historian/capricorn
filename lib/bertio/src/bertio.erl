@@ -4,7 +4,7 @@
 -export([send/2, recv/1, recv/2]).
 
 open_port(PortName, PortOptions) ->
-  erlang:open_port(PortName, [{packet, 4}, use_stdio, binary|PortOptions]).
+  erlang:open_port(PortName, [{packet, 4}, nouse_stdio, binary|PortOptions]).
 
 send(Port, BERT) ->
   BERP = bert:encode(BERT),
