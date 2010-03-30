@@ -223,17 +223,20 @@ do_update(Id, Domains, Gems, Ctx) ->
 -spec do_fupdate(binary(),#ctx{}) -> {'error',_}|{'ok',application()}.
 
 do_fupdate(Id, Ctx) ->
-  ?LOG_INFO("force updating ~s", [Id]),
-  try
-    {ok, App1} = do_lookup_app(Id, Ctx),
-    {ok, App2} = do_update_gems(App1, App1#application.required_gems, Ctx),
-    {ok, App3} = do_save_app(App2, Ctx),
-    {ok, App3}
-  catch
-    error:E ->
-      ?LOG_ERROR("error while updating app ~s: ~p", [Id, E]),
-      {error, E}
-  end.
+  ?LOG_INFO("queued update for ~s", [Id]),
+  emq:push(machine_queue, {fupdate, Id}, fun() ->
+    ?LOG_INFO("force updating ~s", [Id]),
+    try
+      {ok, App1} = do_lookup_app(Id, Ctx),
+      {ok, App2} = do_update_gems(App1, App1#application.required_gems, Ctx),
+      {ok, App3} = do_save_app(App2, Ctx),
+      {ok, App3}
+    catch
+      error:E ->
+        ?LOG_ERROR("error while updating app ~s: ~p", [Id, E]),
+        {error, E}
+    end
+  end).
 
 
 

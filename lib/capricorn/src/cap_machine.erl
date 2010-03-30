@@ -76,6 +76,8 @@ init([]) ->
   
   InstalledGems = ets:new(gems, [set,private,{keypos,2}]),
   
+  emq:new(machine_queue, [{size, 1}]),
+  
   {ok, #ctx{
     knows_cluster  = KnowsCluster,
     cluster        = Node,
