@@ -176,7 +176,9 @@ restart_runner(#state{runner=undefined} = State) ->
     try bertio:recv(Port, 60000) of
     {bert, booted} -> 
       erlang:port_connect(Port, Self),
-      Self ! {booted, Port}
+      Self ! {booted, Port};
+    {Port, {exit_status, _Status}} ->
+      Self ! {timeout}
     catch
     error:timeout ->
       Self ! {timeout}
