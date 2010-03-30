@@ -236,7 +236,14 @@ do_push(StageGemPath, #state{table=T}=Ctx) ->
         GemPath = gem_path(Spec1, Ctx),
         file:rename(StageGemPath, GemPath),
         mark_gem_as_found(Id, Missing, Ctx),
-        {ok, Missing};
+        case Missing of
+        [] ->
+          GemName = Id#gem_id.name,
+          [cap_machine_apps:update_gem(Node, GemName) || Node <- nodes()],
+          {ok, Missing};
+        Missing ->
+          {ok, Missing}
+        end;
       false -> {error, already_present}
       end;
     _ -> {error, already_present}

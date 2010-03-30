@@ -5,7 +5,7 @@
 
 
 -export([start_link/0]).
--export([create/4, create/5, import/7, import/8, update/3, update/4, fupdate/1, fupdate/2, all/0, all/1]).
+-export([create/4, create/5, import/7, import/8, update/3, update/4, fupdate/1, fupdate/2, update_gem/1, update_gem/2, all/0, all/1]).
 -export([init/1, handle_call/3, handle_cast/2,
          handle_info/2, terminate/2, code_change/3]).
 
@@ -74,6 +74,20 @@ fupdate(Id) ->
 
 fupdate(Node, Id) ->
   gen_server:cast({cap_machine_apps, Node}, {fupdate, Id}).
+
+
+
+-spec update_gem(binary()) -> ok.
+
+update_gem(Name) ->
+  gen_server:cast(cap_machine_apps, {update_gem, Name}).
+
+
+
+-spec update_gem(atom(), binary()) -> ok.
+
+update_gem(Node, Name) ->
+  gen_server:cast({cap_machine_apps, Node}, {update_gem, Name}).
 
 
 
@@ -163,6 +177,27 @@ handle_cast({update, Id, Domains, Gems}, Ctx) ->
 
 handle_cast({fupdate, Id}, Ctx) ->
   do_fupdate(Id, Ctx),
+  {noreply, Ctx};
+
+handle_cast({update_gem, GemName}, Ctx) ->
+  #ctx{ apps=Apps } = Ctx,
+  
+  dets:foldl(fun
+  (App, _) ->
+    Included = lists:foldl(fun
+    (#gem_id{name = Name}, _) when Name == GemName ->
+      true;
+    (_, Acc) ->
+      Acc
+    end, false, App#application.installed_gems),
+    
+    case Included of
+    true ->
+      do_fupdate(App#application.id, Ctx);
+    false ->
+      ignore
+    end
+  end, [], Apps),
   {noreply, Ctx};
 
 handle_cast(stop, Ctx) ->
