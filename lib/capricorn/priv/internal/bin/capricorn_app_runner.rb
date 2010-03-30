@@ -10,6 +10,8 @@ ENV["RAILS_ENV"] = (ARGV[0] || "development").dup
 
 require File.expand_path('./config/environment')
 
+Helpers.send(:booted)
+
 Erlang do |cmd|
   begin
     if defined?(LalalaCapricorn) and defined?(LalalaCapricorn::Services)

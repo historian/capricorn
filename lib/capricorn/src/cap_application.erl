@@ -142,17 +142,55 @@ code_change(_OldVsn, State, _Extra) ->
   {ok, State}.
 
 
-restart_runner(#state{runner=undefined, restarts=Restarts,
-  app=#application{root_path=Root, environment=Environment, www_user=User}}=State) ->
-  AppRoot = filename:join([binary_to_list(Root), "host"]),
-  Ruby  = os:find_executable("ruby"),
-  Args = {args, [
-    filename:join([code:priv_dir(capricorn), "internal/bin/capricorn_app_runner.rb"]),
-    atom_to_list(Environment),
-    binary_to_list(User)
-  ]},
-  Port = bertio:open_port({spawn_executable, Ruby}, [exit_status, {cd, AppRoot}, Args]),
-  State#state{runner=Port, restarts=Restarts + 1};
+restart_runner(#state{runner=undefined} = State) ->
+  #state{
+    restarts=Restarts,
+    app=#application{
+      id=AppId,
+      root_path=Root,
+      environment=Environment,
+      www_user=User
+    }
+  } = State,
+  
+  Self = self(),
+  
+  emq:push(machine_queue, {boot, AppId}, fun() ->
+  
+    AppRoot = filename:join([binary_to_list(Root), "host"]),
+    Ruby  = os:find_executable("ruby"),
+    Args = {args, [
+      filename:join([
+        code:priv_dir(capricorn),
+        "internal/bin/capricorn_app_runner.rb"
+      ]),
+      atom_to_list(Environment),
+      binary_to_list(User)
+    ]},
+    Port = bertio:open_port({spawn_executable, Ruby}, [
+      exit_status,
+      {cd, AppRoot},
+      Args
+    ]),
+    
+    try bertio:recv(Port, 60000) of
+    {bert, booted} -> 
+      erlang:port_connect(Port, Self),
+      Self ! {booted, Port}
+    catch
+    error:timeout ->
+      Self ! {timeout}
+    end
+  end),
+  
+  receive
+  {booted, Port} ->
+    State#state{runner=Port, restarts=Restarts + 1};
+  {timeout} ->
+    State#state{runner=undefined, restarts=Restarts + 1}
+  after 15 * 60000 ->
+    State#state{runner=undefined, restarts=Restarts + 1}
+  end;
 restart_runner(#state{runner=Port}=State) when is_port(Port) ->
   catch bertio:port_close(Port),
   restart_runner(State#state{runner=undefined}).

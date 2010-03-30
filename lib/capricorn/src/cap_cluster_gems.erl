@@ -211,18 +211,6 @@ do_find_last_consistent_gem(Gem, #state{table=T}) ->
   end, not_found, T).
 
 
-% do_find_last_gem(Gem, #state{table=T}) ->
-%   dets:foldl(fun
-%   (#gem{}=Spec, #gem{}=Acc) ->
-%     if      ((Spec#gem.id)#gem_id.name == Gem)
-%     andalso ((Spec#gem.id)#gem_id.version > (Acc#gem.id)#gem_id.version) ->
-%       Spec;
-%     true ->
-%       Acc
-%     end
-%   end, not_found, T).
-
-
 -spec do_push(string() | binary(), state()) -> {ok, [dependency()]} |  {error, already_present} | {error, timeout | {not_found} | {gem_error, binary()}} .
 do_push(StageGemPath, #state{table=T}=Ctx) ->
   case do_spec(StageGemPath, Ctx) of
