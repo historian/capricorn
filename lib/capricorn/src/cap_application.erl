@@ -62,9 +62,10 @@ get_proc_name({Node, Id}) ->
 init([#application{}=App]) ->
   
   State  = #state{app=App},
-  State1 = restart_runner(State),
   
-  {ok, State1}.
+  gen_server:cast(self(), {restart}),
+  
+  {ok, State}.
  
 %%% Handle call messages
 handle_call({service, M,F,A}, _From, #state{runner=R}=State) ->
@@ -177,16 +178,19 @@ restart_runner(#state{runner=undefined} = State) ->
     {bert, booted} -> 
       erlang:port_connect(Port, Self),
       Self ! {booted, Port};
-    {Port, {exit_status, _Status}} ->
+    {Port, {exit_status, Status}} ->
+      ?LOG_ERROR("boot error in ~p : ~p", [AppId, {exit_status, Status}]),
       Self ! {timeout}
     catch
     error:timeout ->
+      ?LOG_ERROR("boot error in ~p : ~p", [AppId, timeout]),
       Self ! {timeout}
     end
   end),
   
   receive
   {booted, Port} ->
+    ?LOG_INFO("booted ~p", [AppId]),
     State#state{runner=Port, restarts=Restarts + 1};
   {timeout} ->
     State#state{runner=undefined, restarts=Restarts + 1}
