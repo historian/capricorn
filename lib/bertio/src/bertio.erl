@@ -16,7 +16,9 @@ recv(Port) ->
 recv(Port, Timeout) ->
   receive
   {Port, {data, BERP}} ->
-    {bert, bert:decode(BERP)}
+    {bert, bert:decode(BERP)};
+  {Port, Other} ->
+    {Port, Other}
   after Timeout ->
     erlang:error(timeout)
   end.
