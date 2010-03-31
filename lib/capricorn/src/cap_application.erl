@@ -81,11 +81,8 @@ handle_call({update, App}, _From, State) ->
   case reconfigure_app(App) of
   ok ->
     ?LOG_DEBUG("reconfigured app ~s", [App#application.id]),
-    os:cmd("touch "++get_app_root(App, 'host/tmp/relink.txt')),
-    os:cmd("touch "++get_app_root(App, 'host/tmp/restart.txt')),
-    app_chown(App, 'host/tmp/relink.txt'),
-    app_chown(App, 'host/tmp/restart.txt'),
-    {reply, ok, restart_runner(State#state{restarts=0,app=App})};
+    gen_server:cast(self(), {relink}),
+    {reply, ok, State#state{app=App}};
   Error ->
     ?LOG_ERROR("Error while relinking app with new gems: ~p", [Error]),
     {reply, ok, State}

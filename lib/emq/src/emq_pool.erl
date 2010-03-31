@@ -158,9 +158,9 @@ do_init_worker(Pool, Owner) ->
   stop ->
     erlang:exit(normal);
   {'DOWN', _, process, Pool, _} ->
-    erlang:exit(queue_down)
+    erlang:exit(normal)
   after 300000 ->
-    erlang:exit(timeout)
+    erlang:exit(normal)
   end.
 
 do_loop_worker(Pool, Owner) ->
@@ -168,11 +168,11 @@ do_loop_worker(Pool, Owner) ->
   stop ->
     erlang:exit(normal);
   {'DOWN', _, process, Pool, _} ->
-    erlang:exit(queue_down);
+    erlang:exit(normal);
   {exec, Fun, Ctx1} ->
     Ctx2 = erlang:apply(Fun, [Ctx1]),
     Pool ! {done, self(), Ctx2},
     do_loop_worker(Pool, Owner)
   after 300000 ->
-    erlang:exit(timeout)
+    erlang:exit(normal)
   end.
