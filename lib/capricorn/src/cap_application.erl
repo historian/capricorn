@@ -18,7 +18,7 @@ restart(App) ->
 
 update(App) ->
   {ok, Appname} = get_proc_name(App),
-  gen_server:call(Appname, {update, App}).
+  gen_server:call(Appname, {update, App}, 15 * 60000).
 
 relink(App) ->
   {ok, Appname} = get_proc_name(App),
