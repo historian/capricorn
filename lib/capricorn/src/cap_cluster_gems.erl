@@ -64,20 +64,20 @@ start_link() ->
 
 init([]) ->
   Root = cap_config:get(cluster, database, "var/run/capricorn"),
-  
+
   TablePath = filename:join([Root, "gems.db"]),
   {ok, Ref} = dets:open_file(cap_cluster_gems, [{file, TablePath}, {keypos, 2}]),
   update_gems_table(Ref),
-  
+
   GemPath = filename:join([Root, "gems"]),
   os:cmd("mkdir -p "++GemPath),
-  
+
   StagePath = filename:join([Root, "stage"]),
   os:cmd("mkdir -p "++StagePath),
-  
+
   State  = #state{table=Ref, gem_path=GemPath, stage_path=StagePath},
   State1 = start_spec_reader(State),
-  
+
   {ok, State1}.
 
 
@@ -88,7 +88,7 @@ handle_call({push, Data}, _From, #state{stage_path=Stage,tmp_id=TmpId}=State) ->
   case do_push(StageGemPath, State) of
   {ok, Missing} ->
     {reply, {ok, Missing}, State#state{tmp_id=TmpId+1}};
-  {error, Reason} -> 
+  {error, Reason} ->
     file:delete(StageGemPath),
     {reply, {error, Reason}, State#state{tmp_id=TmpId+1}}
   end;
@@ -226,8 +226,8 @@ do_push(StageGemPath, #state{table=T}=Ctx) ->
         mark_gem_as_found(Id, Missing, Ctx),
         case Missing of
         [] ->
-          GemName = Id#gem_id.name,
-          [cap_machine_apps:update_gem(Node, GemName) || Node <- nodes()],
+          % GemName = Id#gem_id.name,
+          % [cap_machine_apps:update_gem(Node, GemName) || Node <- nodes()],
           {ok, Missing};
         Missing ->
           {ok, Missing}
@@ -313,7 +313,7 @@ find_dependencies(Deps, Ctx) ->
 find_dependencies([], Found, Missing, _Ctx) -> {Found, lists:usort(Missing)};
 find_dependencies([Dep|Rest], Found, Missing, Ctx) ->
   case find_dependency(Dep, Ctx) of
-  undefined -> 
+  undefined ->
     find_dependencies(Rest, Found, [Dep|Missing], Ctx);
   #gem{missing=M}=Spec ->
     find_dependencies(Rest, [Spec|Found], M++Missing, Ctx)
@@ -357,7 +357,7 @@ normalize_gem({Name, Version, Deps1}) ->
     end || Req1 <- Reqs1],
     {DepName, Reqs2}
   end || Dep1 <- Deps1],
-  
+
   #gem{
     id=#gem_id{
       name=Name,
@@ -369,7 +369,7 @@ normalize_gem({Name, Version, Deps1}) ->
 normalize_gem_version({Parts}) when is_list(Parts) ->
   {Parts};
 normalize_gem_version(Version) when is_binary(Version) ->
-  normalize_gem_version(binary_to_list(Version)); 
+  normalize_gem_version(binary_to_list(Version));
 normalize_gem_version(Version) ->
   {[case string:to_integer(Part) of
     {I,[]} when is_integer(I) -> I;
@@ -381,7 +381,7 @@ update_gems_table(Table) ->
   cap_dets_updater:update(Table, fun
   ({gem, _Id, _Deps, _Missing, {rvsn, 2}}) ->
     ok;
-  
+
   ({gem, Id1, Deps1, Missing1, {rvsn, 1}}) ->
     UpVersion = fun
       ({{Parts}}) -> {Parts};
@@ -392,12 +392,12 @@ update_gems_table(Table) ->
       Reqs2 = [UpReq(Req) || Req <- Reqs1],
       {Name, Reqs2}
     end,
-    
+
     Deps2    = [UpDep(Dep) || Dep <- Deps1],
     Missing2 = [UpDep(Mis) || Mis <- Missing1],
-    
+
     {update, {gem, Id1, Deps2, Missing2, {rvsn, 2}}};
-  
+
   ({gem, Id1, Deps1, Missing1, {rvsn, 0}}) ->
     UpVersion = fun
       ({version, Parts}) -> {Parts};
@@ -409,15 +409,15 @@ update_gems_table(Table) ->
       Reqs2 = [UpReq(Req) || Req <- Reqs1],
       {Name, Reqs2}
     end,
-    
+
     Id2      = UpId(Id1),
     Deps2    = [UpDep(Dep) || Dep <- Deps1],
     Missing2 = [UpDep(Mis) || Mis <- Missing1],
-    
+
     {update, {gem, Id2, Deps2, Missing2, {rvsn, 1}}};
-  
+
   ({gem, Id, Deps, Missing}) ->
     {update, {gem, Id, Deps, Missing, {rvsn, 0}}}
-  
+
   end).
 
