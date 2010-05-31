@@ -3,7 +3,7 @@
 -behaviour(gen_server).
 
 -export([start_link/1]).
--export([restart/1, relink/1, update/1, stop/1, start/1, service/2, service/4]).
+-export([restart/1, relink/1, update/1, stop/1, start/1]).
 -export([init/1, handle_call/3, handle_cast/2,
          handle_info/2, terminate/2, code_change/3]).
 
@@ -32,13 +32,6 @@ start(App) ->
   {ok, Appname} = get_proc_name(App),
   gen_server:cast(Appname, {start}).
 
-service(App, [M,F,A]) ->
-  service(App, M,F,A).
-
-service(App, M,F,A) ->
-  {ok, Appname} = get_proc_name(App),
-  gen_server:call(Appname, {service, M,F,A}, 12000).
-  
 
 get_proc_def(App) ->
   case get_proc_name(App) of
@@ -56,26 +49,18 @@ get_proc_name({Node, Id}) ->
     {ok, {list_to_atom(lists:flatten([binary_to_list(Id), ".app"])), Node}}
   end.
 
--record(state, {app=undefined,runner=undefined,restarts=0}).
+-record(state, {app=undefined}).
 
 %%% Initialize the server
 init([#application{}=App]) ->
-  
-  State  = #state{app=App},
-  
-  gen_server:cast(self(), {restart}),
-  
-  {ok, State}.
- 
-%%% Handle call messages
-handle_call({service, M,F,A}, _From, #state{runner=R}=State) ->
-  bertio:send(R, [M,F,A]),
-  try bertio:recv(R, 11000) of
-  {bert, Result} -> {reply, Result, State}
-  catch
-    error:timeout -> {reply, timeout, State}
-  end;
 
+  State  = #state{app=App},
+
+  gen_server:cast(self(), {restart}),
+
+  {ok, State}.
+
+%%% Handle call messages
 handle_call({update, App}, _From, State) ->
   ?LOG_DEBUG("reconfiguring app ~s", [App#application.id]),
   case reconfigure_app(App) of
@@ -99,14 +84,14 @@ handle_cast(stop, State) ->
 handle_cast({restart}, #state{app=App}=State) ->
   os:cmd("touch "++get_app_root(App, 'host/tmp/restart.txt')),
   app_chown(App, 'host/tmp/restart.txt'),
-  {noreply, restart_runner(State#state{restarts=0})};
+  {noreply, State#state{restarts=0}};
 
 handle_cast({relink}, #state{app=App}=State) ->
   os:cmd("touch "++get_app_root(App, 'host/tmp/relink.txt')),
   os:cmd("touch "++get_app_root(App, 'host/tmp/restart.txt')),
   app_chown(App, 'host/tmp/relink.txt'),
   app_chown(App, 'host/tmp/restart.txt'),
-  {noreply, restart_runner(State#state{restarts=0})};
+  {noreply, State#state{restarts=0}};
 
 handle_cast({stop}, #state{app=App}=State) ->
   os:cmd("touch "++get_app_root(App, 'host/tmp/stop.txt')),
@@ -123,11 +108,6 @@ handle_cast(Msg, State) ->
 
 
 %%% Handle generic messages
-handle_info({Port, {exit_status, _Status}}, #state{runner=Port,restarts=3}=State) ->
-  {noreply, State#state{runner=undefined,restarts=0}};
-handle_info({Port, {exit_status, _Status}}, #state{runner=Port}=State) ->
-  {noreply, restart_runner(State)};
-
 handle_info(_Info, State) ->
   {noreply, State}.
 
@@ -139,64 +119,6 @@ terminate(_Reason, _State) ->
 code_change(_OldVsn, State, _Extra) ->
   {ok, State}.
 
-
-restart_runner(#state{runner=undefined} = State) ->
-  #state{
-    restarts=Restarts,
-    app=#application{
-      id=AppId,
-      root_path=Root,
-      environment=Environment,
-      www_user=User
-    }
-  } = State,
-  
-  Self = self(),
-  
-  emq:push(machine_queue, {boot, AppId}, fun() ->
-  
-    AppRoot = filename:join([binary_to_list(Root), "host"]),
-    Ruby  = os:find_executable("ruby"),
-    Args = {args, [
-      filename:join([
-        code:priv_dir(capricorn),
-        "internal/bin/capricorn_app_runner.rb"
-      ]),
-      atom_to_list(Environment),
-      binary_to_list(User)
-    ]},
-    Port = bertio:open_port({spawn_executable, Ruby}, [
-      exit_status,
-      {cd, AppRoot},
-      Args
-    ]),
-    
-    try bertio:recv(Port, 60000) of
-    {bert, booted} -> 
-      erlang:port_connect(Port, Self),
-      Self ! {booted, Port};
-    {Port, {exit_status, Status}} ->
-      ?LOG_ERROR("boot error in ~p : ~p", [AppId, {exit_status, Status}]),
-      Self ! {timeout}
-    catch
-    error:timeout ->
-      ?LOG_ERROR("boot error in ~p : ~p", [AppId, timeout]),
-      Self ! {timeout}
-    end
-  end),
-  
-  receive
-  {booted, Port} ->
-    ?LOG_INFO("booted ~p", [AppId]),
-    State#state{runner=Port, restarts=Restarts + 1};
-  {timeout} ->
-    State#state{runner=undefined, restarts=Restarts + 1}
-  after 15 * 60000 ->
-    State#state{runner=undefined, restarts=Restarts + 1}
-  end;
-restart_runner(#state{runner=Port}=State) when is_port(Port) ->
-  catch bertio:port_close(Port),
-  restart_runner(State#state{runner=undefined}).
 
 reconfigure_app(App) ->
   write_milkshake_gem_config(App).
