@@ -1,4 +1,3 @@
-require File.dirname(File.expand_path(__FILE__))+'/../../minigems'
 require 'bert'
 
 unless Object.respond_to?(:instance_exec)
@@ -19,6 +18,7 @@ unless Object.respond_to?(:instance_exec)
 end
 
 module ErlangHelpers
+
   def setup
     return true if @setup
     $erlin  = IO.new(3, 'r')
@@ -26,13 +26,13 @@ module ErlangHelpers
     $erlin.sync = true
     @setup = true
   end
-  
+
   def send(obj)
     berp = BERT.encode(obj)
     $erlout.write [berp.size].pack('N')+berp
     $erlout.flush
   end
-  
+
   def receive
     exit(0) if $erlin.eof?
     h = $erlin.read(4)
@@ -45,11 +45,11 @@ module ErlangHelpers
     exit(0) if $erlin.eof?
     BERT.decode($erlin.read(l))
   end
-  
+
   def error(*args)
     raise InternalError, args
   end
-  
+
   extend self
 end
 
@@ -63,14 +63,14 @@ end
 
 def Erlang(&block)
   ErlangHelpers.setup
-  
+
   loop do
     cmd = ErlangHelpers.receive
-    
+
     if cmd == :stop
       exit(0)
     end
-    
+
     begin
       ctx = Object.new
       ctx.extend ErlangHelpers

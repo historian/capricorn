@@ -84,14 +84,14 @@ handle_cast(stop, State) ->
 handle_cast({restart}, #state{app=App}=State) ->
   os:cmd("touch "++get_app_root(App, 'host/tmp/restart.txt')),
   app_chown(App, 'host/tmp/restart.txt'),
-  {noreply, State#state{restarts=0}};
+  {noreply, State};
 
 handle_cast({relink}, #state{app=App}=State) ->
   os:cmd("touch "++get_app_root(App, 'host/tmp/relink.txt')),
   os:cmd("touch "++get_app_root(App, 'host/tmp/restart.txt')),
   app_chown(App, 'host/tmp/relink.txt'),
   app_chown(App, 'host/tmp/restart.txt'),
-  {noreply, State#state{restarts=0}};
+  {noreply, State};
 
 handle_cast({stop}, #state{app=App}=State) ->
   os:cmd("touch "++get_app_root(App, 'host/tmp/stop.txt')),

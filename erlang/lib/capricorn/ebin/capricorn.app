@@ -34,7 +34,6 @@
     cap_machine,
     cap_machine_apps,
     cap_machine_apps_sup,
-    cap_service_users,
     cap_sup,
     cap_util
   ]},

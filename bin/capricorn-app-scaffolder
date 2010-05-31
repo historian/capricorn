@@ -1,18 +1,7 @@
 #!/usr/bin/env ruby
 
-require File.dirname(__FILE__)+'/../lib/driver'
-require File.dirname(__FILE__)+'/../lib/system_context'
+require 'capricorn'
 
-# -record(application, {
-#   node=undefined,
-#   name=undefined,
-#   domains=[],
-#   environment=development,
-#   www_user=undefined,
-#   www_group=undefined,
-#   root_path=undefined,
-#   gems=[] % #gem_ref
-# }).
 def convert_app(app)
   application = {}
   application[:id]          = app[1]
@@ -29,10 +18,10 @@ Erlang do |cmd|
   when :create
     recipe = cmd.shift
     app = convert_app(cmd.first)
-    
-    ctx = SystemContext.run(File.dirname(__FILE__)+"/../recipes/#{recipe}.rb",
-      :application => app)
-    
+
+    recipe_path = File.expand_path("../../lib/capricorn/recipes/#{recipe}.rb", __FILE__)
+    ctx = Capricorn::SystemContext.run(recipe_path, :application => app)
+
     send t[true, t[ctx.www_user, ctx.www_group, ctx.root_path]]
   end
 end

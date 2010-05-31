@@ -109,14 +109,14 @@ all(Node) ->
 init([]) ->
   Root   = cap_config:get(machine, database, "var/run/capricorn"),
   Recipe = cap_config:get(machine, recipe, "macports"),
-  
+
   TablePath = filename:join([Root, "applications.db"]),
   {ok, Ref} = dets:open_file(cap_machine_apps, [{file, TablePath}, {keypos, 2}]),
   update_apps_table(Ref),
-  
+
   State  = #ctx{recipe=list_to_binary(Recipe), apps=Ref},
   State1 = start_scaffolder(State),
-  
+
   {ok, State1}.
 
 
@@ -145,7 +145,7 @@ handle_cast({create, Name, [MainDomain|_]=Domains, Environment, Gems}, Ctx) ->
     R = do_create(App, Ctx),
     ?LOG_ERROR("app: ~p", [R]),
     {noreply, Ctx};
-  {false, E} -> 
+  {false, E} ->
     ?LOG_ERROR("Invalid app: ~p", [E]),
     {noreply, Ctx}
   end;
@@ -166,7 +166,7 @@ handle_cast({import, Name, [MainDomain|_]=Domains, Environment, Gems, Root, Uid,
     R = do_import(App, Ctx),
     ?LOG_ERROR("app: ~p", [R]),
     {noreply, Ctx};
-  {false, E} -> 
+  {false, E} ->
     ?LOG_ERROR("Invalid app: ~p", [E]),
     {noreply, Ctx}
   end;
@@ -181,7 +181,7 @@ handle_cast({fupdate, Id}, Ctx) ->
 
 handle_cast({update_gem, GemName}, Ctx) ->
   #ctx{ apps=Apps } = Ctx,
-  
+
   dets:foldl(fun
   (App, _) ->
     Included = lists:foldl(fun
@@ -190,7 +190,7 @@ handle_cast({update_gem, GemName}, Ctx) ->
     (_, Acc) ->
       Acc
     end, false, App#application.installed_gems),
-    
+
     case Included of
     true ->
       do_fupdate(App#application.id, Ctx);
@@ -230,9 +230,8 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 start_scaffolder(State) ->
-  Cmd  = os:find_executable("ruby"),
-  Args = {args, [filename:join([code:priv_dir(capricorn), "internal/bin/capricorn_app_scaffolder.rb"])]},
-  Port = bertio:open_port({spawn_executable, Cmd}, [exit_status, Args]),
+  Cmd  = os:find_executable("capricorn-app-scaffolder"),
+  Port = bertio:open_port({spawn_executable, Cmd}, [exit_status]),
   State#ctx{scaffolder=Port}.
 
 
@@ -323,21 +322,21 @@ do_try_update_gems(App, Gems, Ctx) ->
 
 do_update_gems(App, Gems, _Ctx) ->
   ?LOG_INFO("updating app gems ~p => ~p", [App#application.required_gems, Gems]),
-  
+
   App1 = App#application{required_gems=Gems,installed_gems=[]},
-  
+
   case cap_machine:ensure_gems_are_present_for_app(App1) of
   {ok, App2} ->
     ?LOG_INFO("relinking app ~s", [App#application.id]),
     case cap_application:update(App2) of
-    ok -> 
+    ok ->
       ?LOG_DEBUG("relinked app ~s", [App#application.id]),
       {ok, App2};
-    Error -> 
+    Error ->
       ?LOG_DEBUG("error ~p", [Error]),
       Error
     end;
-  Error -> 
+  Error ->
     ?LOG_DEBUG("error ~p", [Error]),
     Error
   end.
@@ -390,22 +389,22 @@ valid_app(#application{node=No,name=N,domains=D,required_gems=G}) ->
 
 update_apps_table(Table) ->
   cap_dets_updater:update(Table, fun
-  
+
   ({application, _Id, _Node, _Name, _Domains, _Environment, _User,
     _Group, _Root, _Installed, _Required, {rvsn, 1}}) ->
     ok;
-  
+
   ({application, Id, Node, Name, Domains, Environment, User,
     Group, Root, Installed, Required, {rvsn, 0}}) ->
     GemIds = [lists:nth(2, erlang:tuple_to_list(Gem)) || Gem <- Installed],
     {update, {application, Id, Node, Name, Domains, Environment,
       User, Group, Root, GemIds, Required, {rvsn, 1}}};
-  
+
   ({application, Id, Node, Name, Domains, Environment, User,
     Group, Root, Installed, Required}) ->
     {update, {application, Id, Node, Name, Domains, Environment,
       User, Group, Root, Installed, Required, {rvsn, 0}}}
-  
+
   end).
 
 

@@ -1,8 +1,8 @@
 
-pkg/
-rel/capricorn
+erlang/rel/capricorn
 
 *.log
 *.dump
 
 *.beam
+*.gem
