@@ -6,3 +6,5 @@ erlang/rel/capricorn
 
 *.beam
 *.gem
+
+.DS_Store
