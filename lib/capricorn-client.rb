@@ -4,29 +4,29 @@ module Capricorn
   require 'bertrpc'
   require 'highline'
   require 'fileutils'
-  
+
   require 'capricorn-client/helpers'
-  
+
   module CLI
     require 'capricorn-client/cli/applications'
     require 'capricorn-client/cli/gems'
     require 'capricorn-client/cli/machines'
   end
-  
+
   module Runner
-    
+
     HELP = <<-EOH
 Topics:
   CLUSTER applications
   # manage applications
-   
+
   CLUSTER gems
   # manage gems
-   
+
   CLUSTER machines
   # manage machines
 EOH
-    
+
     DEFAULT_CONFIG = <<-EOH
 cluster_name:
   host: localhost
@@ -34,20 +34,20 @@ cluster_name:
   username: dummy
   password: dummy
 EOH
-    
+
     def start
       cluster_name = ARGV.shift
       unless cluster_name
         help
         exit 1
       end
-      
+
       @cluster = config[cluster_name]
       unless @cluster
         puts "I don't know this cluster"
         exit 1
       end
-      
+
       case ARGV.shift
       when 'applications'
         Capricorn::CLI::Applications.start
@@ -59,15 +59,15 @@ EOH
         help
       end
     end
-    
+
     def help
       puts HELP
     end
-    
+
     def cluster
       @cluster
     end
-    
+
     def config
       @config ||= begin
         config_path = File.expand_path('~/.capricorn/config.yml')
@@ -80,7 +80,7 @@ EOH
         YAML.load_file(config_path)
       end
     end
-    
+
     extend self
   end
 end

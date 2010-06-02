@@ -31,6 +31,9 @@ init(Services) ->
 
 
 
+handle_call({runtime, F, A, I}, From, State) ->
+  cap_external_runtime_api:handle_call({F, A, I}, From, State);
+
 handle_call({machines, F, A, I}, From, State) ->
   cap_external_machines_api:handle_call({F, A, I}, From, State);
 
@@ -50,6 +53,9 @@ handle_call({M, F, A, I}, From, State) ->
   end.
 
 
+
+handle_cast({runtime, F, A, I}, State) ->
+  cap_external_runtime_api:handle_cast({F, A, I}, State);
 
 handle_cast({machines, F, A, I}, State) ->
   cap_external_machines_api:handle_cast({F, A, I}, State);
