@@ -5,27 +5,34 @@ src  = File.expand_path('../../', __FILE__)
 rel  = File.join(src, 'erlang/rel/capricorn')
 etc  = File.join(root, 'etc/capricorn')
 
-if ARGV.size == 1 and ARGV[0] == "install"
-  require 'fileutils'
+if ARGV.size == 1
+  case ARGV[0]
 
-  FileUtils.mkdir_p(File.join(root, "etc/capricorn"),
-                    :verbose => true)
-  FileUtils.mkdir_p(File.join(root, "var/run/capricorn-machine"),
-                    :verbose => true)
-  FileUtils.mkdir_p(File.join(root, "var/run/capricorn-cluster"),
-                    :verbose => true)
-  FileUtils.mkdir_p(File.join(root, "var/log/sasl"),
-                    :verbose => true)
+  when "install"
+    require 'fileutils'
 
-  FileUtils.cp(File.join(rel, 'etc/capricorn/app.config'),
-               File.join(etc, 'app.config'),
-               :verbose => true)
-  FileUtils.cp(File.join(rel, 'etc/capricorn/cluster-vm.args'),
-               File.join(etc, 'cluster-vm.args'),
-               :verbose => true)
-  FileUtils.cp(File.join(rel, 'etc/capricorn/machine-vm.args'),
-               File.join(etc, 'machine-vm.args'),
-               :verbose => true)
+    FileUtils.mkdir_p(File.join(root, "etc/capricorn"),
+                      :verbose => true)
+    FileUtils.mkdir_p(File.join(root, "var/run/capricorn-machine"),
+                      :verbose => true)
+    FileUtils.mkdir_p(File.join(root, "var/run/capricorn-cluster"),
+                      :verbose => true)
+    FileUtils.mkdir_p(File.join(root, "var/log/sasl"),
+                      :verbose => true)
+
+    FileUtils.cp(File.join(rel, 'etc/capricorn/app.config'),
+                 File.join(etc, 'app.config'),
+                 :verbose => true)
+    FileUtils.cp(File.join(rel, 'etc/capricorn/cluster-vm.args'),
+                 File.join(etc, 'cluster-vm.args'),
+                 :verbose => true)
+    FileUtils.cp(File.join(rel, 'etc/capricorn/machine-vm.args'),
+                 File.join(etc, 'machine-vm.args'),
+                 :verbose => true)
+  when "tail"
+    exec("tail", "-n", "0", "-f", File.join(root, "var/log/capricorn.log"))
+
+  end
 else
   exec(File.join(rel, 'bin/capricornd'), root, *ARGV)
 end
