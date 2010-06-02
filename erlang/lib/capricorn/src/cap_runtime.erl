@@ -8,12 +8,12 @@
 
 
 reboot(Node) ->
-  gen_server:call({cap_runtime, Node}, reboot).
+  gen_server:call({cap_runtime, Node}, reboot, 60 * 1000).
 
 
 
 selfupdate(Node) ->
-  gen_server:call({cap_runtime, Node}, selfupdate).
+  gen_server:call({cap_runtime, Node}, selfupdate, 15 * 60 * 1000).
 
 
 
