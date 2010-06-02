@@ -28,6 +28,7 @@
     cap_external_gems_api,
     cap_external_machines_api,
     cap_gem_utils,
+    cap_http_service,
     cap_internal_api,
     cap_internal_apps_api,
     cap_log,
@@ -35,7 +36,8 @@
     cap_machine_apps,
     cap_machine_apps_sup,
     cap_sup,
-    cap_util
+    cap_util,
+    jsonerl
   ]},
   {registered, [
     cap_cluster,
@@ -51,6 +53,6 @@
     cap_secondary_services,
     cap_sup
   ]},
-  {applications, [kernel, stdlib, sasl, inets, bertio, bertrpc, gcd, emq]},
+  {applications, [kernel, stdlib, sasl, inets, bertio, bertrpc, emq]},
   {mod, {capricorn_app, []}}
 ]}.
