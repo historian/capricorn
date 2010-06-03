@@ -16,7 +16,7 @@ task :release => [:load_version, :build] do
     exit(1)
   end
 
-  if %x[ git tag 2>&1 ].include?(Capricorn::VERSION)
+  if %x[ git tag 2>&1 ] =~ /^#{Regexp.escape(Capricorn::VERSION)}$/
     puts "Please bump your version first!"
     exit(1)
   end
