@@ -1,5 +1,5 @@
 module Capricorn
 
-  VERSION = '2.0.3.pre2'
+  VERSION = '2.0.3'
 
 end
