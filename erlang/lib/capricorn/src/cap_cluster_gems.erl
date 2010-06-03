@@ -19,7 +19,7 @@ push(Path) when is_list(Path) ->
   Else       -> Else
   end;
 push(Data) ->
-  gen_server:call(cap_cluster_gems, {push, Data}).
+  gen_server:call(cap_cluster_gems, {push, Data}, 15 * 60 * 1000).
 
 
 -spec lookup(binary() | dependency()) -> {ok, gem_spec()} | {error, not_found} .
