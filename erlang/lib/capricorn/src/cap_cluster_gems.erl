@@ -244,7 +244,7 @@ do_spec(GemPath, Ctx) when is_list(GemPath) ->
   do_spec(list_to_binary(GemPath),Ctx);
 do_spec(GemPath, #state{spec_reader=P}) ->
   bertio:send(P, GemPath),
-  try bertio:recv(P) of
+  try bertio:recv(P, 3 * 60 * 1000) of
     {bert, {_, _, _}=Gem} -> normalize_gem(Gem);
     {bert, R} -> R
   catch
