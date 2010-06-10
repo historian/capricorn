@@ -7,7 +7,7 @@ subdomain  = nil if subdomain.nil? or subdomain.empty?
 client     = 'mrhenry'
 
 user       = application[:id].downcase.gsub(/[^a-z]+/, '_')
-short_user = "#{user[0,14]}_#{Digest::SHA1.hexdigest(application[:id])[0,5]}"
+short_user = "#{user[0,10]}_#{Digest::SHA1.hexdigest(application[:id])[0,5]}"
 passwd     = (rand(1_000_000_000) + 10_000).to_s
 
 db_name    = application[:id].downcase.gsub(/[^a-z]+/, '_')
@@ -38,7 +38,8 @@ begin
 
 rescue Rush::BashFailed, Errno::ENOENT
   ### try to create the base domain
-  box.bash(%{ /usr/local/psa/bin/domain -c #{basedomain} -clogin #{client} -status enabled -hosting true -hst_type phys -dns true -www true -login #{short_user} -passwd #{passwd} -shell /bin/bash })
+  %x{ /usr/local/psa/bin/ipmanage --ip_list } =~ /[:](\d+\.\d+\.\d+\.\d+)\//
+  box.bash(%{ /usr/local/psa/bin/domain -c #{basedomain} -owner #{client} -status enabled -hosting true -hst_type phys -ip #{$1} -dns true -www true -login #{short_user} -passwd #{passwd} -shell /bin/bash })
 end
 application_root = box["/var/www/vhosts/#{basedomain}/"]
 
