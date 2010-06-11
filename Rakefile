@@ -7,7 +7,7 @@ end
 
 desc "install the capricorn"
 task :install => [:load_version, :build] do
-  sh "gem install pkg/capricorn-#{Capricorn::VERSION}.gem"
+  sh "gem install -l pkg/capricorn-#{Capricorn::VERSION}.gem"
 end
 
 desc "release the capricorn"

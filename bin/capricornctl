@@ -7,4 +7,4 @@ rescue LoadError
   require 'capricorn-client'
 end
 
-Capricorn::Runner.start
+Capricorn::CLI.start

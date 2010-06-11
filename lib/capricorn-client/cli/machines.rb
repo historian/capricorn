@@ -1,20 +1,29 @@
-class Capricorn::CLI::Machines < Thor
+class Capricorn::CLI::Machines < Capricorn::CLI
   include Capricorn::Helpers
+
+  namespace :machines
 
   desc "list", "list all machines"
   def list
-    ui.table("Machines", self.machines)
+    machines.sort! do |a, b|
+      a <=> b
+    end
+
+    puts "Machines:"
+    machines.each do |machine|
+      puts "- #{machine}"
+    end
   end
 
-  desc "reboot [NODE]", "reboot a node"
-  def reboot(node=nil)
-    node ||= select_node
+  desc "reboot", "reboot a node"
+  method_option :node, :type => :string
+  def reboot
     puts client.call.runtime.reboot(node.to_sym)
   end
 
-  desc "selfupdate [NODE]", "update a node"
-  def selfupdate(node=nil)
-    node ||= select_node
+  desc "selfupdate", "update a node"
+  method_option :node, :type => :string
+  def selfupdate
     puts client.call.runtime.selfupdate(node.to_sym)
   end
 
