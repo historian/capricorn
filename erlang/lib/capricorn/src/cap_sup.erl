@@ -24,9 +24,9 @@
 %% supervisor callback
 -export([init/1]).
 
- 
+
 -define(SERVER, ?MODULE).
- 
+
 %%
 %% Operation & Maintenance API
 %%
@@ -56,14 +56,14 @@ restart_core_server(machine) ->
 
 start_server(NodeType) ->
   LogLevel = cap_config:get(log, level, info),
-  
+
   % announce startup
   io:format("Capricorn (LogLevel=~s, Node=~s, Type=~s) is starting.~n", [
     LogLevel,
     atom_to_list(node()),
     atom_to_list(NodeType)
   ]),
-  
+
   BaseChildSpecs =
   {{one_for_all, 10, 3600},[
     {cap_primary_services,
@@ -79,16 +79,16 @@ start_server(NodeType) ->
       supervisor,
       [cap_sup]}
   ]},
-  
+
   {ok, Pid} = supervisor:start_link({local, cap_sup}, cap_sup, BaseChildSpecs),
-  
+
   io:format("Capricorn has started. Time to relax.~n"),
-  
+
   {ok, Pid}.
 
 start_primary_services(cluster) ->
   ExternalApi = cap_config:get(cluster, api),
-  
+
   supervisor:start_link({local, cap_primary_services}, cap_sup,
   {{one_for_one, 10, 3600},[
     {cap_log,
@@ -120,11 +120,17 @@ start_primary_services(cluster) ->
       permanent,
       1000,
       worker,
-      [cap_external_api]}
+      [cap_external_api]},
+    {cap_runtime,
+      {cap_runtime, start_link, ["cluster"]},
+      permanent,
+      brutal_kill,
+      worker,
+      [cap_runtime]}
   ]});
 start_primary_services(machine) ->
   InternalApi = cap_config:get(machine, api),
-  
+
   supervisor:start_link({local, cap_primary_services}, cap_sup,
   {{one_for_one, 10, 3600},[
     {cap_log,
@@ -162,7 +168,13 @@ start_primary_services(machine) ->
       permanent,
       infinity,
       supervisor,
-      [cap_machine_apps_sup]}
+      [cap_machine_apps_sup]},
+    {cap_runtime,
+      {cap_runtime, start_link, ["machine"]},
+      permanent,
+      brutal_kill,
+      worker,
+      [cap_runtime]}
   ]}).
 
 start_secondary_services(NodeType) ->
@@ -177,7 +189,7 @@ start_secondary_services(NodeType) ->
     end
     || {Name, {Module, Fun, Args}}
     <- cap_config:get(NodeType, daemons, [])],
-  
+
   EventHandlerSpecs = [
     begin
       {Name,
@@ -189,7 +201,7 @@ start_secondary_services(NodeType) ->
     end
     || {Name, {Module, Args}}
     <- cap_config:get(NodeType, event_handlers, [])],
-  
+
   supervisor:start_link({local, cap_secondary_services}, cap_sup,
     {{one_for_one, 10, 3600}, DaemonChildSpecs++EventHandlerSpecs}).
 

@@ -2,11 +2,12 @@
 desc "build the capricorn"
 task :build do
   sh "gem build capricorn.gemspec"
+  system("mkdir -p pkg ; mv ./*.gem pkg/")
 end
 
 desc "install the capricorn"
 task :install => [:load_version, :build] do
-  sh "gem install capricorn-#{Capricorn::VERSION}.gem"
+  sh "gem install -l pkg/capricorn-#{Capricorn::VERSION}.gem"
 end
 
 desc "release the capricorn"
@@ -16,13 +17,13 @@ task :release => [:load_version, :build] do
     exit(1)
   end
 
-  if %x[ git tag 2>&1 ].include?(Capricorn::VERSION)
+  if %x[ git tag 2>&1 ] =~ /^#{Regexp.escape(Capricorn::VERSION)}$/
     puts "Please bump your version first!"
     exit(1)
   end
 
   require File.expand_path('../lib/capricorn/version', __FILE__)
-  sh "gem push capricorn-#{Capricorn::VERSION}.gem"
+  sh "gem push pkg/capricorn-#{Capricorn::VERSION}.gem"
   sh "git tag -a -m \"#{Capricorn::VERSION}\" #{Capricorn::VERSION}"
   sh "git push origin master"
   sh "git push origin master --tags"
