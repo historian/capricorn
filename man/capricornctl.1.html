@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv='content-type' value='text/html;charset=utf8'>
+  <meta name='generator' value='Ronn/v0.6.6 (http://github.com/rtomayko/ronn)'>
+  <title>capricornctl(1) - the capricorn client</title>
+  <style type='text/css' media='all'>
+  /* style: man */
+  body#manpage                        {margin:0}
+  .mp {max-width:100ex;padding:0 9ex 1ex 4ex}
+  .mp p,  .mp pre,
+  .mp ul, .mp ol, .mp dl              {margin:0 0 20px 0}
+  .mp h2                              {margin:10px 0 0 0}
+  .mp > p, .mp > pre, .mp > ul,
+  .mp > ol, .mp > dl                  {margin-left:8ex}
+  .mp h3                              {margin:0 0 0 4ex}
+  .mp dt                              {margin:0;clear:left}
+  .mp dt.flush                        {float:left;width:8ex}
+  .mp dd                              {margin:0 0 0 9ex}
+  .mp h1, .mp h2, .mp h3, .mp h4      {clear:left}
+  .mp pre                             {margin-bottom:20px}
+  .mp pre+h2, .mp pre+h3              {margin-top:22px}
+  .mp h2+pre, .mp h3+pre              {margin-top:5px}
+  .mp img                             {display:block;margin:auto}
+  .mp h1.man-title                    {display:none}
+  .mp, .mp code, .mp pre, .mp tt,
+  .mp kbd, .mp samp, .mp h3, .mp h4 {font-family:monospace;font-size:14px;line-height:1.42857142857143}
+  .mp h2 {font-size:16px;line-height:1.25}
+  .mp h1 {font-size:20px;line-height:2}
+  .mp {text-align:justify;background:#fff}
+  .mp, .mp code, .mp pre,
+  .mp pre code, .mp tt, .mp kbd,
+  .mp samp                            {color:#131211}
+  .mp h1, .mp h2, .mp h3, .mp h4      {color:#030201}
+  .mp ol.man, .mp ol.man li           {color:#636261}
+  .mp code, .mp strong, .mp b {font-weight:bold;color:#131211}
+  .mp em, .mp var, .mp u {font-style:italic;color:#434241;text-decoration:none}
+  .mp pre {background:#edeceb;padding:5px 1ex;border-left:1ex solid #ddd}
+  .mp pre code {font-weight:normal;background:inherit}
+  .mp a, .mp a:link, .mp a:hover,
+  .mp a code, .mp a pre, .mp a tt,
+  .mp a kbd, .mp a samp              {color:#0000ff}
+  ol.man-decor, ol.man-decor li {margin:3px 0 10px 0;padding:0;float:left;width:33%;list-style-type:none;text-transform:uppercase;color:#999;letter-spacing:1px}
+  ol.man-decor                  {width:100%}
+  ol.man-decor li.tl            {text-align:left}
+  ol.man-decor li.tc            {text-align:center;letter-spacing:4px}
+  ol.man-decor li.tr            {text-align:right;float:right}
+  </style>
+  <style type='text/css' media='all'>
+  /* style: toc */
+  .man-navigation {display:block !important;position:fixed;top:0;left:113ex;
+      height:100%;width:100%;padding:48px 0 0 0;border-left:1px solid #dbdbdb;background:#eee}
+  .man-navigation a,
+  .man-navigation a:hover,
+  .man-navigation a:link,
+  .man-navigation a:visited {display:block;margin:0;padding:5px 2px 5px 30px;color:#999;text-decoration:none}
+  .man-navigation a:hover {color:#111;text-decoration:underline}
+  </style>
+</head>
+<!--
+  The following styles are deprecated and will be removed at some point:
+  div#man, div#man ol.man, div#man ol.head, div#man ol.man.
+
+  The .man-page, .man-decor, .man-head, .man-foot, .man-title, and
+  .man-navigation should be used instead.
+-->
+<body id='manpage'>
+  <div class='mp' id='man'>
+
+  <div class='man-navigation' style='display:none'>
+    <a href="#NAME">NAME</a>
+    <a href="#SYNOPSIS">SYNOPSIS</a>
+    <a href="#OPTIONS">OPTIONS</a>
+    <a href="#COMMANDS">COMMANDS</a>
+    <a href="#SEE-ALSO">SEE ALSO</a>
+    </div>
+
+  <h1 class='man-title'>capricornctl(1)</h1>
+
+  <ol class='man-decor man-head man head'>
+    <li class='tl'>capricornctl(1)</li>
+    <li class='tc'>Capricorn 2.0.7</li>
+    <li class='tr'>capricornctl(1)</li>
+  </ol>
+
+  <h2 id='NAME'>NAME</h2>
+<p><code>capricornctl</code> - the capricorn client</p>
+
+<h2 id="SYNOPSIS">SYNOPSIS</h2>
+
+<p><code>capricornctl</code> <code>help</code> <em>task</em><br />
+<code>capricornctl</code> [<var>options</var>] <code>deploy</code><br />
+<code>capricornctl</code> [<var>options</var>] <code>apps:list</code><br />
+<code>capricornctl</code> [<var>options</var>] <code>apps:show</code><br />
+<code>capricornctl</code> [<var>options</var>] <code>apps:create</code> <em>name</em> <em>environment</em> <em>domains...</em><br />
+<code>capricornctl</code> [<var>options</var>] <code>apps:import</code> <em>name</em> <em>environment</em> <em>domains...</em><br />
+<code>capricornctl</code> [<var>options</var>] <code>apps:init</code><br />
+<code>capricornctl</code> [<var>options</var>] <code>apps:start</code><br />
+<code>capricornctl</code> [<var>options</var>] <code>apps:restart</code><br />
+<code>capricornctl</code> [<var>options</var>] <code>apps:relink</code><br />
+<code>capricornctl</code> [<var>options</var>] <code>apps:stop</code><br />
+<code>capricornctl</code> [<var>options</var>] <code>apps:fupdate</code><br />
+<code>capricornctl</code> [<var>options</var>] <code>apps:domains:list</code><br />
+<code>capricornctl</code> [<var>options</var>] <code>apps:domains:add</code> <em>domain</em><br />
+<code>capricornctl</code> [<var>options</var>] <code>apps:domains:remove</code> <em>domain</em><br />
+<code>capricornctl</code> [<var>options</var>] <code>apps:gems:list</code><br />
+<code>capricornctl</code> [<var>options</var>] <code>apps:gems:add</code> <em>gem_name</em><br />
+<code>capricornctl</code> [<var>options</var>] <code>apps:gems:remove</code> <em>gem_name</em><br />
+<code>capricornctl</code> [<var>options</var>] <code>gems:all</code><br />
+<code>capricornctl</code> [<var>options</var>] <code>gems:missing</code><br />
+<code>capricornctl</code> [<var>options</var>] <code>gems:push</code> <em>paths...</em><br />
+<code>capricornctl</code> [<var>options</var>] <code>machines:list</code><br />
+<code>capricornctl</code> [<var>options</var>] <code>machines:reboot</code><br />
+<code>capricornctl</code> [<var>options</var>] <code>machines:selfupdate</code></p>
+
+<h2 id="OPTIONS">OPTIONS</h2>
+
+<p>These options apply to all the commands:</p>
+
+<dl>
+<dt><code>-c</code>=<var>cluster</var>, <code>--cluster</code>=<var>cluster</var></dt><dd><p>Send the command to <var>cluster</var>. If <var>cluster</var> is not set <code>capricornctl</code> will
+look for a default <var>cluster</var>.</p></dd>
+<dt><code>-e</code>=<var>environment</var>, <code>--env</code>=<var>environment</var>, <code>--environment</code>=<var>environment</var></dt><dd><p>When <var>environment</var> is set <var>capricornctl</var> will look for a <code>.capricorn.yml</code> file
+(see <a href="capricorn.yml.5">capricorn.yml(5)</a>) and read the configuration from
+the environment specified in there. The options provided by the
+<var>environment</var> can be overwritten by specifying the as options.</p></dd>
+</dl>
+
+
+<p>These options apply to <code>deploy</code>, <code>apps:*</code>, <code>machines:reboot</code>,
+<code>machines:selfupdate</code>:</p>
+
+<dl>
+<dt><code>-m</code>=<var>machine</var>, <code>-n</code>=<var>machine</var>, <code>--machine</code>=<var>machine</var>, <code>--node</code>=<var>machine</var></dt><dd>Send the command to <var>machine</var>. If <var>machine</var> is not set <code>capricornctl</code> will
+look for a default <var>machine</var>.</dd>
+</dl>
+
+
+<p>These options apply to <code>deploy</code>, <code>apps:show</code>, <code>apps:init</code>, <code>apps:start</code>,
+<code>apps:restart</code>, <code>apps:relink</code>, <code>apps:stop</code>, <code>apps:fupdate</code>, <code>apps:domains:*</code>,
+<code>apps:gems:*</code>:</p>
+
+<dl>
+<dt><code>-a</code>=<var>application</var>, <code>--app</code>=<var>application</var>, <code>--application</code>=<var>application</var></dt><dd>Send the command to <var>application</var>. If <var>application</var> is not set
+<code>capricornctl</code> will look for a default <var>application</var>.</dd>
+</dl>
+
+
+<h2 id="COMMANDS">COMMANDS</h2>
+
+<p>Commands for managing applications:</p>
+
+<p><code>deploy</code><br />
+Deploy the last build gem to the current <var>application</var>.</p>
+
+<p><code>apps:list</code><br />
+List all the applications on a <var>machine</var>.</p>
+
+<p><code>apps:show</code><br />
+Show all information about an <var>application</var>.</p>
+
+<p><code>apps:create</code> <em>name</em> <em>environment</em> <em>domains...</em><br />
+Create a new application on <var>machine</var>.</p>
+
+<ul>
+<li><var>name</var> is the human name of the application.</li>
+<li><var>environment</var> is the Rails environment of the application and can be <code>development</code>, <code>test</code>, <code>staging</code>, <code>production</code>.</li>
+<li><var>domains</var> is a list of domains to bind to this application.</li>
+</ul>
+
+
+<p><code>apps:import</code> <em>name</em> <em>environment</em> <em>domains...</em><br />
+Import an existing application on <var>machine</var>.</p>
+
+<ul>
+<li><var>name</var> is the human name of the application.</li>
+<li><var>environment</var> is the Rails environment of the application and can be <code>development</code>, <code>test</code>, <code>staging</code>, <code>production</code>.</li>
+<li><var>domains</var> is a list of domains to bind to this application.</li>
+</ul>
+
+
+<p><code>apps:init</code><br />
+Create the <code>.capricorn.yml</code> file (see <a href="capricorn.yml.5">capricorn.yml(5)</a>).</p>
+
+<p><code>apps:start</code><br />
+Start a stopped <var>application</var>.</p>
+
+<p><code>apps:restart</code><br />
+Restart an <var>application</var>. this will touch <code>tmp/restart.txt</code>.</p>
+
+<p><code>apps:relink</code><br />
+Relink an <var>application</var>. this will touch <code>tmp/restart.txt</code> and <code>tmp/relink.txt</code>.</p>
+
+<p><code>apps:stop</code><br />
+Stop a stopped <var>application</var>.</p>
+
+<p><code>apps:fupdate</code><br />
+Force update an <var>application</var>.</p>
+
+<p><code>apps:domains:list</code><br />
+List all the bound domains for this <var>application</var>.</p>
+
+<p><code>apps:domains:add</code> <em>domain</em><br />
+Bind a new domain to this <var>application</var>.</p>
+
+<p><code>apps:domains:remove</code> <em>domain</em><br />
+Unbind a domain from this <var>application</var>.</p>
+
+<p><code>apps:gems:list</code><br />
+List all the used gems for this <var>application</var>.</p>
+
+<p><code>apps:gems:add</code> <em>gem</em><br />
+Add a new gem to this <var>application</var>.</p>
+
+<p><code>apps:gems:remove</code> <em>gem</em><br />
+Remove a gem from this <var>application</var>.</p>
+
+<h2 id="SEE-ALSO">SEE ALSO</h2>
+
+<p><a href="capricornd.1">capricornd(1)</a>,
+<a href="capricorn.7">capricorn(7)</a></p>
+
+
+  <ol class='man-decor man-foot man foot'>
+    <li class='tl'>Simon Menke</li>
+    <li class='tc'>June 2010</li>
+    <li class='tr'>capricornctl(1)</li>
+  </ol>
+
+  </div>
+</body>
+</html>

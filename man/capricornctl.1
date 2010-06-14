@@ -1,0 +1,234 @@
+.\" generated with Ronn/v0.6.6
+.\" http://github.com/rtomayko/ronn/
+.
+.TH "CAPRICORNCTL" "1" "June 2010" "Simon Menke" "Capricorn 2.0.7"
+.
+.SH "NAME"
+\fBcapricornctl\fR \- the capricorn client
+.
+.SH "SYNOPSIS"
+\fBcapricornctl\fR \fBhelp\fR \fItask\fR
+.
+.br
+\fBcapricornctl\fR [\fIoptions\fR] \fBdeploy\fR
+.
+.br
+\fBcapricornctl\fR [\fIoptions\fR] \fBapps:list\fR
+.
+.br
+\fBcapricornctl\fR [\fIoptions\fR] \fBapps:show\fR
+.
+.br
+\fBcapricornctl\fR [\fIoptions\fR] \fBapps:create\fR \fIname\fR \fIenvironment\fR \fIdomains\.\.\.\fR
+.
+.br
+\fBcapricornctl\fR [\fIoptions\fR] \fBapps:import\fR \fIname\fR \fIenvironment\fR \fIdomains\.\.\.\fR
+.
+.br
+\fBcapricornctl\fR [\fIoptions\fR] \fBapps:init\fR
+.
+.br
+\fBcapricornctl\fR [\fIoptions\fR] \fBapps:start\fR
+.
+.br
+\fBcapricornctl\fR [\fIoptions\fR] \fBapps:restart\fR
+.
+.br
+\fBcapricornctl\fR [\fIoptions\fR] \fBapps:relink\fR
+.
+.br
+\fBcapricornctl\fR [\fIoptions\fR] \fBapps:stop\fR
+.
+.br
+\fBcapricornctl\fR [\fIoptions\fR] \fBapps:fupdate\fR
+.
+.br
+\fBcapricornctl\fR [\fIoptions\fR] \fBapps:domains:list\fR
+.
+.br
+\fBcapricornctl\fR [\fIoptions\fR] \fBapps:domains:add\fR \fIdomain\fR
+.
+.br
+\fBcapricornctl\fR [\fIoptions\fR] \fBapps:domains:remove\fR \fIdomain\fR
+.
+.br
+\fBcapricornctl\fR [\fIoptions\fR] \fBapps:gems:list\fR
+.
+.br
+\fBcapricornctl\fR [\fIoptions\fR] \fBapps:gems:add\fR \fIgem_name\fR
+.
+.br
+\fBcapricornctl\fR [\fIoptions\fR] \fBapps:gems:remove\fR \fIgem_name\fR
+.
+.br
+\fBcapricornctl\fR [\fIoptions\fR] \fBgems:all\fR
+.
+.br
+\fBcapricornctl\fR [\fIoptions\fR] \fBgems:missing\fR
+.
+.br
+\fBcapricornctl\fR [\fIoptions\fR] \fBgems:push\fR \fIpaths\.\.\.\fR
+.
+.br
+\fBcapricornctl\fR [\fIoptions\fR] \fBmachines:list\fR
+.
+.br
+\fBcapricornctl\fR [\fIoptions\fR] \fBmachines:reboot\fR
+.
+.br
+\fBcapricornctl\fR [\fIoptions\fR] \fBmachines:selfupdate\fR
+.
+.SH "OPTIONS"
+These options apply to all the commands:
+.
+.TP
+\fB\-c\fR=\fIcluster\fR, \fB\-\-cluster\fR=\fIcluster\fR
+Send the command to \fIcluster\fR\. If \fIcluster\fR is not set \fBcapricornctl\fR will look for a default \fIcluster\fR\.
+.
+.TP
+\fB\-e\fR=\fIenvironment\fR, \fB\-\-env\fR=\fIenvironment\fR, \fB\-\-environment\fR=\fIenvironment\fR
+When \fIenvironment\fR is set \fIcapricornctl\fR will look for a \fB\.capricorn\.yml\fR file (see capricorn\.yml(5) \fIcapricorn\.yml\.5\fR) and read the configuration from the environment specified in there\. The options provided by the \fIenvironment\fR can be overwritten by specifying the as options\.
+.
+.P
+These options apply to \fBdeploy\fR, \fBapps:*\fR, \fBmachines:reboot\fR, \fBmachines:selfupdate\fR:
+.
+.TP
+\fB\-m\fR=\fImachine\fR, \fB\-n\fR=\fImachine\fR, \fB\-\-machine\fR=\fImachine\fR, \fB\-\-node\fR=\fImachine\fR
+Send the command to \fImachine\fR\. If \fImachine\fR is not set \fBcapricornctl\fR will look for a default \fImachine\fR\.
+.
+.P
+These options apply to \fBdeploy\fR, \fBapps:show\fR, \fBapps:init\fR, \fBapps:start\fR, \fBapps:restart\fR, \fBapps:relink\fR, \fBapps:stop\fR, \fBapps:fupdate\fR, \fBapps:domains:*\fR, \fBapps:gems:*\fR:
+.
+.TP
+\fB\-a\fR=\fIapplication\fR, \fB\-\-app\fR=\fIapplication\fR, \fB\-\-application\fR=\fIapplication\fR
+Send the command to \fIapplication\fR\. If \fIapplication\fR is not set \fBcapricornctl\fR will look for a default \fIapplication\fR\.
+.
+.SH "COMMANDS"
+Commands for managing applications:
+.
+.P
+\fBdeploy\fR
+.
+.br
+Deploy the last build gem to the current \fIapplication\fR\.
+.
+.P
+\fBapps:list\fR
+.
+.br
+List all the applications on a \fImachine\fR\.
+.
+.P
+\fBapps:show\fR
+.
+.br
+Show all information about an \fIapplication\fR\.
+.
+.P
+\fBapps:create\fR \fIname\fR \fIenvironment\fR \fIdomains\.\.\.\fR
+.
+.br
+Create a new application on \fImachine\fR\.
+.
+.IP "\(bu" 4
+\fIname\fR is the human name of the application\.
+.
+.IP "\(bu" 4
+\fIenvironment\fR is the Rails environment of the application and can be \fBdevelopment\fR, \fBtest\fR, \fBstaging\fR, \fBproduction\fR\.
+.
+.IP "\(bu" 4
+\fIdomains\fR is a list of domains to bind to this application\.
+.
+.IP "" 0
+.
+.P
+\fBapps:import\fR \fIname\fR \fIenvironment\fR \fIdomains\.\.\.\fR
+.
+.br
+Import an existing application on \fImachine\fR\.
+.
+.IP "\(bu" 4
+\fIname\fR is the human name of the application\.
+.
+.IP "\(bu" 4
+\fIenvironment\fR is the Rails environment of the application and can be \fBdevelopment\fR, \fBtest\fR, \fBstaging\fR, \fBproduction\fR\.
+.
+.IP "\(bu" 4
+\fIdomains\fR is a list of domains to bind to this application\.
+.
+.IP "" 0
+.
+.P
+\fBapps:init\fR
+.
+.br
+Create the \fB\.capricorn\.yml\fR file (see capricorn\.yml(5) \fIcapricorn\.yml\.5\fR)\.
+.
+.P
+\fBapps:start\fR
+.
+.br
+Start a stopped \fIapplication\fR\.
+.
+.P
+\fBapps:restart\fR
+.
+.br
+Restart an \fIapplication\fR\. this will touch \fBtmp/restart\.txt\fR\.
+.
+.P
+\fBapps:relink\fR
+.
+.br
+Relink an \fIapplication\fR\. this will touch \fBtmp/restart\.txt\fR and \fBtmp/relink\.txt\fR\.
+.
+.P
+\fBapps:stop\fR
+.
+.br
+Stop a stopped \fIapplication\fR\.
+.
+.P
+\fBapps:fupdate\fR
+.
+.br
+Force update an \fIapplication\fR\.
+.
+.P
+\fBapps:domains:list\fR
+.
+.br
+List all the bound domains for this \fIapplication\fR\.
+.
+.P
+\fBapps:domains:add\fR \fIdomain\fR
+.
+.br
+Bind a new domain to this \fIapplication\fR\.
+.
+.P
+\fBapps:domains:remove\fR \fIdomain\fR
+.
+.br
+Unbind a domain from this \fIapplication\fR\.
+.
+.P
+\fBapps:gems:list\fR
+.
+.br
+List all the used gems for this \fIapplication\fR\.
+.
+.P
+\fBapps:gems:add\fR \fIgem\fR
+.
+.br
+Add a new gem to this \fIapplication\fR\.
+.
+.P
+\fBapps:gems:remove\fR \fIgem\fR
+.
+.br
+Remove a gem from this \fIapplication\fR\.
+.
+.SH "SEE ALSO"
+capricornd(1) \fIcapricornd\.1\fR, capricorn(7) \fIcapricorn\.7\fR

@@ -29,6 +29,14 @@ task :release => [:load_version, :build] do
   sh "git push origin master --tags"
 end
 
+desc 'Build the manual'
+task :man => :load_version do
+  require 'ronn'
+  ENV['RONN_MANUAL']  = "Capricorn #{Capricorn::VERSION}"
+  ENV['RONN_ORGANIZATION'] = "Simon Menke"
+  sh "ronn -w -s toc man/*.ronn"
+end
+
 begin
   require 'yard'
   YARD::Rake::YardocTask.new do |t|

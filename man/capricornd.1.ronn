@@ -1,0 +1,17 @@
+capricornd(1) -- the capricorn server
+=====================================
+
+## SYNOPSIS
+
+`capricornd` `machine`|`cluster` `start`<br>
+`capricornd` `machine`|`cluster` `stop`<br>
+`capricornd` `machine`|`cluster` `restart`<br>
+`capricornd` `machine`|`cluster` `reboot`<br>
+`capricornd` `machine`|`cluster` `ping`<br>
+`capricornd` `machine`|`cluster` `console`<br>
+`capricornd` `machine`|`cluster` `attach`
+
+## SEE ALSO
+
+[capricornctl(1)](capricornctl.1),
+[capricorn(7)](capricorn.7)
