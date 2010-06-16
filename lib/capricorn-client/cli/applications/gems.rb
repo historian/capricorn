@@ -6,22 +6,22 @@ class Capricorn::CLI::ApplicationsGems < Capricorn::CLI
 
   desc "list", "list all gems"
   def list
-    application_info[9].sort! do |a,b|
+    (application_info[9] || []).sort! do |a,b|
       a[1] <=> b[1]
     end
 
-    application_info[10].sort! do |a,b|
+    (application_info[10] || []).sort! do |a,b|
       a <=> b
     end
 
     puts "Configured gems:"
-    application_info[10].each do |name|
+    (application_info[10] || []).each do |name|
       puts "- #{name}"
     end
     puts
 
     puts "Used gems:"
-    application_info[9].each do |gem|
+    (application_info[9] || []).each do |gem|
       puts "- #{gem[1]} (#{gem[2].flatten.join('.')})"
     end
   end
@@ -32,6 +32,8 @@ class Capricorn::CLI::ApplicationsGems < Capricorn::CLI
 
     machine, id = *application
     app         = application_info
+
+    app[10] ||= []
 
     if app[10].include?(gem_name)
       halt "Gem is already configured"
@@ -48,6 +50,8 @@ class Capricorn::CLI::ApplicationsGems < Capricorn::CLI
 
     machine, id = *application
     app         = application_info
+
+    app[10] ||= []
 
     unless app[10].include?(gem_name)
       halt "Gem is not configured"

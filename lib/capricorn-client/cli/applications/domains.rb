@@ -6,10 +6,10 @@ class Capricorn::CLI::ApplicationsDomains < Capricorn::CLI
 
   desc "list", "list all domains"
   def list
-    application_info[4].sort! do |a, b|
+    (application_info[4] || []).sort! do |a, b|
       a <=> b
     end
-    application_info[4].each do |domain|
+    (application_info[4] || []).each do |domain|
       puts "- #{domain}"
     end
   end
@@ -26,6 +26,8 @@ class Capricorn::CLI::ApplicationsDomains < Capricorn::CLI
 
     machine, id = *application
     app         = application_info
+
+    app[4] ||= []
 
     if app[4].include?(domain)
       halt "Domain is already configured"
@@ -48,6 +50,8 @@ class Capricorn::CLI::ApplicationsDomains < Capricorn::CLI
 
     machine, id = *application
     app         = application_info
+
+    app[4] ||= []
 
     unless app[4].include?(domain)
       halt "Domain is not configured"
