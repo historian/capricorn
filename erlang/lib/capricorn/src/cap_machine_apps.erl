@@ -230,8 +230,9 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 start_scaffolder(State) ->
-  Cmd  = os:find_executable("capricorn-app-scaffolder"),
-  Port = bertio:open_port({spawn_executable, Cmd}, [exit_status]),
+  Cmd  = os:find_executable("capricornutl"),
+  Port = bertio:open_port({spawn_executable, Cmd}, [
+    exit_status, {args, ["internal:scaffolder"]}]),
   State#ctx{scaffolder=Port}.
 
 

@@ -161,8 +161,9 @@ code_change(_OldVsn, State, _Extra) ->
 
 -spec start_spec_reader(state()) -> state() .
 start_spec_reader(State) ->
-  RubyCmd    = os:find_executable("capricorn-gem-spec"),
-  SpecReader = bertio:open_port({spawn_executable, RubyCmd}, [exit_status]),
+  RubyCmd    = os:find_executable("capricornutl"),
+  SpecReader = bertio:open_port({spawn_executable, RubyCmd}, [
+    exit_status, {args, ["internal:inspector"]}]),
   State#state{spec_reader=SpecReader}.
 
 

@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.files        = Dir.glob("{lib,erlang,ext}/**/*") +
                    %w(LICENSE README.md ext/Makefile )
 
-  s.executables = %w( capricornctl capricornd capricorn-app-scaffolder capricorn-gem-spec )
+  s.executables = %w( capricornctl capricornd capricornutl )
   s.extensions  = %w( ext/extconf.rb )
 
   s.add_runtime_dependency 'fd-bertrpc',            '= 1.3.1'

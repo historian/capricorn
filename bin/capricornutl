@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+begin
+  require 'capricorn-util'
+rescue LoadError
+  $:.unshift(File.dirname(__FILE__)+'/../lib')
+  require 'capricorn-util'
+end
+
+Capricorn::Util.start
