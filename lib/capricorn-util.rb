@@ -21,10 +21,14 @@ module Capricorn
     end
 
     def method_missing(meth, *args)
-      meth = meth.to_s
-      klass, task = Thor::Util.find_class_and_task_by_namespace(meth)
-      args.unshift(task) if task
-      klass.start(args, :shell => self.shell)
+      if self.class == Capricorn::Util
+        meth = meth.to_s
+        klass, task = Thor::Util.find_class_and_task_by_namespace(meth)
+        args.unshift(task) if task
+        klass.start(args, :shell => self.shell)
+      else
+        super
+      end
     end
 
   end

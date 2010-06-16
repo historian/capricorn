@@ -3,6 +3,7 @@
 begin
   require 'capricorn-client'
 rescue LoadError
+  require 'rubygems'
   $:.unshift(File.dirname(__FILE__)+'/../lib')
   require 'capricorn-client'
 end
