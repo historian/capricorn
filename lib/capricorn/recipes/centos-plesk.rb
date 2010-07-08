@@ -78,7 +78,7 @@ has_db = application_root['shared/settings/database.yml'].exists?
 if application_root['host/'].exists?
   application_root.bash %{ mv host host-#{Time.now.strftime('%Y%m%d%H%M%S')} }
 end
-application_root.bash %{ milkshake create.host "host" --git-data --shared-data "shared" }
+application_root.bash %{ milkshake create:host "host" --git-data --shared-data "shared" }
 
 unless has_db
   ###############################################################################
