@@ -178,12 +178,12 @@ app_to_json(App) ->
     {<<"root_path">>,      App#application.root_path},
     {<<"installed_gems">>, lists:foldl(fun(Gem, Acc1) ->
         [gem_id_to_json(Gem) |Acc1]
-      end, [], App#application.required_gems)},
+      end, [], App#application.installed_gems)},
     {<<"required_gems">>,  App#application.required_gems}
   ]}.
 
 
-gem_id_to_json(Gem) ->
+gem_id_to_json(#gem_id{}=Gem) ->
   % -record(gem_id, {
   %   name    :: binary(),
   %   version :: version()
@@ -209,6 +209,11 @@ gem_id_to_json(Gem) ->
   
   {[
     {<<"name">>,    Gem#gem_id.name},
-    {<<"version">>, ?l2b(Version)}
-  ]}.
+    {<<"version">>, case Version of
+        undefined -> null;
+        Else -> ?l2b(Version)
+      end}
+  ]};
 
+gem_id_to_json(_) ->
+  null.
