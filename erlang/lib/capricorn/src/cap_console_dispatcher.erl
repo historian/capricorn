@@ -211,7 +211,7 @@ gem_id_to_json(#gem_id{}=Gem) ->
     {<<"name">>,    Gem#gem_id.name},
     {<<"version">>, case Version of
         undefined -> null;
-        Else -> ?l2b(Version)
+        _Else -> ?l2b(Version)
       end}
   ]};
 
