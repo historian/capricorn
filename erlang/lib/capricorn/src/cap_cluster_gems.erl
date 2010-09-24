@@ -2,7 +2,7 @@
 -behaviour(gen_server).
 -include("capricorn.hrl").
 
--export([start_link/0, push/1, missing/0, lookup/1, lookup/2, pull/1, pull/2, check/0, all/0]).
+-export([start_link/0, push/1, missing/0, lookup/1, lookup/2, pull/1, pull/2, check/0, all/0, all/1]).
 -export([init/1, handle_call/3, handle_cast/2,
          handle_info/2, terminate/2, code_change/3]).
 
@@ -50,6 +50,11 @@ missing() ->
 -spec all() -> {ok, [gem_id()]} .
 all() ->
   gen_server:call(cap_cluster_gems, {all}).
+
+
+-spec all(node()) -> {ok, [gem_id()]} .
+all(Node) ->
+  gen_server:call({cap_cluster_gems, Node}, {all}).
 
 
 -spec check() -> ok .

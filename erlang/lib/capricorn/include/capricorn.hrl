@@ -11,6 +11,7 @@
 %%
 
 -define(b2a(V), list_to_atom(binary_to_list(V))).
+-define(a2b(V), list_to_binary(atom_to_list(V))).
 -define(b2l(V), binary_to_list(V)).
 -define(l2b(V), list_to_binary(V)).
 

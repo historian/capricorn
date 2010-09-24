@@ -20,6 +20,7 @@
     cap_cluster,
     cap_cluster_gems,
     cap_config,
+    cap_console_dispatcher,
     cap_dets_updater,
     cap_events,
     cap_event_sup,
@@ -53,6 +54,6 @@
     cap_secondary_services,
     cap_sup
   ]},
-  {applications, [kernel, stdlib, sasl, inets, bertio, bertrpc, emq]},
+  {applications, [kernel, stdlib, sasl, inets, bertio, bertrpc, emq, misultin, ejson]},
   {mod, {capricorn_app, []}}
 ]}.

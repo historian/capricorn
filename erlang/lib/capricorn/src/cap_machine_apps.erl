@@ -5,7 +5,7 @@
 
 
 -export([start_link/0]).
--export([create/4, create/5, import/7, import/8, update/3, update/4, fupdate/1, fupdate/2, update_gem/1, update_gem/2, all/0, all/1]).
+-export([create/4, create/5, import/7, import/8, update/3, update/4, fupdate/1, fupdate/2, update_gem/1, update_gem/2, all/0, all/1, one/1, one/2]).
 -export([init/1, handle_call/3, handle_cast/2,
          handle_info/2, terminate/2, code_change/3]).
 
@@ -105,6 +105,20 @@ all(Node) ->
 
 
 
+-spec one(binary()) -> application().
+
+one(Id) ->
+  gen_server:call(cap_machine_apps, {one, Id}).
+
+
+
+-spec one(atom(), binary()) -> application().
+
+one(Node, Id) ->
+  gen_server:call({cap_machine_apps, Node}, {one, Id}).
+
+
+
 %%% Initialize the server
 init([]) ->
   Root   = cap_config:get(machine, database, "var/run/capricorn"),
@@ -125,6 +139,16 @@ init([]) ->
 handle_call({all}, _From, #ctx{apps=Apps}=State) ->
   All = dets:foldl(fun(App, Acc) -> [App|Acc] end, [], Apps),
   {reply, All, State};
+
+handle_call({one, Id}, _From, #ctx{}=State) ->
+  try
+    {ok, App} = do_lookup_app(Id, State),
+    {reply, {ok, App}, State}
+  catch
+    T:E ->
+      ?LOG_ERROR("error while getting one app ~s: ~p", [Id, E]),
+      {reply, {T, E}, State}
+  end;
 
 handle_call(_Request, _From, State) ->
   {reply, ok, State}.

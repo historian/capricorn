@@ -88,6 +88,7 @@ start_server(NodeType) ->
 
 start_primary_services(cluster) ->
   ExternalApi = cap_config:get(cluster, api),
+  ConsolePort = cap_config:get(cluster, console_port),
 
   supervisor:start_link({local, cap_primary_services}, cap_sup,
   {{one_for_one, 10, 3600},[
@@ -121,6 +122,12 @@ start_primary_services(cluster) ->
       1000,
       worker,
       [cap_external_api]},
+    {cap_console_dispatcher,
+      {cap_console_dispatcher, start_link, [ConsolePort]},
+      permanent,
+      1000,
+      worker,
+      [cap_console_dispatcher]},
     {cap_runtime,
       {cap_runtime, start_link, ["cluster"]},
       permanent,
@@ -130,6 +137,7 @@ start_primary_services(cluster) ->
   ]});
 start_primary_services(machine) ->
   InternalApi = cap_config:get(machine, api),
+  ConsolePort = cap_config:get(machine, console_port),
 
   supervisor:start_link({local, cap_primary_services}, cap_sup,
   {{one_for_one, 10, 3600},[
@@ -169,6 +177,12 @@ start_primary_services(machine) ->
       infinity,
       supervisor,
       [cap_machine_apps_sup]},
+    {cap_console_dispatcher,
+      {cap_console_dispatcher, start_link, [ConsolePort]},
+      permanent,
+      1000,
+      worker,
+      [cap_console_dispatcher]},
     {cap_runtime,
       {cap_runtime, start_link, ["machine"]},
       permanent,
