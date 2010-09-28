@@ -54,6 +54,7 @@ APP_VSN=${START_ERL#* }
 
 # Add ERTS bin dir to our path
 ERTS_PATH=$RUNNER_SRC_DIR/erts-$ERTS_VSN/bin
+SSL_PATH=$RUNNER_SRC_DIR/lib/ssl-3.10.8/priv/bin
 
 # Setup command to control the node
 NODETOOL="$ERTS_PATH/escript $ERTS_PATH/nodetool $NAME_ARG $COOKIE_ARG"
@@ -120,7 +121,7 @@ case "$1" in
         BINDIR=$ROOTDIR/erts-$ERTS_VSN/bin
         EMU=beam
         PROGNAME=`echo $0 | sed 's/.*\///'`
-        CMD="$BINDIR/erlexec -boot $RUNNER_SRC_DIR/releases/$APP_VSN/capricorn -embedded -config $RUNNER_ETC_DIR/app.config -args_file $RUNNER_ETC_DIR/$NODETYPE-vm.args -node_type $NODETYPE -- ${1+"$@"}"
+        CMD="$BINDIR/erlexec -ssl_portprogram_dir $SSL_PATH -boot $RUNNER_SRC_DIR/releases/$APP_VSN/capricorn -embedded -config $RUNNER_ETC_DIR/app.config -args_file $RUNNER_ETC_DIR/$NODETYPE-vm.args -node_type $NODETYPE -- ${1+"$@"}"
         export EMU
         export ROOTDIR
         export BINDIR

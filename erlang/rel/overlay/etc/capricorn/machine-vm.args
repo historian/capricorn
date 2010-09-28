@@ -1,3 +1,8 @@
+-proto_dist inet_ssl
+-ssl_dist_opt server_certfile "/Users/Simon/Desktop/sslcerts/machine-001/machine-001.pem"
+-ssl_dist_opt server_cacertfile "/Users/Simon/Desktop/sslcerts/CA/cacert.pem"
+-ssl_dist_opt client_certfile "/Users/Simon/Desktop/sslcerts/machine-001/machine-001.pem"
+-ssl_dist_opt verify 1 -ssl_dist_opt depth 1
 
 ## Name of the capricorn node
 -name machine-001@127.0.0.1

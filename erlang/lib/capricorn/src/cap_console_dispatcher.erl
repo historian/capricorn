@@ -1,26 +1,21 @@
 -module(cap_console_dispatcher).
--export([start_link/1, stop/0]).
+-export([start_link/1]).
 -include("capricorn.hrl").
 
 % start misultin http server
 start_link(Port) ->
-  misultin:start_link([
+  mochiweb_http:start([
     {port, Port},
-    {loop,    fun(Req) -> handle_http(Req, Port) end},
-    {ws_loop, fun(Ws)  -> handle_websocket(Ws)   end}
+    {loop, fun(Req) -> handle_http(Req, Port) end}
   ]).
-
-% stop misultin
-stop() ->
-  misultin:stop().
 
 % callback on request received
 handle_http(Req, _Port) ->
-  handle_rest(Req:get(method), Req:resource([lowercase, urldecode]), Req).
+  handle_rest(Req:get(method), Req:get(resource), Req).
 
 
 handle_rest('GET', [], Req) ->
-  Req:ok("Hello World.");
+  Req:ok({"text/plain", "Hello World."});
 
 handle_rest(Method, ["machines" |Rest], Req) ->
   handle_machines_rest(Method, Rest, Req);
@@ -40,10 +35,10 @@ handle_gems_rest('GET', [], Req) ->
   JSON = lists:foldl(fun(Gem, Acc) ->
     [gem_id_to_json(Gem) |Acc]
   end, [], All),
-  Req:ok([{"Content-Type", "application/json"}], ejson:encode(JSON));
+  Req:ok({"application/json", mochijson2:encode(JSON)});
 
 handle_gems_rest('POST', [], Req) ->
-  Req:ok([{"Content-Type", "text/plain"}], "handle_gems_rest: POST, []");
+  Req:ok({"text/plain", "handle_gems_rest: POST, []"});
 
 handle_gems_rest(Method, [Gem, Version |Rest], Req) ->
   handle_gem_rest(Method, {Gem, Version}, Rest, Req);
@@ -53,7 +48,7 @@ handle_gems_rest(_, _, Req) ->
 
 
 handle_gem_rest('GET', {Gem, Version}, [], Req) ->
-  Req:ok([{"Content-Type", "text/plain"}], "handle_gem_rest: GET, ~p, []", [{Gem, Version}]);
+  Req:ok({"text/plain", "handle_gem_rest: GET, ~p, []", [{Gem, Version}]});
 
 handle_gem_rest('PUT', {Gem, Version}, [], Req) ->
   Req:ok([{"Content-Type", "text/plain"}], "handle_gem_rest: PUT, ~p, []", [{Gem, Version}]);
@@ -69,7 +64,7 @@ handle_machines_rest('GET', [], Req) ->
   Nodes    = [atom_to_list(node()) | [atom_to_list(Node)   || Node <- nodes()]],
   Machines = [list_to_binary(Node) || Node <- Nodes,
                string:substr(Node, 1, 8) == "machine-"],
-  Req:ok([{"Content-Type", "application/json"}], ejson:encode(Machines));
+  Req:ok({"application/json", mochijson2:encode(Machines)});
 
 handle_machines_rest(Method, [Machine |Rest], Req) ->
   handle_machine_rest(Method, Machine, Rest, Req);
@@ -90,10 +85,10 @@ handle_apps_rest('GET', Machine, [], Req) ->
   JSON = lists:foldl(fun(App, Acc) ->
     [app_to_json(App) |Acc]
   end, [], All),
-  Req:ok([{"Content-Type", "application/json"}], ejson:encode(JSON));
+  Req:ok({"application/json", mochijson2:encode(JSON)});
 
 handle_apps_rest('POST', Machine, [], Req) ->
-  Req:ok([{"Content-Type", "text/plain"}], "handle_apps_rest: POST, ~p, []", [Machine]);
+  Req:ok({"text/plain", "handle_apps_rest: POST, ~p, []", [Machine]});
 
 handle_apps_rest(Method, Machine, [Application |Rest], Req) ->
   handle_app_rest(Method, Machine, Application, Rest, Req);
@@ -106,36 +101,36 @@ handle_app_rest('GET', Machine, Application, [], Req) ->
   Resp = cap_machine_apps:one(list_to_atom(Machine), ?l2b(Application)),
   case Resp of
   {ok, App} ->
-    JSON = ejson:encode(app_to_json(App)),
-    Req:ok([{"Content-Type", "application/json"}], JSON);
+    JSON = mochijson2:encode(app_to_json(App)),
+    Req:ok({"application/json", JSON});
   _ ->
     handle_404(Req)
   end;
 
 handle_app_rest('PUT', Machine, Application, [], Req) ->
-  Req:ok([{"Content-Type", "text/plain"}], "handle_apps_rest: PUT, ~p, ~p, []", [Machine, Application]);
+  Req:ok({"text/plain", "handle_apps_rest: PUT, ~p, ~p, []", [Machine, Application]});
 
 handle_app_rest('DELETE', Machine, Application, [], Req) ->
-  Req:ok([{"Content-Type", "text/plain"}], "handle_apps_rest: DELETE, ~p, ~p, []", [Machine, Application]);
+  Req:ok({"text/plain", "handle_apps_rest: DELETE, ~p, ~p, []", [Machine, Application]});
 
 handle_app_rest('POST', Machine, Application, ["start"], Req) ->
-  Req:ok([{"Content-Type", "text/plain"}], "handle_apps_rest: POST, ~p, ~p, [start]", [Machine, Application]);
+  Req:ok({"text/plain", "handle_apps_rest: POST, ~p, ~p, [start]", [Machine, Application]});
 
 handle_app_rest('POST', Machine, Application, ["restart"], Req) ->
-  Req:ok([{"Content-Type", "text/plain"}], "handle_apps_rest: POST, ~p, ~p, [restart]", [Machine, Application]);
+  Req:ok({"text/plain", "handle_apps_rest: POST, ~p, ~p, [restart]", [Machine, Application]});
 
 handle_app_rest('POST', Machine, Application, ["stop"], Req) ->
-  Req:ok([{"Content-Type", "text/plain"}], "handle_apps_rest: POST, ~p, ~p, [stop]", [Machine, Application]);
+  Req:ok({"text/plain", "handle_apps_rest: POST, ~p, ~p, [stop]", [Machine, Application]});
 
 handle_app_rest('POST', Machine, Application, ["update"], Req) ->
-  Req:ok([{"Content-Type", "text/plain"}], "handle_apps_rest: POST, ~p, ~p, [update]", [Machine, Application]);
+  Req:ok({"text/plain", "handle_apps_rest: POST, ~p, ~p, [update]", [Machine, Application]});
 
 handle_app_rest(_, _, _, _, Req) ->
   handle_404(Req).
 
 
 handle_auth_rest('GET', ["login"], Req) ->
-  Req:ok([{"Content-Type", "text/html"}],
+  Req:ok({"text/html",
     "<html>"
     "  <head><title>Console</title></head>"
     "  <body>"
@@ -145,43 +140,43 @@ handle_auth_rest('GET', ["login"], Req) ->
     "      <p><input type=\"submit\" /></p>"
     "    </form>"
     "  </body>"
-    "</html>");
+    "</html>"});
 handle_auth_rest('POST', ["login"], Req) ->
   Data = Req:parse_post(),
 
   case proplists:get_value("username", Data) of
-  undefined -> Req:respond(302, [{"Location", "/"}], "");
-  Username ->
+  undefined -> Req:respond({302, [{"Location", "/"}], ""});
+  _Username ->
     case proplists:get_value("password", Data) of
-    undefined -> Req:respond(302, [{"Location", "/"}], "");
-    Password ->
+    undefined -> Req:respond({302, [{"Location", "/"}], ""});
+    _Password ->
 
-      Req:respond(302, [{"Location", "/"}], "");
+      Req:respond({302, [{"Location", "/"}], ""})
 
     end
   end;
 handle_auth_rest('POST', ["logout"], Req) ->
-  Req:respond(302, [{"Location", "/"}], "");
+  Req:respond({302, [{"Location", "/"}], ""});
 handle_auth_rest(_, _, Req) ->
   handle_404(Req).
 
 
 handle_404(Req) ->
-  Req:respond(404, [{"Content-Type", "text/plain"}], "Page not found.").
+  Req:respond({404, [{"Content-Type", "text/plain"}], "Page not found."}).
 
 
 % callback on received websockets data
-handle_websocket(Ws) ->
-  receive
-    {browser, Data} ->
-      Ws:send(["received '", Data, "'"]),
-      handle_websocket(Ws);
-    _Ignore ->
-      handle_websocket(Ws)
-  after 5000 ->
-    Ws:send("pushing!"),
-    handle_websocket(Ws)
-  end.
+% handle_websocket(Ws) ->
+%   receive
+%     {browser, Data} ->
+%       Ws:send(["received '", Data, "'"]),
+%       handle_websocket(Ws);
+%     _Ignore ->
+%       handle_websocket(Ws)
+%   after 5000 ->
+%     Ws:send("pushing!"),
+%     handle_websocket(Ws)
+%   end.
 
 
 
@@ -202,7 +197,7 @@ app_to_json(App) ->
   %   rvsn={rvsn, 0}
   % }).
 
-  {[
+  {struct, [
     {<<"id">>,             App#application.id},
     {<<"node">>,           ?a2b(App#application.node)},
     {<<"name">>,           App#application.name},
@@ -242,7 +237,7 @@ gem_id_to_json(#gem_id{}=Gem) ->
     end
   end, undefined, Parts),
 
-  {[
+  {struct, [
     {<<"name">>,    Gem#gem_id.name},
     {<<"version">>, case Version of
         undefined -> null;

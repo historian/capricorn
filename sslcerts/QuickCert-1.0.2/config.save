@@ -1,0 +1,12 @@
+site-ruby=/Library/Ruby/Site/1.8
+prefix=/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr
+ruby-prog=/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby
+ruby-path=/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby
+make-prog=make
+site-ruby-common=/Library/Ruby/Site
+rb-dir=$site-ruby
+without-ext=no
+std-ruby=$prefix/lib/ruby/1.8
+bin-dir=$prefix/bin
+data-dir=$prefix/share
+so-dir=/Library/Ruby/Site/1.8/universal-darwin10.0

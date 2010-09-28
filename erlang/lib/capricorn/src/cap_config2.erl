@@ -1,7 +1,18 @@
 -module(cap_config2).
 -behaviour(gen_server).
 
+-export([
+  start_link/0,
+  get/1, get/2, get/3,
+  get_all/1,
+  set/2, set/3,
+  unset/1, unset/2
+]).
+-export([init/1, handle_call/3, handle_cast/2,
+         handle_info/2, terminate/2, code_change/3]).
 
+start_link() ->
+  gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
 get(Key) ->
   get(node(), Key, undefined).
@@ -50,7 +61,8 @@ handle_call({get, {Type, Id}, Key, Default}, _From, #ctx{}=Ctx) ->
   _1 ->
     case dict:find({Type, Id, "node"}, Ctx#ctx.local_values) of
     {ok, Node} -> handle_call({get, {node, Node}, Key, Default}, _From, Ctx);
-    _2         -> {reply, Default, Ctx}
+    _2         -> handle_call({get, global, Key, Default}, _From, Ctx)
+    end
   end;
 
 handle_call({get_all, Key}, _From, #ctx{}=Ctx) ->
@@ -58,27 +70,27 @@ handle_call({get_all, Key}, _From, #ctx{}=Ctx) ->
   All1 = [],
 
   All2 = dict:foldl(fun(K, V, Acc) ->
-    case K of
-    K when K = Key -> [{global, Value}|Acc];
-    _              -> Acc
+    case Key of
+    K -> [{global, V}|Acc];
+    _ -> Acc
     end
   end, All1, D1),
 
   All3 = dict:foldl(fun({Node, K}, V, Acc) ->
-    case K of
-    K when K = Key -> [{{node, Node}, Value}|Acc];
-    _              -> Acc
+    case Key of
+    K -> [{{node, Node}, V}|Acc];
+    _ -> Acc
     end
   end, All2, D2),
 
   All4 = dict:foldl(fun({Type, Id, K}, V, Acc) ->
-    case K of
-    K when K = Key -> [{{Type, Id}, Value}|Acc];
-    _              -> Acc
+    case Key of
+    K -> [{{Type, Id}, V}|Acc];
+    _ -> Acc
     end
   end, All3, D3),
 
-  {reply, All3, Ctx};
+  {reply, All4, Ctx}.
 
 handle_cast({set, global, Key, Value}, #ctx{}=Ctx) ->
   #ctx{ global_values=D1 } = Ctx,
@@ -104,4 +116,16 @@ handle_cast({unset, {node, Node}, Key}, #ctx{}=Ctx) ->
 handle_cast({unset, {Type, Id}, Key}, #ctx{}=Ctx) ->
   #ctx{ local_values=D1 } = Ctx,
   D2 = dict:erase({Type, Id, Key}, D1),
-  {norely, Ctx#ctx{ local_values=D2 }};
+  {norely, Ctx#ctx{ local_values=D2 }}.
+
+
+handle_info(_, State) ->
+  {noreply, State}.
+
+
+terminate(_Reason, #ctx{}) ->
+  ok.
+
+
+code_change(_OldVsn, State, _Extra) ->
+  {ok, State}.

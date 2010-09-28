@@ -1,10 +1,13 @@
 
-erlang/rel/capricorn
+/erlang/rel/capricorn
+/sslcerts/CA/serial
+/sslcerts/qc_config
 
 *.log
 *.dump
 
 *.beam
 *.gem
+*.pem
 
 .DS_Store
