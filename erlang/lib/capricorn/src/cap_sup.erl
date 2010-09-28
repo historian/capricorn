@@ -44,8 +44,6 @@ restart_core_server() ->
   NodeType = cap_config:get(node_type),
   restart_core_server(NodeType).
 restart_core_server(cluster) ->
-  supervisor:terminate_child(cap_primary_services, cap_cluster),
-  supervisor:restart_child(cap_primary_services, cap_cluster),
   ok;
 restart_core_server(machine) ->
   supervisor:terminate_child(cap_primary_services, cap_machine),
@@ -98,12 +96,6 @@ start_primary_services(cluster) ->
       brutal_kill,
       worker,
       [cap_log]},
-    {cap_cluster,
-      {cap_cluster, start_link, []},
-      permanent,
-      1000,
-      worker,
-      [cap_cluster]},
     {cap_cluster_gems,
       {cap_cluster_gems, start_link, []},
       permanent,
@@ -136,7 +128,6 @@ start_primary_services(cluster) ->
       [cap_runtime]}
   ]});
 start_primary_services(machine) ->
-  InternalApi = cap_config:get(machine, api),
   ConsolePort = cap_config:get(machine, console_port),
 
   supervisor:start_link({local, cap_primary_services}, cap_sup,
@@ -159,12 +150,6 @@ start_primary_services(machine) ->
       1000,
       worker,
       [cap_machine_apps]},
-    {cap_internal_api,
-      {cap_internal_api, start_link, [InternalApi]},
-      permanent,
-      1000,
-      worker,
-      [cap_internal_api]},
     {cap_events,
       {cap_events, start_link, []},
       permanent,

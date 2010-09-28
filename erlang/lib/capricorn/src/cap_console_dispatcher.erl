@@ -28,6 +28,9 @@ handle_rest(Method, ["machines" |Rest], Req) ->
 handle_rest(Method, ["gems" |Rest], Req) ->
   handle_gems_rest(Method, Rest, Req);
 
+handle_rest(Method, ["auth" |Rest], Req) ->
+  handle_auth_rest(Method, Rest, Req);
+
 handle_rest(_, _, Req) ->
   handle_404(Req).
 
@@ -131,6 +134,38 @@ handle_app_rest(_, _, _, _, Req) ->
   handle_404(Req).
 
 
+handle_auth_rest('GET', ["login"], Req) ->
+  Req:ok([{"Content-Type", "text/html"}],
+    "<html>"
+    "  <head><title>Console</title></head>"
+    "  <body>"
+    "    <form action=\"/auth/logout\" method=\"post\">"
+    "      <p><label for=\"username\">Username:</label> <input name=\"username\" type=\"text\" /></p>"
+    "      <p><label for=\"password\">Password:</label> <input name=\"password\" type=\"password\" /></p>"
+    "      <p><input type=\"submit\" /></p>"
+    "    </form>"
+    "  </body>"
+    "</html>");
+handle_auth_rest('POST', ["login"], Req) ->
+  Data = Req:parse_post(),
+
+  case proplists:get_value("username", Data) of
+  undefined -> Req:respond(302, [{"Location", "/"}], "");
+  Username ->
+    case proplists:get_value("password", Data) of
+    undefined -> Req:respond(302, [{"Location", "/"}], "");
+    Password ->
+
+      Req:respond(302, [{"Location", "/"}], "");
+
+    end
+  end;
+handle_auth_rest('POST', ["logout"], Req) ->
+  Req:respond(302, [{"Location", "/"}], "");
+handle_auth_rest(_, _, Req) ->
+  handle_404(Req).
+
+
 handle_404(Req) ->
   Req:respond(404, [{"Content-Type", "text/plain"}], "Page not found.").
 
@@ -166,7 +201,7 @@ app_to_json(App) ->
   %   required_gems=[]        :: [binary()],
   %   rvsn={rvsn, 0}
   % }).
-    
+
   {[
     {<<"id">>,             App#application.id},
     {<<"node">>,           ?a2b(App#application.node)},
@@ -191,7 +226,7 @@ gem_id_to_json(#gem_id{}=Gem) ->
   % -type version_part()  :: pos_integer() | string() .
   % -type version_parts() :: [version_part(),...] .
   % -type version()       :: {version_parts()} .
-  
+
   {Parts} = Gem#gem_id.version,
   Version = lists:foldl(fun(Part, Acc2) ->
     Str = case Part of
@@ -200,13 +235,13 @@ gem_id_to_json(#gem_id{}=Gem) ->
     Part ->
       Part
     end,
-    
+
     case Acc2 of
     undefined -> Str;
     _ -> Acc2 ++ [$. |Str]
     end
   end, undefined, Parts),
-  
+
   {[
     {<<"name">>,    Gem#gem_id.name},
     {<<"version">>, case Version of
