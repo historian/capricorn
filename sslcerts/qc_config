@@ -1,0 +1,19 @@
+CA[:hostname] = 'ca'
+CA[:domainname] = 'mrhenry.be'
+CA[:CA_dir] = File.join Dir.pwd, "CA"
+CA[:password] = '381122'
+
+CERTS << {
+  :type => 'server',
+  :hostname => 'machine-001'
+}
+
+CERTS << {
+  :type => 'server',
+  :hostname => 'machine-002'
+}
+
+CERTS << {
+  :type => 'server',
+  :hostname => 'machine-003'
+}

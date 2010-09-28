@@ -28,7 +28,7 @@ init(NodeType) ->
 
 
 handle_call(selfupdate, From, NodeType) ->
-  Install = os:cmd("bash -l -c \"gem install capricorn --pre\""),
+  Install = os:cmd("bash -l -c \"gem install capricorn\""),
   init:reboot(),
   gen_server:reply(From, list_to_binary(Install)),
   {noreply, NodeType};
