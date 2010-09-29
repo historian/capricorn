@@ -3,6 +3,8 @@ capricornd(1) -- the capricorn server
 
 ## SYNOPSIS
 
+`capricornd` `install`<br>
+`capricornd` `tail`<br>
 `capricornd` `machine`|`cluster` `start`<br>
 `capricornd` `machine`|`cluster` `stop`<br>
 `capricornd` `machine`|`cluster` `restart`<br>
@@ -10,6 +12,35 @@ capricornd(1) -- the capricorn server
 `capricornd` `machine`|`cluster` `ping`<br>
 `capricornd` `machine`|`cluster` `console`<br>
 `capricornd` `machine`|`cluster` `attach`
+
+## COMMANDS
+
+`install`<br>
+Install the config files.
+
+`tail`<br>
+Tail the log files.
+
+_nodetype_ `start`<br>
+Start a node of type <nodetype>.
+
+_nodetype_ `stop`<br>
+Stop a node of type <nodetype>.
+
+_nodetype_ `restart`<br>
+Restart a node of type <nodetype>.
+
+_nodetype_ `reboot`<br>
+Reboot a node of type <nodetype>.
+
+_nodetype_ `ping`<br>
+Ping a node of type <nodetype>.
+
+_nodetype_ `console`<br>
+Start a node of type <nodetype> and open an erlang shell.
+
+_nodetype_ `attach`<br>
+Attach to a node of type <nodetype>.
 
 ## SEE ALSO
 

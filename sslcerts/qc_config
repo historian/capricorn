@@ -1,19 +1,34 @@
 CA[:hostname] = 'ca'
 CA[:domainname] = 'mrhenry.be'
+CA[:ca_name] = 'Mr. Henry Cluster CA'
+CA[:name] = [
+  ['C', 'BE', OpenSSL::ASN1::PRINTABLESTRING],
+  ['O', 'Mr. Henry', OpenSSL::ASN1::UTF8STRING],
+  ['OU', 'Operations', OpenSSL::ASN1::UTF8STRING],
+]
 CA[:CA_dir] = File.join Dir.pwd, "CA"
-CA[:password] = '381122'
 
 CERTS << {
-  :type => 'server',
+  :type => 'node',
   :hostname => 'machine-001'
 }
 
 CERTS << {
-  :type => 'server',
+  :type => 'node',
   :hostname => 'machine-002'
 }
 
 CERTS << {
-  :type => 'server',
+  :type => 'node',
   :hostname => 'machine-003'
+}
+
+CERTS << {
+  :type => 'node',
+  :hostname => 'machine-004'
+}
+
+CERTS << {
+  :type => 'node',
+  :hostname => 'machine-005'
 }

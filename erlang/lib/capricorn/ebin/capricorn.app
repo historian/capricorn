@@ -19,6 +19,7 @@
     cap_application,
     cap_cluster_gems,
     cap_config,
+    cap_config2,
     cap_console_dispatcher,
     cap_dets_updater,
     cap_events,
