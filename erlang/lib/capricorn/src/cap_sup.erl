@@ -53,7 +53,9 @@ restart_core_server(machine) ->
 
 
 start_server(NodeType) ->
-  LogLevel = cap_config:get(log, level, info),
+  {ok, ConfPid} = cap_config:start_link(),
+
+  LogLevel = cap_config:get({node, node()}, "log.level", info),
 
   % announce startup
   io:format("Capricorn (LogLevel=~s, Node=~s, Type=~s) is starting.~n", [
@@ -80,16 +82,24 @@ start_server(NodeType) ->
 
   {ok, Pid} = supervisor:start_link({local, cap_sup}, cap_sup, BaseChildSpecs),
 
+  unlink(ConfPid),
+
   io:format("Capricorn has started. Time to relax.~n"),
 
   {ok, Pid}.
 
 start_primary_services(cluster) ->
-  ExternalApi = cap_config:get(cluster, api),
-  ConsolePort = cap_config:get(cluster, console_port),
+  % ExternalApi = cap_config:get({node, node()}, api),
+  ConsolePort = cap_config:get({node, node()}, "console_port", 8756),
 
   supervisor:start_link({local, cap_primary_services}, cap_sup,
   {{one_for_one, 10, 3600},[
+    {cap_config,
+      {cap_config, start_link, []},
+      permanent,
+      1000,
+      worker,
+      [cap_config]},
     {cap_log,
       {cap_log, start_link, []},
       permanent,
@@ -109,7 +119,7 @@ start_primary_services(cluster) ->
       worker,
       [cap_events]},
     {cap_external_api,
-      {cap_external_api, start_link, [ExternalApi]},
+      {cap_external_api, start_link, [[]]},
       permanent,
       1000,
       worker,
@@ -128,10 +138,16 @@ start_primary_services(cluster) ->
       [cap_runtime]}
   ]});
 start_primary_services(machine) ->
-  ConsolePort = cap_config:get(machine, console_port),
+  ConsolePort = cap_config:get({node, node()}, "console_port", 8756),
 
   supervisor:start_link({local, cap_primary_services}, cap_sup,
   {{one_for_one, 10, 3600},[
+    {cap_config,
+      {cap_config, start_link, []},
+      permanent,
+      1000,
+      worker,
+      [cap_config]},
     {cap_log,
       {cap_log, start_link, []},
       permanent,
@@ -176,33 +192,33 @@ start_primary_services(machine) ->
       [cap_runtime]}
   ]}).
 
-start_secondary_services(NodeType) ->
-  DaemonChildSpecs = [
-    begin
-      {Name,
-          {Module, Fun, Args},
-          permanent,
-          brutal_kill,
-          worker,
-          [Module]}
-    end
-    || {Name, {Module, Fun, Args}}
-    <- cap_config:get(NodeType, daemons, [])],
-
-  EventHandlerSpecs = [
-    begin
-      {Name,
-          {cap_event_sup, start_link, [cap_events, Module, Args]},
-          permanent,
-          brutal_kill,
-          worker,
-          [Module]}
-    end
-    || {Name, {Module, Args}}
-    <- cap_config:get(NodeType, event_handlers, [])],
+start_secondary_services(_NodeType) ->
+  % DaemonChildSpecs = [
+  %   begin
+  %     {Name,
+  %         {Module, Fun, Args},
+  %         permanent,
+  %         brutal_kill,
+  %         worker,
+  %         [Module]}
+  %   end
+  %   || {Name, {Module, Fun, Args}}
+  %   <- cap_config:get(NodeType, daemons, [])],
+  %
+  % EventHandlerSpecs = [
+  %   begin
+  %     {Name,
+  %         {cap_event_sup, start_link, [cap_events, Module, Args]},
+  %         permanent,
+  %         brutal_kill,
+  %         worker,
+  %         [Module]}
+  %   end
+  %   || {Name, {Module, Args}}
+  %   <- cap_config:get(NodeType, event_handlers, [])],
 
   supervisor:start_link({local, cap_secondary_services}, cap_sup,
-    {{one_for_one, 10, 3600}, DaemonChildSpecs++EventHandlerSpecs}).
+    {{one_for_one, 10, 3600}, []}).
 
 stop() ->
   catch exit(whereis(cap_sup), normal).

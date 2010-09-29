@@ -42,13 +42,13 @@ stop() ->
 
 init([]) ->
   % read config and register for configuration changes
-  
+
   % just stop if one of the config settings change. capricorn_server_sup
   % will restart us and then we will pick up the new settings.
-  
-  Filename = cap_config:get(log, file, "var/log/capricorn.log"),
-  Level = cap_config:get(log, level, info),
-  
+
+  Filename = cap_config:get({node, node()}, "log.file", "var/log/capricorn.log"),
+  Level = cap_config:get({node, node()}, "log.level", info),
+
   {ok, Fd} = file:open(Filename, [append]),
   {ok, {Fd, level_integer(Level)}}.
 

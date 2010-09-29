@@ -20,7 +20,7 @@
 
 %% operation & maintenance api
 -export([start_link/0, stop/0]).
- 
+
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2,
          handle_info/2, terminate/2, code_change/3]).
@@ -59,10 +59,10 @@ ensure_gems_are_present_for_app(App) ->
 %% @spec init(State) -> {ok, State}
 %% @doc Callback for initialize the cap_machine
 init([]) ->
-  Node = cap_config:get(machine, cluster, cluster),
+  Node = cap_config:get({node, node()}, "cluster.address", 'cluster@127.0.0.1'),
   KnowsCluster =
   case net_adm:ping(Node) of
-  pong -> 
+  pong ->
     monitor_cluster(Node),
     ?LOG_INFO("Connected to ~s", [Node]),
     true;
@@ -71,20 +71,20 @@ init([]) ->
     wait_for_cluster(Node),
     false
   end,
-  
-  GemsPath = cap_config:get(machine, gems_path, "/usr/lib/ruby/gems/1.8"),
-  
+
+  GemsPath = cap_config:get({node, node()}, "gems.path", "/opt/local/lib/ruby/gems/1.8"),
+
   InstalledGems = ets:new(gems, [set,private,{keypos,2}]),
-  
+
   emq:new(machine_queue, [{size, 1}]),
-  
+
   {ok, #ctx{
     knows_cluster  = KnowsCluster,
     cluster        = Node,
     gems_path      = GemsPath,
     installed_gems = InstalledGems
   }}.
- 
+
 %% @spec handle_call(_Request, _From, State) -> {reply, Reply, State}
 %% @doc Callback for synchronous requests
 handle_call({ensure_gems_are_present_for_app, App}, _From, State) ->
@@ -93,7 +93,7 @@ handle_call({ensure_gems_are_present_for_app, App}, _From, State) ->
 handle_call(_Request, _From, State) ->
   Reply = ok,
   {reply, Reply, State}.
- 
+
 %% @spec handle_cast(stop, State) -> {stop, normal, State}
 %% @doc Callback for assynchronous messages
 handle_cast(stop, State) ->
@@ -108,17 +108,17 @@ handle_cast({cluster_down, Node}, State) ->
   {noreply, State#ctx{knows_cluster=false}};
 handle_cast(_Msg, State) ->
   {noreply, State}.
- 
+
 %% @spec handle_info(_Info, State) -> {noreply, State}
 %% @doc Callback for timeout or other unreconized messages
 handle_info(_Info, State) ->
   {noreply, State}.
- 
+
 %% @spec terminate(_Reason, _State) -> ok
 %% @doc Callback for free resources used by the server
 terminate(_Reason, _State) ->
   ok.
- 
+
 %% @spec code_change(_OldVsn, State, _Extra) -> {ok, State}
 %% @doc Callback for upgrade source code
 code_change(_OldVsn, State, _Extra) ->
@@ -139,7 +139,7 @@ monitor_cluster(Node) ->
 monitor_cluster(Node, Owner) ->
   erlang:monitor_node(Node, true),
   receive
-  {nodedown, Node} -> 
+  {nodedown, Node} ->
     gen_server:cast(Owner, {cluster_down, Node})
   end.
 
@@ -180,7 +180,7 @@ do_install_gem(lookup, {DepName,_}=Dep, #ctx{cluster=Cluster}=Ctx) ->
   {ok, Spec} ->
     ?LOG_DEBUG("found gem ~s", [DepName]),
     do_install_gem(deps, Spec, Ctx);
-    
+
   {error, not_found} ->
     ?LOG_DEBUG("error ~p", [{missing_gem, DepName}]),
     {error, {missing_gem, Dep}}
@@ -191,7 +191,7 @@ do_install_gem(lookup, GemName, #ctx{cluster=Cluster}=Ctx) ->
   {ok, Spec} ->
     ?LOG_DEBUG("found gem ~s", [GemName]),
     do_install_gem(deps, Spec, Ctx);
-    
+
   {error, not_found} ->
     ?LOG_DEBUG("error ~p", [{missing_gem, GemName}]),
     {error, {missing_gem, GemName}}
@@ -208,7 +208,7 @@ do_install_gem(deps, #gem{deps=Deps}=Spec, Ctx) ->
   (_, Error) ->
     Error
   end, [], Deps),
-  
+
   case Installed of
   Installed when is_list(Installed) ->
     case do_install_gem(check, Spec, Ctx) of
@@ -216,7 +216,7 @@ do_install_gem(deps, #gem{deps=Deps}=Spec, Ctx) ->
       {ok, Installed ++ Installed2};
     Error -> Error
     end;
-    
+
   Error ->
     ?LOG_DEBUG("error ~p", [Error]),
     Error
@@ -240,19 +240,19 @@ do_install_gem(pull, #gem{}=Spec, #ctx{cluster=Cluster}=Ctx) ->
   ?LOG_DEBUG("pull gem ~s", [GemName]),
   case cap_cluster_gems:pull(Cluster, Spec) of
   {ok, Data} ->
-    
+
     ?LOG_DEBUG("staging gem ~s", [GemName]),
     case file:write_file("/tmp/capricorn-gem.gem", Data) of
     ok ->
-      
+
       do_install_gem(install, Spec, Ctx);
-      
-    Error -> 
+
+    Error ->
       ?LOG_DEBUG("error ~p", [Error]),
       Error
     end;
-    
-  Error -> 
+
+  Error ->
     ?LOG_DEBUG("error ~p", [Error]),
     Error
   end;
@@ -261,13 +261,13 @@ do_install_gem(install, #gem{}=Spec, _Ctx) ->
   GemName = (Spec#gem.id)#gem_id.name,
   Cmd = "install --no-rdoc --no-ri --local --no-update-sources "++
         "/tmp/capricorn-gem.gem",
-  
+
   ?LOG_INFO("installing gem ~s", [GemName]),
-  
+
   case gem_exec(Cmd) of
   "Successfully"++_ ->
     {ok, [Spec#gem.id]};
-    
+
   Error ->
     ?LOG_DEBUG("error ~p", [Error]),
     {error, {install_failed, GemName}}
@@ -281,14 +281,14 @@ do_is_gem_installed(#gem{}=Gem, #ctx{installed_gems=T, gems_path=GemsPath}) ->
   [] ->
     Name1    = (Gem#gem.id)#gem_id.name,
     Name2    = binary_to_list(Name1),
-    
+
     Version1 = (Gem#gem.id)#gem_id.version,
     case Version1 of
     undefined ->
       Version2 = "*",
       Fullname = lists:flatten([Name2, "-", Version2]),
       Path     = filename:join([GemsPath, "gems", Fullname]),
-      
+
       case filelib:wildcard(Path) of
       []    -> false;
       _Else ->
@@ -299,7 +299,7 @@ do_is_gem_installed(#gem{}=Gem, #ctx{installed_gems=T, gems_path=GemsPath}) ->
       Version2 = cap_cluster_gems:version_to_string(Version1),
       Fullname = lists:flatten([Name2, "-", Version2]),
       Path     = filename:join([GemsPath, "gems", Fullname]),
-      
+
       case filelib:is_file(Path) of
       false -> false;
       true  ->

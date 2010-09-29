@@ -121,7 +121,7 @@ case "$1" in
         BINDIR=$ROOTDIR/erts-$ERTS_VSN/bin
         EMU=beam
         PROGNAME=`echo $0 | sed 's/.*\///'`
-        CMD="$BINDIR/erlexec -ssl_portprogram_dir $SSL_PATH -boot $RUNNER_SRC_DIR/releases/$APP_VSN/capricorn -embedded -config $RUNNER_ETC_DIR/app.config -args_file $RUNNER_ETC_DIR/$NODETYPE-vm.args -node_type $NODETYPE -- ${1+"$@"}"
+        CMD="$BINDIR/erlexec -ssl_portprogram_dir $SSL_PATH -boot $RUNNER_SRC_DIR/releases/$APP_VSN/capricorn -embedded -cap_etc $RUNNER_ETC_DIR -config $RUNNER_ETC_DIR/app.config -args_file $RUNNER_ETC_DIR/$NODETYPE-vm.args -node_type $NODETYPE -- ${1+"$@"}"
         export EMU
         export ROOTDIR
         export BINDIR
