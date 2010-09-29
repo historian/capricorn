@@ -1,7 +1,6 @@
 
 /erlang/rel/capricorn
 /sslcerts/CA/serial
-/sslcerts/qc_config
 
 *.log
 *.dump

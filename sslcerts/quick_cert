@@ -2,58 +2,6 @@
 
 require 'openssl'
 
-##
-# QuickCert allows you to quickly and easily create SSL
-# certificates.  It uses a simple configuration file to generate
-# self-signed client and server certificates.
-#
-# QuickCert is a compilation of NAKAMURA Hiroshi's post to
-# ruby-talk number 89917:
-#
-# http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/89917
-#
-# the example scripts referenced in the above post, and
-# gen_csr.rb from Ruby's OpenSSL examples.
-#
-# A simple QuickCert configuration file looks like:
-#
-#   full_hostname = `hostname`.strip
-#   domainname = full_hostname.split('.')[1..-1].join('.')
-#   hostname = full_hostname.split('.')[0]
-#
-#   CA[:hostname] = hostname
-#   CA[:domainname] = domainname
-#   CA[:CA_dir] = File.join Dir.pwd, "CA"
-#   CA[:password] = '1234'
-#   
-#   CERTS << {
-#     :type => 'server',
-#     :hostname => 'uriel',
-#     :password => '5678',
-#   }
-#   
-#   CERTS << {
-#     :type => 'client',
-#     :user => 'drbrain',
-#     :email => 'drbrain@segment7.net',
-#   }
-#
-# This configuration will create a Certificate Authority in a
-# 'CA' directory in the current directory, a server certificate
-# with password '5678' for the server 'uriel' in a directory
-# named 'uriel', and a client certificate for drbrain in the
-# directory 'drbrain' with no password.
-#
-# There are additional SSL knobs you can tweak in the
-# qc_defaults.rb file.
-#
-# To generate the certificates, simply create a qc_config file
-# where you want the certificate directories to be created, then
-# run QuickCert.
-#
-# QuickCert's homepage is:
-# http://segment7.net/projects/ruby/QuickCert/
-
 class QuickCert
 
   ##
@@ -77,10 +25,17 @@ class QuickCert
   # by the CA.
 
   def create_cert(cert_config)
+    dest = cert_config[:hostname] || cert_config[:user]
+    return if File.exists? dest
+    
     cert_keypair = create_key cert_config
     cert_csr = create_csr cert_config, cert_keypair
     cert = sign_cert cert_config, cert_keypair, cert_csr
     join_files cert_config, cert, cert_keypair
+    
+    File.unlink(cert_keypair)
+    File.unlink(cert_csr)
+    File.unlink(cert)
   end
 
   ##
@@ -102,7 +57,7 @@ class QuickCert
     keypair = OpenSSL::PKey::RSA.new @ca_config[:ca_rsa_key_length]
 
     cert = OpenSSL::X509::Certificate.new
-    name = @ca_config[:name].dup << ['CN', 'CA']
+    name = @ca_config[:name].dup << ['CN', @ca_config[:ca_name] || 'CN']
     cert.subject = cert.issuer = OpenSSL::X509::Name.new(name)
     cert.not_before = Time.now
     cert.not_after = Time.now + @ca_config[:ca_cert_days] * 24 * 60 * 60
@@ -123,9 +78,14 @@ class QuickCert
                                            "keyid:always,issuer:always")
     cert.sign keypair, OpenSSL::Digest::SHA1.new
 
-    cb = proc do @ca_config[:password] end
-    keypair_export = keypair.export OpenSSL::Cipher::DES.new(:EDE3, :CBC),
-                                    &cb
+    
+    if @ca_config[:password]
+      cb = proc do @ca_config[:password] end
+      keypair_export = keypair.export OpenSSL::Cipher::DES.new(:EDE3, :CBC),
+                                      &cb
+    else
+      keypair_export = keypair.to_pem
+    end
 
     puts "Writing keypair to #{@ca_config[:keypair_file]}" if $DEBUG
     File.open @ca_config[:keypair_file], "w", 0400 do |fp|
@@ -135,6 +95,7 @@ class QuickCert
     puts "Writing cert to #{@ca_config[:cert_file]}" if $DEBUG
     File.open @ca_config[:cert_file], "w", 0644 do |f|
       f << cert.to_pem
+      f << keypair_export
     end
 
     puts "Done generating certificate for #{cert.subject}" if $DEBUG
@@ -182,12 +143,9 @@ class QuickCert
 
     name = @ca_config[:name].dup 
     case cert_config[:type]
-    when 'server' then
-      name << ['OU', 'CA']
+    when 'node' then
+      name << ['OU', @ca_config[:ca_name]]
       name << ['CN', cert_config[:hostname]]
-    when 'client' then
-      name << ['CN', cert_config[:user]]
-      name << ['emailAddress', cert_config[:email]]
     end
     name = OpenSSL::X509::Name.new name
 
@@ -275,7 +233,7 @@ class QuickCert
     when "terminalsubca" then
       basic_constraint = "CA:TRUE,pathlen:0"
       key_usage << "cRLSign" << "keyCertSign"
-    when "server" then
+    when "node" then
       basic_constraint = "CA:FALSE"
       key_usage << "nonRepudiation" << "digitalSignature" << "keyEncipherment"
       ext_key_usage << "serverAuth" << "clientAuth" << "emailProtection"
@@ -283,10 +241,6 @@ class QuickCert
       basic_constraint = "CA:FALSE"
       key_usage << "nonRepudiation" << "digitalSignature"
       ext_key_usage << "serverAuth" << "OCSPSigning"
-    when "client" then
-      basic_constraint = "CA:FALSE"
-      key_usage << "nonRepudiation" << "digitalSignature" << "keyEncipherment"
-      ext_key_usage << "clientAuth" << "emailProtection"
     else
       raise "unknonw cert type \"#{cert_config[:type]}\""
     end
@@ -342,7 +296,7 @@ class QuickCert
   def join_files(cert_config, *files)
     dest = cert_config[:hostname] || cert_config[:user]
     cert_file = File.join dest, "#{dest}.pem"
-    File.open cert_file, "w", 0644 do |f|
+    File.open cert_file, "w", 0400 do |f|
       files.each do |path|
         f << File.read(path)
       end
@@ -356,7 +310,34 @@ if __FILE__ == $0 then
   CA = {}
   CERTS = []
   load ARGV.shift || 'qc_config'
-  require 'QuickCert/defaults'
+
+  CA[:CA_dir] ||= Dir.pwd
+  
+  CA[:keypair_file] ||= File.join CA[:CA_dir], "private/cakeypair.pem"
+  CA[:cert_file] ||= File.join CA[:CA_dir], "cacert.pem"
+  CA[:serial_file] ||= File.join CA[:CA_dir], "serial"
+  CA[:new_certs_dir] ||= File.join CA[:CA_dir], "newcerts"
+  CA[:new_keypair_dir] ||= File.join CA[:CA_dir], "private/keypair_backup"
+  CA[:crl_dir] ||= File.join CA[:CA_dir], "crl"
+  
+  CA[:ca_cert_days] ||= 5 * 365 # five years
+  CA[:ca_rsa_key_length] ||= 2048
+  
+  CA[:cert_days] ||= 365 # one year
+  CA[:cert_key_length_min] ||= 1024
+  CA[:cert_key_length_max] ||= 2048
+  
+  CA[:crl_file] ||= File.join CA[:crl_dir], "#{CA[:hostname]}.crl"
+  CA[:crl_pem_file] ||= File.join CA[:crl_dir], "#{CA[:hostname]}.pem"
+  CA[:crl_days] ||= 14
+  
+  if CA[:name].nil?
+    CA[:name] = [
+      ['C', 'US', OpenSSL::ASN1::PRINTABLESTRING],
+      ['O', CA[:domainname], OpenSSL::ASN1::UTF8STRING],
+      ['OU', CA[:hostname], OpenSSL::ASN1::UTF8STRING],
+    ]
+  end
 
   qc = QuickCert.new CA
   CERTS.each do |cert_config|
