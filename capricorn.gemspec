@@ -20,6 +20,8 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.files        = Dir.glob("{lib,erlang,ext}/**/*") +
                    %w(LICENSE README.md ext/Makefile )
+  s.files       -= Dir.glob("{lib,erlang,ext}/**/*.beam")
+  s.files       -= Dir.glob("erlang/rel/capricorn/**/*")
 
   s.executables = %w( capricornctl capricornd capricornutl )
   s.extensions  = %w( ext/extconf.rb )
