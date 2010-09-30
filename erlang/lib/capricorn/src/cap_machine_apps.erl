@@ -121,7 +121,7 @@ one(Node, Id) ->
 
 %%% Initialize the server
 init([]) ->
-  Root   = cap_config:get({node, node()}, "database", "var/run/capricorn-machine"),
+  Root   = cap_config:get({node, node()}, "database", "var/run/capricorn"),
   Recipe = cap_config:get({node, node()}, "recipe", "macports"),
 
   TablePath = filename:join([Root, "applications.db"]),

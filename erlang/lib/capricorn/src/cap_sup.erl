@@ -17,8 +17,8 @@
 
 %% operation & maintenance api
 % -export([start_link/0]).
--export([start_link/1,stop/0,
-         start_primary_services/1,start_secondary_services/1,
+-export([start_link/0,stop/0,
+         start_primary_services/0,start_secondary_services/0,
          restart_core_server/0]).
 
 %% supervisor callback
@@ -32,48 +32,42 @@
 %%
 
 
-start_link(NodeType) ->
+start_link() ->
   case whereis(cap_sup) of
   undefined ->
-    start_server(NodeType);
+    start_server();
   _Else ->
     {error, already_started}
   end.
 
 restart_core_server() ->
-  NodeType = cap_config:get(node_type),
-  restart_core_server(NodeType).
-restart_core_server(cluster) ->
-  ok;
-restart_core_server(machine) ->
   supervisor:terminate_child(cap_primary_services, cap_machine),
   supervisor:restart_child(cap_primary_services, cap_machine),
   ok.
 
 
 
-start_server(NodeType) ->
+start_server() ->
   {ok, ConfPid} = cap_config:start_link(),
 
   LogLevel = cap_config:get({node, node()}, "log.level", info),
 
   % announce startup
-  io:format("Capricorn (LogLevel=~s, Node=~s, Type=~s) is starting.~n", [
+  io:format("Capricorn (LogLevel=~s, Node=~s) is starting.~n", [
     LogLevel,
-    atom_to_list(node()),
-    atom_to_list(NodeType)
+    atom_to_list(node())
   ]),
 
   BaseChildSpecs =
   {{one_for_all, 10, 3600},[
     {cap_primary_services,
-      {cap_sup, start_primary_services, [NodeType]},
+      {cap_sup, start_primary_services, []},
       permanent,
       infinity,
       supervisor,
       [cap_sup]},
     {cap_secondary_services,
-      {cap_sup, start_secondary_services, [NodeType]},
+      {cap_sup, start_secondary_services, []},
       permanent,
       infinity,
       supervisor,
@@ -88,56 +82,7 @@ start_server(NodeType) ->
 
   {ok, Pid}.
 
-start_primary_services(cluster) ->
-  % ExternalApi = cap_config:get({node, node()}, api),
-  ConsolePort = cap_config:get({node, node()}, "console_port", 8756),
-
-  supervisor:start_link({local, cap_primary_services}, cap_sup,
-  {{one_for_one, 10, 3600},[
-    {cap_config,
-      {cap_config, start_link, []},
-      permanent,
-      1000,
-      worker,
-      [cap_config]},
-    {cap_log,
-      {cap_log, start_link, []},
-      permanent,
-      brutal_kill,
-      worker,
-      [cap_log]},
-    {cap_cluster_gems,
-      {cap_cluster_gems, start_link, []},
-      permanent,
-      1000,
-      worker,
-      [cap_cluster_gems]},
-    {cap_events,
-      {cap_events, start_link, []},
-      permanent,
-      brutal_kill,
-      worker,
-      [cap_events]},
-    {cap_external_api,
-      {cap_external_api, start_link, [[]]},
-      permanent,
-      1000,
-      worker,
-      [cap_external_api]},
-    {cap_console_dispatcher,
-      {cap_console_dispatcher, start_link, [ConsolePort]},
-      permanent,
-      1000,
-      worker,
-      [cap_console_dispatcher]},
-    {cap_runtime,
-      {cap_runtime, start_link, ["cluster"]},
-      permanent,
-      brutal_kill,
-      worker,
-      [cap_runtime]}
-  ]});
-start_primary_services(machine) ->
+start_primary_services() ->
   ConsolePort = cap_config:get({node, node()}, "console_port", 8756),
 
   supervisor:start_link({local, cap_primary_services}, cap_sup,
@@ -192,7 +137,7 @@ start_primary_services(machine) ->
       [cap_runtime]}
   ]}).
 
-start_secondary_services(_NodeType) ->
+start_secondary_services() ->
   % DaemonChildSpecs = [
   %   begin
   %     {Name,

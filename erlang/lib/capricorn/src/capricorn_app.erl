@@ -15,22 +15,13 @@
 -include("capricorn.hrl").
 
 -behaviour(application).
- 
+
 -export([start/2, stop/1]).
 
 -spec start(_,_) -> {'error','already_started'} | {'ok',pid()} .
 start(_Type, _) ->
-  NodeType = get_ini_node_type(),
-  cap_sup:start_link(NodeType).
+  cap_sup:start_link().
 
 stop(_) ->
   cap_sup:stop(),
   ok.
-
--spec get_ini_node_type() -> machine | cluster .
-get_ini_node_type() ->
-  case init:get_argument(node_type) of
-  error          -> machine;
-  {ok, [[]]}     -> machine;
-  {ok, [[Type]]} -> list_to_atom(Type)
-  end.

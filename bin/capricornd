@@ -1,38 +1,103 @@
 #!/usr/bin/env ruby
+require 'opts'
+require 'shellwords'
 
-root = File.expand_path('../../', $0)
-src  = File.expand_path('../../', __FILE__)
-rel  = File.join(src, 'erlang/rel/capricorn')
-etc  = File.join(root, 'etc/capricorn')
+class CLI
+  include Opts::DSL
 
-if ARGV.size == 1
-  case ARGV[0]
+  class_option "root",
+    :short   => 'r',
+    :default => File.expand_path('../../', $0),
+    :type    => :string
 
-  when "install"
+  class_option "port",
+    :short   => 'p',
+    :default => "0",
+    :type    => :string
+
+  def install(env, args)
     require 'fileutils'
 
-    FileUtils.mkdir_p(File.join(root, "etc/capricorn"),
+    @root = env['ROOT']
+    generate_other_paths
+
+    FileUtils.mkdir_p(File.join(@root, "etc/capricorn"),
                       :verbose => true)
-    FileUtils.mkdir_p(File.join(root, "var/run/capricorn-machine"),
+    FileUtils.mkdir_p(File.join(@root, "var/run/capricorn"),
                       :verbose => true)
-    FileUtils.mkdir_p(File.join(root, "var/run/capricorn-cluster"),
-                      :verbose => true)
-    FileUtils.mkdir_p(File.join(root, "var/log/sasl"),
+    FileUtils.mkdir_p(File.join(@root, "var/log/sasl"),
                       :verbose => true)
 
-    FileUtils.cp(File.join(rel, 'etc/capricorn/app.config'),
-                 File.join(etc, 'app.config'),
+    FileUtils.cp(File.join(@rel, 'etc/capricorn/app.config'),
+                 File.join(@etc, 'app.config'),
                  :verbose => true)
-    FileUtils.cp(File.join(rel, 'etc/capricorn/cluster-vm.args'),
-                 File.join(etc, 'cluster-vm.args'),
+    FileUtils.cp(File.join(@rel, 'etc/capricorn/vm.args'),
+                 File.join(@etc, 'vm.args'),
                  :verbose => true)
-    FileUtils.cp(File.join(rel, 'etc/capricorn/machine-vm.args'),
-                 File.join(etc, 'machine-vm.args'),
-                 :verbose => true)
-  when "tail"
-    exec("tail", "-n", "0", "-f", File.join(root, "var/log/capricorn.log"))
-
   end
-else
-  exec(File.join(rel, 'bin/capricornd'), root, *ARGV)
+
+  def tail(env, args)
+    @root = env['ROOT']
+    exec(Shellwords.shelljoin(["tail", "-n", "0", "-f", File.join(@root, "var/log/capricorn.log")]))
+  end
+
+  def console(env, args)
+    @root = env['ROOT']
+    generate_other_paths
+
+    exec(Shellwords.shelljoin([File.join(@rel, 'bin/capricornd'), @root, env['PORT'], 'console'] + args))
+  end
+
+  def start(env, args)
+    @root = env['ROOT']
+    generate_other_paths
+
+    exec(Shellwords.shelljoin([File.join(@rel, 'bin/capricornd'), @root, env['PORT'], 'start'] + args))
+  end
+
+  def stop(env, args)
+    @root = env['ROOT']
+    generate_other_paths
+
+    exec(Shellwords.shelljoin([File.join(@rel, 'bin/capricornd'), @root, env['PORT'], 'stop'] + args))
+  end
+
+  def restart(env, args)
+    @root = env['ROOT']
+    generate_other_paths
+
+    exec(Shellwords.shelljoin([File.join(@rel, 'bin/capricornd'), @root, env['PORT'], 'restart'] + args))
+  end
+
+  def reboot(env, args)
+    @root = env['ROOT']
+    generate_other_paths
+
+    exec(Shellwords.shelljoin([File.join(@rel, 'bin/capricornd'), @root, env['PORT'], 'reboot'] + args))
+  end
+
+  def ping(env, args)
+    @root = env['ROOT']
+    generate_other_paths
+
+    exec(Shellwords.shelljoin([File.join(@rel, 'bin/capricornd'), @root, env['PORT'], 'ping'] + args))
+  end
+
+  def attach(env, args)
+    @root = env['ROOT']
+    generate_other_paths
+
+    exec(Shellwords.shelljoin([File.join(@rel, 'bin/capricornd'), @root, env['PORT'], 'attach'] + args))
+  end
+
+private
+
+  def generate_other_paths
+    @src = File.expand_path('../../', __FILE__)
+    @rel = File.join(@src, 'erlang/rel/capricorn')
+    @etc = File.join(@root, 'etc/capricorn')
+  end
+
 end
+
+CLI.new.call({}, ARGV.dup)

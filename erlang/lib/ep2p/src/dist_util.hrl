@@ -1,24 +1,24 @@
 %%
 %% %CopyrightBegin%
-%% 
+%%
 %% Copyright Ericsson AB 1999-2009. All Rights Reserved.
-%% 
+%%
 %% The contents of this file are subject to the Erlang Public License,
 %% Version 1.1, (the "License"); you may not use this file except in
 %% compliance with the License. You should have received a copy of the
 %% Erlang Public License along with this software. If not, it can be
 %% retrieved online at http://www.erlang.org/.
-%% 
+%%
 %% Software distributed under the License is distributed on an "AS IS"
 %% basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
 %% the License for the specific language governing rights and limitations
 %% under the License.
-%% 
+%%
 %% %CopyrightEnd%
 %%
 %% uncomment this if tracing of handshake etc is wanted
-%%-define(dist_trace, true). 
-%%-define(dist_debug, true).
+-define(dist_trace, true).
+-define(dist_debug, true).
 
 
 -ifdef(dist_debug).
@@ -46,7 +46,7 @@
 	  other_node,        %% Name of peer
 	  this_node,         %% my nodename
 	  socket,            %% The connection "socket"
-	  timer,             %% The setup timer 
+	  timer,             %% The setup timer
 	                     %% (stream_dist_handshake:start_timer)
 	  this_flags,        %% Flags my node should use
 	  allowed,           %% Allowed nodes list
@@ -60,7 +60,7 @@
 	  f_setopts_post_nodeup, %% Sets "socket" options after
 	                         %% nodeup is delivered
 	  f_getll,               %% Get low level port or pid.
-	  f_address,         %% The address of the "socket", 
+	  f_address,         %% The address of the "socket",
 	                     %% generated from Socket,Node
 	  %% These two are used in the tick loop,
 	  %% so they are not fun's to avoid holding old code.
@@ -69,19 +69,19 @@
 	                     %% is a tuple {M,F}.
 	                     %% Is should place {tcp_closed, Socket}
 	                     %% in the message queue on failure.
-	  mf_getstat,        %% Returns 
+	  mf_getstat,        %% Returns
 			     %% {ok, RecvCnt, SendCnt, SendPend} for
-	                     %% a given socket. This is a {M,F}, 
+	                     %% a given socket. This is a {M,F},
 	                     %% returning {error, Reason on failure}
 	  request_type = normal
 }).
-	  
 
-%% The following should be filled in upon enter of... 
+
+%% The following should be filled in upon enter of...
 %% - handshake_we_started:
-%% kernel_pid, other_node, this_node, socket, timer, 
+%% kernel_pid, other_node, this_node, socket, timer,
 %% this_flags, other_version, All fun's/mf's.
 %% - handshake_other_started:
-%% kernel_pid, this_node, socket, timer, 
+%% kernel_pid, this_node, socket, timer,
 %% this_flags, allowed, All fun's/mf's.
 

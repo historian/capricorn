@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'mustache',              '= 0.5.1'
   s.add_runtime_dependency 'rush',                  '= 0.6.5'
   s.add_runtime_dependency 'session',               '= 3.1.0'
+  s.add_runtime_dependency 'opts',                  '= 0.0.1'
   s.add_runtime_dependency 'thor',                  '= 0.13.6'
   s.add_runtime_dependency 'public_suffix_service', '= 0.4.0'
 end

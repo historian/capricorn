@@ -29,7 +29,7 @@
 -include("dist_util.hrl").
 
 %% -------------------------------------------------------------
-%% This function should return a valid childspec, so that 
+%% This function should return a valid childspec, so that
 %% the primitive ssl_server gets supervised
 %% -------------------------------------------------------------
 childspecs() ->
@@ -66,19 +66,17 @@ select(Node) ->
 %% ------------------------------------------------------------
 
 listen(Name) ->
-  case ssl_prim:listen(0, [{active, false}, {packet,4}] ++ 
+  case ssl_prim:listen(get_listener_port(), [{active, false}, {packet,4}] ++
            get_ssl_options(server)) of
   {ok, Socket} ->
     TcpAddress = get_tcp_address(Socket),
     {Ip,Port} = TcpAddress#net_address.address,
-    
-    io:format("~p ~p is listening on: ~p:~p",[erlang:now(),node(),Ip,Port]),
-    
+
     %% setup port forwarding using NAT-PMP or uPNP
     %% distribute node IP:PORT pairs through erlang
     {ok, Creation} = ep2p_contact_list:publish(Name, [{Ip, Port}], erlang:get_cookie()),
     % {ok, Creation} = erl_epmd:register_node(Name, Port),
-    
+
     {ok, {Socket, TcpAddress, Creation}};
   Error ->
     Error
@@ -208,7 +206,7 @@ do_setup(Kernel, Node, Type, MyNode, LongOrShortNames,SetupTime) ->
 
 do_setup2(Kernel, Node, Address, Type, MyNode, Timer, [{Ip, Port}| Rest]) ->
   dist_util:reset_timer(Timer),
-  case ssl_prim:connect(Ip, Port, [{active, false}, {packet,4}] ++ 
+  case ssl_prim:connect(Ip, Port, [{active, false}, {packet,4}] ++
             get_ssl_options(client)) of
   {ok, Socket} ->
     HSData = #hs_data{
@@ -244,7 +242,7 @@ do_setup2(Kernel, Node, Address, Type, MyNode, Timer, [{Ip, Port}| Rest]) ->
     do_setup2(Kernel, Node, Address, Type, MyNode, Timer, Rest)
   end;
 do_setup2(_Kernel, Node, _Address, _Type, _MyNode, _Timer, []) ->
-  %% Other Node may have closed since 
+  %% Other Node may have closed since
   %% port_please !
   ?trace("other node (~p) "
          "closed since port_please.~n", [Node]),
@@ -340,7 +338,7 @@ check_ip([{OwnIP, _, Netmask}|IFs], PeerIP) ->
   end;
 check_ip([], PeerIP) ->
   {false, PeerIP}.
-  
+
 mask({M1,M2,M3,M4}, {IP1,IP2,IP3,IP4}) ->
   { M1 band IP1,
     M2 band IP2,
@@ -374,6 +372,14 @@ split_stat([], R, W, P) ->
   {ok, R, W, P}.
 
 
+get_listener_port() ->
+  case init:get_argument(ep2p_port) of
+  {ok, [[Arg]]} ->
+    list_to_integer(Arg);
+  _ ->
+    0
+  end.
+
 get_ssl_options(Type) ->
   case init:get_argument(ssl_dist_opt) of
   {ok, Args} ->
@@ -400,7 +406,7 @@ ssl_options(Type, [[Item,Value |T1]|T2]) ->
   ssl_options(atomize(Type),[[Item,Value],T1|T2]);
 ssl_options(_,_) ->
   exit(malformed_ssl_dist_opt).
-    
+
 fixup(Value) ->
   case catch list_to_integer(Value) of
   {'EXIT',_} ->

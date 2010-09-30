@@ -5,6 +5,9 @@ RUNNER_SCRIPT_DIR=$(cd ${0%/*} && pwd)
 RDIR="$1"
 shift
 
+DIST_PORT="$1"
+shift
+
 RUNNER_BASE_DIR=${RDIR}
 RUNNER_SRC_DIR=${RUNNER_SCRIPT_DIR%/*}
 RUNNER_ETC_DIR=$RUNNER_BASE_DIR/etc/capricorn
@@ -20,27 +23,20 @@ fi
 # Make sure CWD is set to runner base dir
 cd $RUNNER_BASE_DIR
 
-NODETYPE="$1"
-if [ -z "$NODETYPE" ]; then
-  echo "Usage: $SCRIPT {machine|cluster} {start|stop|restart|reboot|ping|console|attach}"
-  exit 1
-fi
-shift
-
 # Make sure log directory exists
 mkdir -p $RUNNER_LOG_DIR
 
 # Extract the target node name from node.args
-NAME_ARG=`grep -e '-[s]*name' $RUNNER_ETC_DIR/$NODETYPE-vm.args`
+NAME_ARG=`grep -e '-[s]*name' $RUNNER_ETC_DIR/vm.args`
 if [ -z "$NAME_ARG" ]; then
-    echo "$NODETYPE-vm.args needs to have either -name or -sname parameter."
+    echo "vm.args needs to have either -name or -sname parameter."
     exit 1
 fi
 
 # Extract the target cookie
-COOKIE_ARG=`grep -e '-setcookie' $RUNNER_ETC_DIR/$NODETYPE-vm.args`
+COOKIE_ARG=`grep -e '-setcookie' $RUNNER_ETC_DIR/vm.args`
 if [ -z "$COOKIE_ARG" ]; then
-    echo "$NODETYPE-vm.args needs to have a -setcookie parameter."
+    echo "vm.args needs to have a -setcookie parameter."
     exit 1
 fi
 
@@ -68,9 +64,9 @@ case "$1" in
             echo "Node is already running!"
             exit 1
         fi
-        export HEART_COMMAND="$RUNNER_BASE_DIR/bin/$SCRIPT $NODETYPE start"
+        export HEART_COMMAND="$RUNNER_BASE_DIR/bin/$SCRIPT start"
         mkdir -p $PIPE_DIR
-        $ERTS_PATH/run_erl -daemon $PIPE_DIR $RUNNER_LOG_DIR "exec $RUNNER_BASE_DIR/bin/$SCRIPT $NODETYPE console" 2>&1
+        $ERTS_PATH/run_erl -daemon $PIPE_DIR $RUNNER_LOG_DIR "exec $RUNNER_BASE_DIR/bin/$SCRIPT console" 2>&1
         ;;
 
     stop)
@@ -121,7 +117,7 @@ case "$1" in
         BINDIR=$ROOTDIR/erts-$ERTS_VSN/bin
         EMU=beam
         PROGNAME=`echo $0 | sed 's/.*\///'`
-        CMD="$BINDIR/erlexec -ssl_portprogram_dir $SSL_PATH -boot $RUNNER_SRC_DIR/releases/$APP_VSN/capricorn -embedded -cap_etc $RUNNER_ETC_DIR -config $RUNNER_ETC_DIR/app.config -args_file $RUNNER_ETC_DIR/$NODETYPE-vm.args -node_type $NODETYPE -- ${1+"$@"}"
+        CMD="$BINDIR/erlexec -ssl_portprogram_dir $SSL_PATH -boot $RUNNER_SRC_DIR/releases/$APP_VSN/capricorn -embedded -cap_etc $RUNNER_ETC_DIR -config $RUNNER_ETC_DIR/app.config -ep2p_port $DIST_PORT -args_file $RUNNER_ETC_DIR/vm.args -- ${1+"$@"}"
         export EMU
         export ROOTDIR
         export BINDIR
@@ -139,7 +135,7 @@ case "$1" in
         ;;
 
     *)
-        echo "Usage: $SCRIPT {machine|cluster} {start|stop|restart|reboot|ping|console|attach}"
+        echo "Usage: $SCRIPT {start|stop|restart|reboot|ping|console|attach}"
         exit 1
         ;;
 esac

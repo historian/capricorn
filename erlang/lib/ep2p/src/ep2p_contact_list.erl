@@ -25,13 +25,17 @@ handle_call({lookup, Name}, _From, Nodes) ->
   end;
 
 handle_call({publish, Name, Addresses, Cookie}, _From, Nodes) ->
-  Creation = erlang:now(),
+  Creation = case dict:find(Name, Nodes) of
+  {ok, {_, _, Creation1}} -> Creation1 + 1;
+  _ -> 1
+  end,
+
   Nodes1 = dict:store(Name, {Addresses, Cookie, Creation}, Nodes),
   handle_cast({request_sync}, Nodes1),
   {reply, {ok, Creation}, Nodes1};
 
 handle_call({bootstrap, Name, Addresses, Cookie}, _From, Nodes) ->
-  Creation = {0,0,0},
+  Creation = 0,
   Nodes1 = dict:store(Name, {Addresses, Cookie, Creation}, Nodes),
   {reply, {ok, Creation}, Nodes1};
 
@@ -57,7 +61,7 @@ handle_cast({sync_req, Node}, Nodes) ->
         {Acc, Updated}
       end
     end, {Nodes, false}, NodeList),
-    
+
     case Updated of
     true  -> handle_cast({request_sync}, Nodes1);
     false -> {noreply, Nodes1}
