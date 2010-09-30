@@ -7,7 +7,7 @@
 
 %% internal exports
 
--export([accept_loop/2,do_accept/6,do_setup/6, getstat/1,tick/1]).
+-export([accept_loop/2,do_accept/6,do_setup/6, do_publish/2, getstat/1,tick/1]).
 
 -import(error_logger,[error_msg/2]).
 
@@ -72,15 +72,26 @@ listen(Name) ->
     TcpAddress = get_tcp_address(Socket),
     {Ip,Port} = TcpAddress#net_address.address,
 
+
     %% setup port forwarding using NAT-PMP or uPNP
     %% distribute node IP:PORT pairs through erlang
-    {ok, Creation} = ep2p_contact_list:publish(Name, [{Ip, Port}], erlang:get_cookie()),
-    % {ok, Creation} = erl_epmd:register_node(Name, Port),
+    spawn_link(fun()->
+      receive after 500 ->
+        apply(?MODULE, do_publish, [Name, Port])
+      end
+    end),
+    
+    {ok, Creation} = ep2p_contact_list:publish(Name, [{Ip,Port}], erlang:get_cookie()),
 
     {ok, {Socket, TcpAddress, Creation}};
   Error ->
     Error
   end.
+
+do_publish(Name, Port) ->
+  {ok, IPs0} = inet:getaddrs(net_adm:localhost(), inet),
+  IPs1 = [{Ip, Port} || Ip <- IPs0],
+  ep2p_contact_list:publish(Name, IPs1, erlang:get_cookie()).
 
 %% ------------------------------------------------------------
 %% Accepts new connection attempts from other Erlang nodes.

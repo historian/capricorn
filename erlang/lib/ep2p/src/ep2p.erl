@@ -5,8 +5,8 @@
 join(Node, Addresses, Cookie) ->
   case split_node(atom_to_list(Node), $@, []) of
   [Name, _] ->
-    gen_server:call(ep2p_contact_list, {bootstrap, Name, Addresses, Cookie}),
-    gen_server:cast({?MODULE, Node}, {sync_rec, node()}),
+    gen_server:call(ep2p_contact_list, {bootstrap, list_to_atom(Name), Addresses, Cookie}),
+    gen_server:cast({?MODULE, Node}, {sync_req, node()}),
     gen_server:cast(ep2p_contact_list, {request_sync});
   _ -> false
   end,

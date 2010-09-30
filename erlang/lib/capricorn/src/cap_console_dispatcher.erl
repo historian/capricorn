@@ -4,10 +4,16 @@
 
 % start misultin http server
 start_link(Port) ->
-  mochiweb_http:start([
-    {port, Port},
-    {loop, fun(Req) -> handle_http(Req, Port) end}
-  ]).
+  try 
+    mochiweb_http:start([
+      {port, Port},
+      {loop, fun(Req) -> handle_http(Req, Port) end}
+    ])
+  catch
+  T:E ->
+    erlang:display({T, E}),
+    start_link(Port + 1)
+  end.
 
 % callback on request received
 handle_http(Req, _Port) ->

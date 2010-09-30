@@ -17,8 +17,8 @@
 %% %CopyrightEnd%
 %%
 %% uncomment this if tracing of handshake etc is wanted
--define(dist_trace, true).
--define(dist_debug, true).
+% -define(dist_trace, true).
+% -define(dist_debug, true).
 
 
 -ifdef(dist_debug).

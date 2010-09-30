@@ -59,7 +59,7 @@ ensure_gems_are_present_for_app(App) ->
 %% @spec init(State) -> {ok, State}
 %% @doc Callback for initialize the cap_machine
 init([]) ->
-  Node = cap_config:get({node, node()}, "cluster.address", 'cluster@127.0.0.1'),
+  Node = cap_config:get({node, node()}, "cluster.address", 'cluster@cluster'),
   ep2p:join(Node, [{{127,0,0,1}, 4567}], erlang:get_cookie()),
   KnowsCluster =
   case net_adm:ping(Node) of
