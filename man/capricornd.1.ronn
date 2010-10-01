@@ -3,15 +3,33 @@ capricornd(1) -- the capricorn server
 
 ## SYNOPSIS
 
-`capricornd` `install`<br>
-`capricornd` `tail`<br>
-`capricornd` `machine`|`cluster` `start`<br>
-`capricornd` `machine`|`cluster` `stop`<br>
-`capricornd` `machine`|`cluster` `restart`<br>
-`capricornd` `machine`|`cluster` `reboot`<br>
-`capricornd` `machine`|`cluster` `ping`<br>
-`capricornd` `machine`|`cluster` `console`<br>
-`capricornd` `machine`|`cluster` `attach`
+`capricornd` [<options>] `install`<br>
+`capricornd` [<options>] `tail`<br>
+`capricornd` [<options>] `start`<br>
+`capricornd` [<options>] `stop`<br>
+`capricornd` [<options>] `restart`<br>
+`capricornd` [<options>] `reboot`<br>
+`capricornd` [<options>] `ping`<br>
+`capricornd` [<options>] `console`<br>
+`capricornd` [<options>] `attach`
+
+## OPTIONS
+
+These options apply to all the commands:
+
+  * `-r`=<path>, `--root`=<path>:
+    Path to the root of the node. This is the directory conatining the `etc` and `var` directories.
+
+These options apply to `start` and `console`:
+
+  * `-p`=<number>, `--port`=<number>:
+    The port number to use for the Erlang distribution. Usually you don't need this.
+
+  * `--cert`=<path>:
+    The path to the nodes SSL certificate. (defaults to: `etc/capricorn/cert.pem`)
+
+  * `--ca-cert`=<path>:
+    The path to the CA's SSL certificate. (defaults to: `etc/capricorn/ca.pem`)
 
 ## COMMANDS
 
@@ -21,26 +39,26 @@ Install the config files.
 `tail`<br>
 Tail the log files.
 
-_nodetype_ `start`<br>
-Start a node of type <nodetype>.
+`start`<br>
+Start a node.
 
-_nodetype_ `stop`<br>
-Stop a node of type <nodetype>.
+`stop`<br>
+Stop a node.
 
-_nodetype_ `restart`<br>
-Restart a node of type <nodetype>.
+`restart`<br>
+Restart a node.
 
-_nodetype_ `reboot`<br>
-Reboot a node of type <nodetype>.
+`reboot`<br>
+Reboot a node.
 
-_nodetype_ `ping`<br>
-Ping a node of type <nodetype>.
+`ping`<br>
+Ping a node.
 
-_nodetype_ `console`<br>
-Start a node of type <nodetype> and open an erlang shell.
+`console`<br>
+Start a node and open an erlang shell.
 
-_nodetype_ `attach`<br>
-Attach to a node of type <nodetype>.
+`attach`<br>
+Attach to a node and open an erlang shell.
 
 ## SEE ALSO
 

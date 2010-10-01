@@ -61,6 +61,7 @@
   <div class='man-navigation' style='display:none'>
     <a href="#NAME">NAME</a>
     <a href="#SYNOPSIS">SYNOPSIS</a>
+    <a href="#OPTIONS">OPTIONS</a>
     <a href="#COMMANDS">COMMANDS</a>
     <a href="#SEE-ALSO">SEE ALSO</a>
     </div>
@@ -78,15 +79,33 @@
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>capricornd</code> <code>install</code><br />
-<code>capricornd</code> <code>tail</code><br />
-<code>capricornd</code> <code>machine</code>|<code>cluster</code> <code>start</code><br />
-<code>capricornd</code> <code>machine</code>|<code>cluster</code> <code>stop</code><br />
-<code>capricornd</code> <code>machine</code>|<code>cluster</code> <code>restart</code><br />
-<code>capricornd</code> <code>machine</code>|<code>cluster</code> <code>reboot</code><br />
-<code>capricornd</code> <code>machine</code>|<code>cluster</code> <code>ping</code><br />
-<code>capricornd</code> <code>machine</code>|<code>cluster</code> <code>console</code><br />
-<code>capricornd</code> <code>machine</code>|<code>cluster</code> <code>attach</code></p>
+<p><code>capricornd</code> [<var>options</var>] <code>install</code><br />
+<code>capricornd</code> [<var>options</var>] <code>tail</code><br />
+<code>capricornd</code> [<var>options</var>] <code>start</code><br />
+<code>capricornd</code> [<var>options</var>] <code>stop</code><br />
+<code>capricornd</code> [<var>options</var>] <code>restart</code><br />
+<code>capricornd</code> [<var>options</var>] <code>reboot</code><br />
+<code>capricornd</code> [<var>options</var>] <code>ping</code><br />
+<code>capricornd</code> [<var>options</var>] <code>console</code><br />
+<code>capricornd</code> [<var>options</var>] <code>attach</code></p>
+
+<h2 id="OPTIONS">OPTIONS</h2>
+
+<p>These options apply to all the commands:</p>
+
+<dl>
+<dt><code>-r</code>=<var>path</var>, <code>--root</code>=<var>path</var></dt><dd>Path to the root of the node. This is the directory conatining the <code>etc</code> and <code>var</code> directories.</dd>
+</dl>
+
+
+<p>These options apply to <code>start</code> and <code>console</code>:</p>
+
+<dl>
+<dt><code>-p</code>=<var>number</var>, <code>--port</code>=<var>number</var></dt><dd><p>The port number to use for the Erlang distribution. Usually you don't need this.</p></dd>
+<dt><code>--cert</code>=<var>path</var></dt><dd><p>The path to the nodes SSL certificate. (defaults to: <code>etc/capricorn/cert.pem</code>)</p></dd>
+<dt><code>--ca-cert</code>=<var>path</var></dt><dd><p>The path to the CA's SSL certificate. (defaults to: <code>etc/capricorn/ca.pem</code>)</p></dd>
+</dl>
+
 
 <h2 id="COMMANDS">COMMANDS</h2>
 
@@ -96,26 +115,26 @@ Install the config files.</p>
 <p><code>tail</code><br />
 Tail the log files.</p>
 
-<p><em>nodetype</em> <code>start</code><br />
-Start a node of type <var>nodetype</var>.</p>
+<p><code>start</code><br />
+Start a node.</p>
 
-<p><em>nodetype</em> <code>stop</code><br />
-Stop a node of type <var>nodetype</var>.</p>
+<p><code>stop</code><br />
+Stop a node.</p>
 
-<p><em>nodetype</em> <code>restart</code><br />
-Restart a node of type <var>nodetype</var>.</p>
+<p><code>restart</code><br />
+Restart a node.</p>
 
-<p><em>nodetype</em> <code>reboot</code><br />
-Reboot a node of type <var>nodetype</var>.</p>
+<p><code>reboot</code><br />
+Reboot a node.</p>
 
-<p><em>nodetype</em> <code>ping</code><br />
-Ping a node of type <var>nodetype</var>.</p>
+<p><code>ping</code><br />
+Ping a node.</p>
 
-<p><em>nodetype</em> <code>console</code><br />
-Start a node of type <var>nodetype</var> and open an erlang shell.</p>
+<p><code>console</code><br />
+Start a node and open an erlang shell.</p>
 
-<p><em>nodetype</em> <code>attach</code><br />
-Attach to a node of type <var>nodetype</var>.</p>
+<p><code>attach</code><br />
+Attach to a node and open an erlang shell.</p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
@@ -125,7 +144,7 @@ Attach to a node of type <var>nodetype</var>.</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Simon Menke</li>
-    <li class='tc'>September 2010</li>
+    <li class='tc'>October 2010</li>
     <li class='tr'>capricornd(1)</li>
   </ol>
 
