@@ -162,6 +162,7 @@ private
     @root        = File.expand_path(env['ROOT'])    if env['ROOT']
     @certfile    = File.expand_path(env['CERT'])    if env['CERT']
     @cacertfile  = File.expand_path(env['CA_CERT']) if env['CA_CERT']
+    @gem_dir     = File.expand_path('../../', __FILE__)
     Dir.chdir(base_dir)
     FileUtils.mkdir_p(etc_dir)
     FileUtils.mkdir_p(log_dir)

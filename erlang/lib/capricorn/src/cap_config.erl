@@ -1,179 +1,79 @@
 -module(cap_config).
--behaviour(gen_server).
 
 -export([
-  start_link/0,
-  get/1, get/2, get/3,
-  get_all/0, get_all/1,
-  set/2, set/3,
-  unset/1, unset/2,
-  sync/0
+  set/3,
+  get/2, get/3,
+  unset/2
 ]).
--export([init/1, handle_call/3, handle_cast/2,
-         handle_info/2, terminate/2, code_change/3]).
 
-start_link() ->
-  case whereis(?MODULE) of
-  undefined -> gen_server:start_link({local, ?MODULE}, ?MODULE, [], []);
-  Pid -> {ok, Pid}
+
+set(Env, Var, Value) ->
+  Key = normalize_key(Env, Var),
+  {ok, C} = riak:local_client(),
+  
+  case C:get(<<"cap.config">>, Key) of
+  {ok, OldObject} ->
+    NewObject = OldObject:update_value(Value),
+    C:put(NewObject, 3);
+  _Else ->
+    NewObject = riak_object:new(<<"cap.config">>, Key, Value),
+    C:put(NewObject, 3)
   end.
 
-get(Key) ->
-  get({node, node()}, Key, undefined).
-get(Scope, Key) ->
-  get(Scope, Key, undefined).
-get(Scope, Key, Default) ->
-  gen_server:call(?MODULE, {get, Scope, Key, Default}).
 
-get_all() ->
-  gen_server:call(?MODULE, {get_all}).
-get_all(Key) ->
-  gen_server:call(?MODULE, {get_all, Key}).
+get(Env, Var) ->
+  get(Env, Var, undefined).
 
-set(Key, Value) ->
-  set(node(), Key, Value).
-set(Scope, Key, Value) ->
-  gen_server:cast(?MODULE, {set, Scope, Key, Value}).
+get(Env, Var, Default) ->
+  {ok, C} = riak:local_client(),
+  case do_get(Env, Var, C) of
+  {ok, Value} -> Value;
+  _Else -> Default
+  end.
 
-unset(Key) ->
-  set(node(), Key).
-unset(Scope, Key) ->
-  gen_server:cast(?MODULE, {set, Scope, Key}).
 
-sync() ->
-  gen_server:cast(?MODULE, {sync}).
+unset(Env, Var) ->
+  {ok, C} = riak:local_client(),
+  C:delete(<<"cap.config">>, normalize_key(Env, Var)).
+  
 
--record(ctx, {
-  monitors=[],
-  callbacks=[],
-  tab
-}).
 
-init([]) ->
-  {ok, [[Base]]} = init:get_argument(cap_etc),
-  Path = filename:join(Base, 'config.db'),
-  {ok, Tab} = dets:open_file(cap_config_table, [
-    {file, Path}
-  ]),
-
-  pg2:create(cap_config_pool),
-  pg2:join(cap_config_pool, self()),
-
-  {ok, #ctx{tab = Tab}}.
-
-handle_call({get, global, Key, Default}, _From, #ctx{}=Ctx) ->
-  case dets:lookup(Ctx#ctx.tab, {global, Key}) of
-  [{_, Value, _}] -> {reply, Value,   Ctx};
-  _               -> {reply, Default, Ctx}
-  end;
-handle_call({get, {node, Node}, Key, Default}, _From, #ctx{}=Ctx) ->
-  case dets:lookup(Ctx#ctx.tab, {node, Node, Key}) of
-  [{_, Value, _}] -> {reply, Value,   Ctx};
-  _               -> handle_call({get, global, Key, Default}, _From, Ctx)
-  end;
-handle_call({get, {Type, Id}, Key, Default}, _From, #ctx{}=Ctx) ->
-  case dets:lookup(Ctx#ctx.tab, {local, Type, Id, Key}) of
-  [{_, Value, _}] -> {reply, Value,   Ctx};
-  _1 ->
-    case dets:lookup(Ctx#ctx.tab, {local, Type, Id, "node"}) of
-    [{_, Node, _}] -> handle_call({get, {node, Node}, Key, Default}, _From, Ctx);
-    _2             -> handle_call({get, global, Key, Default}, _From, Ctx)
+do_get(Env, Var, C) ->
+  Key = normalize_key(Env, Var),
+  case C:get(<<"cap.config">>, Key) of
+  {ok, Object} ->
+    Value = riak_object:get_value(Object),
+    {ok, Value};
+  _Else ->
+    case fallback_env(Env, C) of
+    {ok, Fallback} ->
+      do_get(Fallback, Var, C);
+    _Else2 ->
+      {error, not_found}
     end
-  end;
-
-handle_call({get_all, Key}, _From, #ctx{}=Ctx) ->
-  All1 = [],
-
-  All2 = dets:foldr(fun
-  ({{global, K}, V, _}, Acc) when K =:= Key ->
-    [{global, V}|Acc];
-  (_, Acc) ->
-    Acc
-  end, All1, Ctx#ctx.tab),
-
-  All3 = dets:foldr(fun
-  ({{node, Node, K}, V, _}, Acc) when K =:= Key ->
-    [{{node, Node}, V}|Acc];
-  (_, Acc) ->
-    Acc
-  end, All2, Ctx#ctx.tab),
-
-  All4 = dets:foldr(fun
-  ({{local, Type, Id, K}, V, _}, Acc) when K =:= Key ->
-    [{{local, Type, Id}, V}|Acc];
-  (_, Acc) ->
-    Acc
-  end, All3, Ctx#ctx.tab),
-
-  {reply, All4, Ctx};
-
-handle_call({get_all}, _From, #ctx{}=Ctx) ->
-  Objects = dets:foldr(fun
-  (Object, Acc) ->
-    [Object|Acc]
-  end, [], Ctx#ctx.tab),
-  {reply, Objects, Ctx}.
-
-handle_cast({set, global, Key, Value}, #ctx{}=Ctx) ->
-  dets:insert(Ctx#ctx.tab, {{global, Key}, Value, erlang:now()}),
-  {noreply, Ctx};
-handle_cast({set, {node, Node}, Key, Value}, #ctx{}=Ctx) ->
-  dets:insert(Ctx#ctx.tab, {{node, Node, Key}, Value, erlang:now()}),
-  {noreply, Ctx};
-handle_cast({set, {Type, Id}, Key, Value}, #ctx{}=Ctx) ->
-  dets:insert(Ctx#ctx.tab, {{local, Type, Id, Key}, Value, erlang:now()}),
-  {noreply, Ctx};
-
-handle_cast({unset, global, Key}, #ctx{}=Ctx) ->
-  dets:delete(Ctx#ctx.tab, {global, Key}),
-  {noreply, Ctx};
-handle_cast({unset, {node, Node}, Key}, #ctx{}=Ctx) ->
-  dets:delete(Ctx#ctx.tab, {node, Node, Key}),
-  {noreply, Ctx};
-handle_cast({unset, {Type, Id}, Key}, #ctx{}=Ctx) ->
-  dets:delete(Ctx#ctx.tab, {local, Type, Id, Key}),
-  {noreply, Ctx};
-
-handle_cast({sync}, #ctx{}=Ctx) ->
-  handle_cast({sync, pg2:get_members(cap_config_pool)}, Ctx);
-
-handle_cast({sync, [Peer |Other]}, #ctx{}=Ctx) when Peer =:= self() ->
-  handle_cast({sync, Other}, Ctx);
-
-handle_cast({sync, [Peer |Other]}, #ctx{}=Ctx) ->
-  Objects1 = gen_server:call(Peer, {get_all}),
-
-  Objects2 = lists:foldl(fun
-  ({Key, _, Date1}=Object1, Acc) ->
-
-    case dets:lookup(Ctx#ctx.tab, Key) of
-    [{_,_,Date2}=Object2] when Date1 =< Date2 ->
-      [Object2|Acc];
-    [{_,_,Date2}] when Date1 > Date2 ->
-      [Object1|Acc];
-    _ ->
-      [Object1|Acc]
-    end
-
-  end, [], Objects1),
-
-  dets:insert(Ctx#ctx.tab, Objects2),
-
-  handle_cast({sync, Other}, Ctx);
-
-handle_cast({sync, []}, #ctx{}=Ctx) ->
-  {noreply, Ctx}.
+  end.
 
 
-handle_info(_, State) ->
-  {noreply, State}.
+fallback_env(Env, C) ->
+  Key = normalize_key(Env, "_fallback"),
+  case C:get(<<"cap.config">>, Key) of
+  {ok, Object} ->
+    Fallback = riak_object:get_value(Object),
+    {ok, Fallback};
+  _Else ->
+    {error, no_fallback}
+  end.
 
 
-terminate(_Reason, #ctx{}=Ctx) ->
-  pg2:leave(cap_config_pool, self()),
-  dets:close(Ctx#ctx.tab),
-  ok.
+normalize_key(Env, Var) ->
+  Env1 = normalize_env(Env),
+  Var1 = normalize_var(Var),
+  <<Env1/binary, ".", Var1/binary>>.
 
+normalize_env(Env) when is_binary(Env) -> normalize_env(binary_to_list(Env));
+normalize_env(Env) when is_atom(Env)   -> normalize_env(atom_to_list(Env));
+normalize_env(Env) when is_list(Env)   -> list_to_binary(string:to_upper(Env)).
 
-code_change(_OldVsn, State, _Extra) ->
-  {ok, State}.
+normalize_var(Var) when is_binary(Var) -> normalize_var(binary_to_list(Var));
+normalize_var(Var) when is_atom(Var)   -> normalize_var(atom_to_list(Var));
+normalize_var(Var) when is_list(Var)   -> list_to_binary(string:to_upper(Var)).
