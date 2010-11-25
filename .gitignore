@@ -1,10 +1,17 @@
 
-erlang/rel/capricorn
+/erlang/deps
+/erlang/rel/capricorn
+/erlang/lib/*/doc/*.html
+/erlang/lib/*/doc/*.css
+/erlang/lib/*/doc/*.png
+/erlang/lib/*/doc/edoc-info
+/sslcerts/CA/serial
 
 *.log
 *.dump
 
 *.beam
 *.gem
+*.pem
 
 .DS_Store

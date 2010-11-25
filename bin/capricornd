@@ -1,31 +1,306 @@
 #!/usr/bin/env ruby
+require 'rubygems'
+require 'fileutils'
+require 'opts'
+require 'shellwords'
 
-root = File.expand_path('../../', $0)
-src  = File.expand_path('../../', __FILE__)
-rel  = File.join(src, 'erlang/rel/capricorn')
-etc  = File.join(root, 'etc/capricorn')
+class CLI
+  include Opts::DSL
 
-if ARGV.size == 1 and ARGV[0] == "install"
-  require 'fileutils'
+  class_option "root",
+    :short   => 'r',
+    :type    => :string
 
-  FileUtils.mkdir_p(File.join(root, "etc/capricorn"),
-                    :verbose => true)
-  FileUtils.mkdir_p(File.join(root, "var/run/capricorn-machine"),
-                    :verbose => true)
-  FileUtils.mkdir_p(File.join(root, "var/run/capricorn-cluster"),
-                    :verbose => true)
-  FileUtils.mkdir_p(File.join(root, "var/log/sasl"),
-                    :verbose => true)
+  class_option "cert",
+    :type    => :string
 
-  FileUtils.cp(File.join(rel, 'etc/capricorn/app.config'),
-               File.join(etc, 'app.config'),
-               :verbose => true)
-  FileUtils.cp(File.join(rel, 'etc/capricorn/cluster-vm.args'),
-               File.join(etc, 'cluster-vm.args'),
-               :verbose => true)
-  FileUtils.cp(File.join(rel, 'etc/capricorn/machine-vm.args'),
-               File.join(etc, 'machine-vm.args'),
-               :verbose => true)
-else
-  exec(File.join(rel, 'bin/capricornd'), root, *ARGV)
+  class_option "ca-cert",
+    :type    => :string
+
+  class_option "port",
+    :short   => 'p',
+    :default => "0",
+    :type    => :string
+  
+  def start(env, args)
+    prepare_for_exec(env)
+    
+    result = node_tool_call(['ping'], true)
+    if result.include?('pong')
+      raise "Node is already running!"
+    end
+    
+    ENV['HEART_COMMAND'] = Shellwords.shelljoin([
+      File.join(gem_dir, 'bin', File.basename($0)),
+      'start'
+    ])
+    
+    FileUtils.mkdir_p(pipe_dir)
+    
+    cmd = [
+      File.join(erts_path, 'run_erl'),
+      '-daemon', pipe_dir+"/",
+      log_dir,
+      [
+        'exec',
+        File.join(gem_dir, 'bin', File.basename($0)),
+        "--root=#{base_dir}",
+        "--port=#{port_number}",
+        "--cert=#{cert_path}",
+        "--ca-cert=#{cacert_path}",
+        'console'
+      ].join(' ').inspect
+    ].join(' ')
+    
+    puts "Exec: #{cmd}"
+    
+    system(cmd)
+  end
+  
+  def stop(env, args)
+    prepare_for_exec(env)
+    
+    ENV['PID'] = %x[ps -ef|grep "#{src_dir}/.*/[b]eam.smp|awk '{print $2}'"]
+    node_tool_call(['stop'])
+    
+    until %x[kill -0 #{ENV['PID']} 2>/dev/null].strip.empty?
+      sleep(1)
+    end
+  end
+  
+  def restart(env, args)
+    prepare_for_exec(env)
+    
+    node_tool_call(['restart'])
+  end
+  
+  def reboot(env, args)
+    prepare_for_exec(env)
+    
+    node_tool_call(['reboot'])
+  end
+  
+  def ping(env, args)
+    prepare_for_exec(env)
+    
+    node_tool_call(['ping'])
+  end
+  
+  def attach(env, args)
+    prepare_for_exec(env)
+    
+    result = node_tool_call(['ping'], true)
+    unless result.include?('pong')
+      raise "Node is not running!"
+    end
+    
+    Kernel.exec(Shellwords.shelljoin([
+      File.join(erts_path, 'to_erl'),
+      pipe_dir + '/'
+    ]))
+  end
+  
+  def console(env, args)
+    prepare_for_exec(env)
+    
+    result = node_tool_call(['ping'], true)
+    if result.include?('pong')
+      raise "Node is already running - use 'capricornd attach' instead"
+    end
+    
+    ENV['ROOTDIR']  = src_dir
+    ENV['BINDIR']   = erts_path
+    ENV['EMU']      = 'beam'
+    ENV['PROGNAME'] = File.basename($0)
+    
+    cmd = Shellwords.shelljoin([
+      File.join(erts_path, 'erlexec'),
+      '-ssl_portprogram_dir', ssl_path,
+      '-boot', File.join(src_dir, 'releases', app_vsn, 'capricorn'),
+      '-embedded',
+      '-cap_etc', etc_dir,
+      '-config', File.join(etc_dir, 'app.config'),
+      '-ep2p_port', env['PORT']
+    ] + dist_args + [
+      '-args_file', vm_args_path,
+      '--'
+    ] + args)
+    
+    exec(cmd)
+  end
+  
+  def install(env, args)
+    prepare_for_exec(env)
+
+    FileUtils.mkdir_p(File.join(base_dir, "etc/capricorn"),
+                      :verbose => true)
+    FileUtils.mkdir_p(File.join(base_dir, "var/run/capricorn"),
+                      :verbose => true)
+    FileUtils.mkdir_p(File.join(base_dir, "var/log/sasl"),
+                      :verbose => true)
+
+    FileUtils.cp(File.join(src_dir, 'etc/capricorn/app.config'),
+                 File.join(etc_dir, 'app.config'),
+                 :verbose => true)
+    FileUtils.cp(File.join(src_dir, 'etc/capricorn/vm.args'),
+                 File.join(etc_dir, 'vm.args'),
+                 :verbose => true)
+  end
+
+  def tail(env, args)
+    prepare_for_exec(env)
+    exec(Shellwords.shelljoin([
+      "tail", "-n", "0",
+      "-f", File.join(base_dir, "var/log/capricorn.log")
+    ]))
+  end
+  
+private
+  
+  def prepare_for_exec(env)
+    @port_number = env['PORT'].to_s if env['PORT']
+    @root        = File.expand_path(env['ROOT'])    if env['ROOT']
+    @certfile    = File.expand_path(env['CERT'])    if env['CERT']
+    @cacertfile  = File.expand_path(env['CA_CERT']) if env['CA_CERT']
+    @gem_dir     = File.expand_path('../../', __FILE__)
+    Dir.chdir(base_dir)
+    FileUtils.mkdir_p(etc_dir)
+    FileUtils.mkdir_p(log_dir)
+  end
+  
+  def base_dir
+    @root ||= File.expand_path('../../', $0)
+  end
+  
+  def gem_dir
+    @gem_dir ||= File.expand_path('../../', __FILE__)
+  end
+  
+  def src_dir
+    @src_dir ||= File.join(gem_dir, 'erlang/rel/capricorn')
+  end
+  
+  def etc_dir
+    @etc_dir ||= File.join(base_dir, 'etc/capricorn')
+  end
+  
+  def log_dir
+    @log_dir ||= File.join(base_dir, 'var/log')
+  end
+  
+  def pipe_dir
+    @pipe_dir ||= '/tmp' + base_dir
+  end
+  
+  def vm_args_path
+    @vm_args_path ||= File.join(etc_dir, 'vm.args')
+  end
+  
+  def vm_args
+    @vm_args ||= File.read(vm_args_path)
+  end
+  
+  def node_name_arg
+    @node_name_arg ||= begin
+      name = nil
+      
+      vm_args.split("\n").each do |line|
+        if line =~ /^\s*[-](s?)name.+$/
+          name = line
+          break
+        end
+      end
+      
+      unless name
+        raise "vm.args needs to have either -name or -sname parameter."
+      end
+      
+      name.split(/\s+/, 2)
+    end
+  end
+  
+  def node_cookie_arg
+    @node_cookie_arg ||= begin
+      cookie = nil
+      vm_args.split("\n").each do |line|
+        if line =~ /^\s*[-]setcookie.+$/
+          cookie = line
+          break
+        end
+      end
+      
+      unless cookie
+        raise "vm.args needs to have a -setcookie parameter."
+      end
+      
+      cookie.split(/\s+/, 2)
+    end
+  end
+  
+  def start_erl_data
+    @start_erl_data ||= File.read(File.join(src_dir, 'releases/start_erl.data'))
+  end
+  
+  def erts_vsn
+    @erts_vsn ||= start_erl_data.split(' ').first
+  end
+  
+  def app_vsn
+    @app_vsn ||= start_erl_data.split(' ').last
+  end
+  
+  def erts_path
+    @erts_path ||= File.join(src_dir, "erts-#{erts_vsn}/bin")
+  end
+  
+  def ssl_path
+    @ssl_path ||= Dir.glob(File.join(src_dir, "lib/ssl-*/priv/bin")).first
+  end
+  
+  def node_tool
+    @node_tool ||= [
+      File.join(erts_path, 'escript'),
+      File.join(erts_path, 'nodetool'),
+    ] + node_name_arg + node_cookie_arg + [
+      '-port', port_number
+    ]
+  end
+  
+  def node_tool_call(args, catch_output=false)
+    ENV['ESCRIPT_EMULATOR'] = Shellwords.shelljoin(
+      [File.join(erts_path, "erl")] + dist_args(false))
+    cmd = Shellwords.shelljoin(node_tool + args)
+    if catch_output
+      %x[#{cmd}]
+    else
+      Kernel.system(cmd)
+    end
+  ensure
+    ENV.delete('ESCRIPT_EMULATOR')
+  end
+  
+  def port_number
+    @port_number ||= '0'
+  end
+  
+  def dist_args(set_port=true)
+    @dist_args ||= [
+      '-proto_dist',   'inet_ep2p',
+      '-ssl_dist_opt', 'certfile',   cert_path,
+      '-ssl_dist_opt', 'cacertfile', cacert_path,
+      '-ssl_dist_opt', 'verify',     '1',
+      '-ssl_dist_opt', 'depth',      '1'
+    ] + (set_port ? ['-ep2p_port', port_number] : [])
+  end
+  
+  def cert_path
+    @cert_path ||= File.join(etc_dir, 'node.pem')
+  end
+  
+  def cacert_path
+    @cacert_path ||= File.join(etc_dir, 'ca.pem')
+  end
+  
 end
+
+CLI.new.call({}, ARGV.dup)

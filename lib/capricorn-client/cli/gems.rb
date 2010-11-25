@@ -1,45 +1,67 @@
-class Capricorn::CLI::Gems < Thor
+class Capricorn::CLI::Gems < Capricorn::CLI
   include Capricorn::Helpers
-  
+
+  namespace :gems
+
   desc "push PATHS...", "push gems to capricorn"
   def push(*paths)
     paths = paths.flatten.collect do |path|
       Dir.glob(path)
     end.flatten
+
     paths.each do |path|
       begin
         client.call(:stream => path).gems.push
-        puts ui.color("Pushed: #{File.basename(path)}", :green)
+        info "Pushed: #{File.basename(path)}"
       rescue BERTRPC::UserError => e
-        puts ui.color(e.message, :red)
+        halt(e.message, $capr_gems_weak_push)
       end
     end
   end
-  
+
   desc "missing", "list missing gems"
   def missing
-    ui.table %w( Gem Requirements ), clean_missing(client.call.gems.missing), :columns_across, 2
+    all = clean_missing(client.call.gems.missing)
+    all.sort! { |a, b| a[0] <=> b[0] }
+    width = all.inject(0) { |m, (name, _)| (m > name.size ? m : name.size) }
+    all.each do |(name, versions)|
+      padding = ' ' * (width - name.size)
+      puts "#{padding}#{name}: #{versions}"
+    end
   end
-  
+
   desc "all", "list all gems"
   def all
-    ui.table %w( Gem Versions ), clean_all(client.call.gems.all), :columns_across, 2
+    all = clean_all(client.call.gems.all)
+    all.sort! { |a, b| a[0] <=> b[0] }
+    width = all.inject(0) { |m, (name, _)| (m > name.size ? m : name.size) }
+    all.each do |(name, versions)|
+      padding = ' ' * (width - name.size)
+      puts "#{padding}#{name}: #{versions}"
+    end
   end
-  
+
 private
-  
+
   def clean_all(gems)
     gems = gems.last
     gems.inject(Hash.new { |h,k| h[k] = [] }) do |m, g|
       header, name, version = *(g.to_ary)
+      next(m) unless version.last
       version = version.last.join('.')
       m[name.to_s] << version
       m
     end.collect do |name, versions|
-      [name, versions.join(', ')]
-    end.flatten
+      versions = versions.reverse
+      if versions.size > 5
+        versions = versions[0, 5].join(', ') + ", (and #{versions.size - 5} more)"
+      else
+        versions = versions.join(', ')
+      end
+      [name, versions]
+    end
   end
-  
+
   def clean_missing(deps)
     deps = deps.last if deps and deps.first == :ok
     return [] if deps.nil? or deps.empty?
@@ -49,9 +71,9 @@ private
         op = req.shift
         version = req.shift.to_a.last.join('.')
         "#{op} #{version}"
-      end.join(', ')
+      end.reverse.join(', ')
       [dep.first, reqs]
-    end.flatten
+    end
   end
-  
+
 end

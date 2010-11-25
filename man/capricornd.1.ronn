@@ -1,0 +1,66 @@
+capricornd(1) -- the capricorn server
+=====================================
+
+## SYNOPSIS
+
+`capricornd` [<options>] `install`<br>
+`capricornd` [<options>] `tail`<br>
+`capricornd` [<options>] `start`<br>
+`capricornd` [<options>] `stop`<br>
+`capricornd` [<options>] `restart`<br>
+`capricornd` [<options>] `reboot`<br>
+`capricornd` [<options>] `ping`<br>
+`capricornd` [<options>] `console`<br>
+`capricornd` [<options>] `attach`
+
+## OPTIONS
+
+These options apply to all the commands:
+
+  * `-r`=<path>, `--root`=<path>:
+    Path to the root of the node. This is the directory conatining the `etc` and `var` directories.
+
+These options apply to `start` and `console`:
+
+  * `-p`=<number>, `--port`=<number>:
+    The port number to use for the Erlang distribution. Usually you don't need this.
+
+  * `--cert`=<path>:
+    The path to the nodes SSL certificate. (defaults to: `etc/capricorn/cert.pem`)
+
+  * `--ca-cert`=<path>:
+    The path to the CA's SSL certificate. (defaults to: `etc/capricorn/ca.pem`)
+
+## COMMANDS
+
+`install`<br>
+Install the config files.
+
+`tail`<br>
+Tail the log files.
+
+`start`<br>
+Start a node.
+
+`stop`<br>
+Stop a node.
+
+`restart`<br>
+Restart a node.
+
+`reboot`<br>
+Reboot a node.
+
+`ping`<br>
+Ping a node.
+
+`console`<br>
+Start a node and open an erlang shell.
+
+`attach`<br>
+Attach to a node and open an erlang shell.
+
+## SEE ALSO
+
+[capricornctl(1)](capricornctl.1),
+[capricorn(7)](capricorn.7)

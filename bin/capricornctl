@@ -1,12 +1,11 @@
 #!/usr/bin/env ruby
 
-require File.dirname(File.expand_path(__FILE__))+'/../../minigems'
-
 begin
   require 'capricorn-client'
 rescue LoadError
+  require 'rubygems'
   $:.unshift(File.dirname(__FILE__)+'/../lib')
   require 'capricorn-client'
 end
 
-Capricorn::Runner.start
+Capricorn::CLI.start

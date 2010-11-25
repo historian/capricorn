@@ -13,7 +13,7 @@ application_root = capricorn_root[application[:id]+'/'].create
 if application_root['host/'].exists?
   application_root.bash %{ rm -rf host }
 end
-application_root.bash %{ milkshake create.host "host" --git-data --shared-data "shared" }
+application_root.bash %{ milkshake create:host "host" --git-data --shared-data "shared" }
 capricorn_root.bash %{ chown -R #{username}:staff "#{application_root.full_path}" }
 
 # create the vhost

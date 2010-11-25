@@ -1,0 +1,14 @@
+capricorn(7) -- semi automatic deployment of rails applications
+===============================================================
+
+## INSTALL
+
+Install with Rubygems:
+
+    $ [sudo] gem install capricorn
+    $ capricornd cluster start
+
+## SEE ALSO
+
+[capricornctl(1)](capricornctl.1),
+[capricornd(1)](capricornd.1)

@@ -20,15 +20,17 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.files        = Dir.glob("{lib,erlang,ext}/**/*") +
                    %w(LICENSE README.md ext/Makefile )
+  s.files       -= Dir.glob("{lib,erlang,ext}/**/*.beam")
+  s.files       -= Dir.glob("erlang/rel/capricorn/**/*")
 
-  s.executables = %w( capricornctl capricornd capricorn-app-scaffolder capricorn-gem-spec )
+  s.executables = %w( capricornctl capricornd capricornutl )
   s.extensions  = %w( ext/extconf.rb )
 
-  s.add_runtime_dependency 'bert',     '= 1.1.1'
-  s.add_runtime_dependency 'bertrpc',  '= 1.1.2'
-  s.add_runtime_dependency 'highline', '= 1.5.2'
-  s.add_runtime_dependency 'mustache', '= 0.5.1'
-  s.add_runtime_dependency 'rush',     '= 0.6.5'
-  s.add_runtime_dependency 'session',  '= 3.1.0'
-  s.add_runtime_dependency 'thor',     '= 0.12.3'
+  s.add_runtime_dependency 'fd-bertrpc',            '= 1.3.1'
+  s.add_runtime_dependency 'mustache',              '= 0.5.1'
+  s.add_runtime_dependency 'rush',                  '= 0.6.5'
+  s.add_runtime_dependency 'session',               '= 3.1.0'
+  s.add_runtime_dependency 'opts',                  '= 0.0.1'
+  s.add_runtime_dependency 'thor',                  '= 0.13.6'
+  s.add_runtime_dependency 'public_suffix_service', '= 0.4.0'
 end

@@ -1,0 +1,129 @@
+capricornctl(1) -- the capricorn client
+========================================
+
+## SYNOPSIS
+
+`capricornctl` `help` _task_<br>
+`capricornctl` [<options>] `deploy`<br>
+`capricornctl` [<options>] `apps:list`<br>
+`capricornctl` [<options>] `apps:show`<br>
+`capricornctl` [<options>] `apps:create` _name_ _environment_ _domains..._<br>
+`capricornctl` [<options>] `apps:import` _name_ _environment_ _domains..._<br>
+`capricornctl` [<options>] `apps:init`<br>
+`capricornctl` [<options>] `apps:start`<br>
+`capricornctl` [<options>] `apps:restart`<br>
+`capricornctl` [<options>] `apps:relink`<br>
+`capricornctl` [<options>] `apps:stop`<br>
+`capricornctl` [<options>] `apps:fupdate`<br>
+`capricornctl` [<options>] `apps:domains:list`<br>
+`capricornctl` [<options>] `apps:domains:add` _domain_<br>
+`capricornctl` [<options>] `apps:domains:remove` _domain_<br>
+`capricornctl` [<options>] `apps:gems:list`<br>
+`capricornctl` [<options>] `apps:gems:add` _gem_name_<br>
+`capricornctl` [<options>] `apps:gems:remove` _gem_name_<br>
+`capricornctl` [<options>] `gems:all`<br>
+`capricornctl` [<options>] `gems:missing`<br>
+`capricornctl` [<options>] `gems:push` _paths..._<br>
+`capricornctl` [<options>] `machines:list`<br>
+`capricornctl` [<options>] `machines:reboot`<br>
+`capricornctl` [<options>] `machines:selfupdate`
+
+## OPTIONS
+
+These options apply to all the commands:
+
+  * `-c`=<cluster>, `--cluster`=<cluster>:
+    Send the command to <cluster>. If <cluster> is not set `capricornctl` will
+    look for a default <cluster>.
+
+  * `-e`=<environment>, `--env`=<environment>, `--environment`=<environment>:
+    When <environment> is set <capricornctl> will look for a `.capricorn.yml` file
+    (see [capricorn.yml(5)](capricorn.yml.5)) and read the configuration from
+    the environment specified in there. The options provided by the
+    <environment> can be overwritten by specifying the as options.
+
+These options apply to `deploy`, `apps:*`, `machines:reboot`,
+`machines:selfupdate`:
+
+  * `-m`=<machine>, `-n`=<machine>, `--machine`=<machine>, `--node`=<machine>:
+    Send the command to <machine>. If <machine> is not set `capricornctl` will
+    look for a default <machine>.
+
+These options apply to `deploy`, `apps:show`, `apps:init`, `apps:start`,
+`apps:restart`, `apps:relink`, `apps:stop`, `apps:fupdate`, `apps:domains:*`,
+`apps:gems:*`:
+
+  * `-a`=<application>, `--app`=<application>, `--application`=<application>:
+    Send the command to <application>. If <application> is not set
+    `capricornctl` will look for a default <application>.
+
+
+## COMMANDS
+
+Commands for managing applications:
+
+`deploy`<br>
+Deploy the last build gem to the current <application>.
+
+`apps:list`<br>
+List all the applications on a <machine>.
+
+`apps:show`<br>
+Show all information about an <application>.
+
+`apps:create` _name_ _environment_ _domains..._<br>
+Create a new application on <machine>.
+
+  * <name> is the human name of the application.
+  * <environment> is the Rails environment of the application and can be `development`, `test`, `staging`, `production`.
+  * <domains> is a list of domains to bind to this application.
+
+`apps:import` _name_ _environment_ _domains..._<br>
+Import an existing application on <machine>.
+
+  * <name> is the human name of the application.
+  * <environment> is the Rails environment of the application and can be `development`, `test`, `staging`, `production`.
+  * <domains> is a list of domains to bind to this application.
+
+`apps:init`<br>
+Create the `.capricorn.yml` file (see [capricorn.yml(5)](capricorn.yml.5)).
+
+`apps:start`<br>
+Start a stopped <application>.
+
+`apps:restart`<br>
+Restart an <application>. this will touch `tmp/restart.txt`.
+
+`apps:relink`<br>
+Relink an <application>. this will touch `tmp/restart.txt` and `tmp/relink.txt`.
+
+`apps:stop`<br>
+Stop a stopped <application>.
+
+`apps:fupdate`<br>
+Force update an <application>.
+
+`apps:domains:list`<br>
+List all the bound domains for this <application>.
+
+`apps:domains:add` _domain_<br>
+Bind a new domain to this <application>.
+
+`apps:domains:remove` _domain_<br>
+Unbind a domain from this <application>.
+
+`apps:gems:list`<br>
+List all the used gems for this <application>.
+
+`apps:gems:add` _gem_<br>
+Add a new gem to this <application>.
+
+`apps:gems:remove` _gem_<br>
+Remove a gem from this <application>.
+
+
+
+## SEE ALSO
+
+[capricornd(1)](capricornd.1),
+[capricorn(7)](capricorn.7)

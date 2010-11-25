@@ -2,11 +2,12 @@
 desc "build the capricorn"
 task :build do
   sh "gem build capricorn.gemspec"
+  system("mkdir -p pkg ; mv ./*.gem pkg/")
 end
 
 desc "install the capricorn"
 task :install => [:load_version, :build] do
-  sh "gem install capricorn-#{Capricorn::VERSION}.gem"
+  sh "gem install -l pkg/capricorn-#{Capricorn::VERSION}.gem"
 end
 
 desc "release the capricorn"
@@ -16,16 +17,50 @@ task :release => [:load_version, :build] do
     exit(1)
   end
 
-  if %x[ git tag 2>&1 ].include?(Capricorn::VERSION)
+  if %x[ git tag 2>&1 ] =~ /^#{Regexp.escape(Capricorn::VERSION)}$/
     puts "Please bump your version first!"
     exit(1)
   end
 
   require File.expand_path('../lib/capricorn/version', __FILE__)
-  sh "gem push capricorn-#{Capricorn::VERSION}.gem"
+  sh "gem push pkg/capricorn-#{Capricorn::VERSION}.gem"
   sh "git tag -a -m \"#{Capricorn::VERSION}\" #{Capricorn::VERSION}"
   sh "git push origin master"
   sh "git push origin master --tags"
+end
+
+desc 'Build the manual'
+task :man => :load_version do
+  require 'ronn'
+  ENV['RONN_MANUAL']  = "Capricorn #{Capricorn::VERSION}"
+  ENV['RONN_ORGANIZATION'] = "Simon Menke"
+  sh "ronn -w -s toc man/*.ronn"
+end
+
+desc 'Build website'
+task :site => :man do
+  repo = Dir.pwd
+  
+  begin
+    tmp = FileUtils.mkdir_p("/tmp/capr-site-#{Time.now.to_i}")
+    
+    sh "git clone #{repo}/.git #{tmp}"
+    
+    Dir.chdir(tmp) do
+      sh "git checkout gh-pages"
+      sh "rm ./*.html"
+      sh "cp #{File.join(repo, 'man/*.html')} ./"
+      sh "cp capricorn.7.html index.html"
+      sh "git add . && git add -u"
+      unless %x[git status].include?('nothing to commit')
+        sh "git commit -m \"Updated website\""
+        sh "git push origin gh-pages"
+      end
+    end
+    
+  ensure
+    FileUtils.rm_rf(tmp)
+  end
 end
 
 begin
