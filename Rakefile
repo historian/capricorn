@@ -34,6 +34,16 @@ task :site => :man do
   end
 end
 
+begin
+  require 'yard'
+  YARD::Rake::YardocTask.new do |t|
+    t.files   = FileList['lib/**/*.rb'].to_a
+    t.options = ['-m', 'markdown', '--files', FileList['documentation/*.markdown'].to_a.join(',')]
+  end
+rescue LoadError
+  puts "YARD not available. Install it with: sudo gem install yard"
+end
+
 task :load_version do
   require File.expand_path('../lib/capr/version', __FILE__)
 end

@@ -2,12 +2,12 @@ PATH
   remote: .
   specs:
     capricorn (3.0.0)
-      cramp
-      em-http-request
-      eventmachine
-      opts
-      usher
-      yajl-ruby
+      cramp (~> 0.11)
+      em-http-request (~> 0.2)
+      eventmachine (~> 0.12)
+      opts (~> 0.0)
+      usher (~> 0.8)
+      yajl-ruby (~> 0.7)
 
 GEM
   remote: http://rubygems.org/
@@ -47,17 +47,19 @@ GEM
     usher (0.8.3)
       fuzzyhash (>= 0.0.11)
     yajl-ruby (0.7.8)
+    yard (0.6.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (>= 1.0.0)
+  bundler (~> 1.0)
   capricorn!
-  cramp
-  em-http-request
-  eventmachine
-  opts
-  ronn
-  usher
-  yajl-ruby
+  cramp (~> 0.11)
+  em-http-request (~> 0.2)
+  eventmachine (~> 0.12)
+  opts (~> 0.0)
+  ronn (~> 0.7)
+  usher (~> 0.8)
+  yajl-ruby (~> 0.7)
+  yard (~> 0.6)
