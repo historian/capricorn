@@ -3,10 +3,10 @@ class Capr::CLI::Caprd
   include Capr::Helpers::Shared
 
   class_use Opts::Shell
-  # class_use Opts::ErrorHandler
+  class_use Opts::ErrorHandler
   class_use Opts::Environment, 'CAPRD_'
   class_use Opts::ManHelp,
-    :path    => File.expand_path('../../../man', __FILE__),
+    :path    => File.expand_path('../../../../man', __FILE__),
     :default => 'caprd.1'
 
   option 'root', :type => :string, :required => true
@@ -35,6 +35,10 @@ class Capr::CLI::Caprd
       f.puts name
       f.puts repo
     end
+  end
+
+  def help(env, args)
+    env['opts.man_help'].exec(env, ['caprd'] + args)
   end
 
 end

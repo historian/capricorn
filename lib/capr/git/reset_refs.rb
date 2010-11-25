@@ -6,21 +6,21 @@ class Capr::Git::ResetRefs < Capr::Do::Action(:reset_ref)
 
   define_callback :message
 
-  def initialize(url, refs={})
-    @url, @refs = url, refs.to_a
+  def initialize(url, refs, options={})
+    @url, @branch, @refs = url, options[:branch], refs.to_a
   end
 
   def reset_ref
     if @refs.empty?
-      success
+      if @branch
+        reset_work_tree
+      else
+        succeed
+      end
     else
       ref, sha1 = @refs.shift
-      
-      git_dir   = git_dir(@url)
-      work_tree = work_tree(@url, ref)
-      cmd = exec('git', '--git-dir',   git_dir,
-                        '--work_tree', work_tree,
-                        'reset', '--hard', sha1)
+      cmd = exec('git', 'update-ref', ref, sha1,
+                        :pwd => work_tree(@url, @branch))
 
       cmd.callback do
         fire_message(
@@ -29,7 +29,7 @@ class Capr::Git::ResetRefs < Capr::Do::Action(:reset_ref)
           :verbose => cmd.output)
         reset_ref
       end
-      
+
       cmd.errback do
         fire_message(
           :success => false,
@@ -40,5 +40,25 @@ class Capr::Git::ResetRefs < Capr::Do::Action(:reset_ref)
     end
   end
 
-end
+  def reset_work_tree
+    cmd = exec('git', 'reset', '--hard', @branch,
+                      :pwd => work_tree(@url, @branch))
 
+    cmd.callback do
+      fire_message(
+        :success => true,
+        :message => "Reset #{@repo}##{@branch}",
+        :verbose => cmd.output)
+      succeed
+    end
+
+    cmd.errback do
+      fire_message(
+        :success => false,
+        :message => "Failed to reset #{@repo}##{@branch}",
+        :verbose => cmd.output)
+      fail
+    end
+  end
+
+end

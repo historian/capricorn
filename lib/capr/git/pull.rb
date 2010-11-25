@@ -6,16 +6,14 @@ class Capr::Git::Pull < Capr::Do::Action(:start)
 
   define_callback :message
 
-  def initialize(url, branch)
-    @url, @branch = url, branch
+  def initialize(url, options={})
+    @url, @branch = url, (options[:branch] || 'master')
   end
 
   def start
-    git_dir   = git_dir(@url)
     work_tree = work_tree(@url, @branch)
-    cmd = exec('git', '--git-dir',   git_dir,
-                      '--work-tree', work_tree,
-                      'pull', @url, @branch)
+    cmd = exec('git', 'pull', 'origin', @branch,
+               :pwd => work_tree)
 
     cmd.callback do
       fire_message(
@@ -27,7 +25,7 @@ class Capr::Git::Pull < Capr::Do::Action(:start)
 
     cmd.errback do
       puts cmd.output
-      
+
       fire_message(
         :success => false,
         :message => "Failed to pull #{@url}",

@@ -11,4 +11,4 @@ Install with Rubygems:
 
 ## SEE ALSO
 
-[caprd(1)](caprd.1)
+capr(1), caprd(1)

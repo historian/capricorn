@@ -1,0 +1,20 @@
+capr(1) -- the capricorn client
+===============================
+
+## SYNOPSIS
+
+`capr` `ping` `--node`=<HOSTNAME> <REPO> <BRANCHES>...
+
+## OPTIONS
+
+  * `--node`=<HOSTNAME>:
+    The node to contact.
+
+## COMMANDS
+
+`ping`<br>
+Send a ping to be forwarded to all known nodes.
+
+## SEE ALSO
+
+capricorn(7), caprd(1)

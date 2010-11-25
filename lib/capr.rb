@@ -9,13 +9,13 @@ module Capr
   require 'uri'
   require 'yaml'
   require 'shellwords'
-  
+
   require 'capr/version'
 
   module Do
     require 'capr/do'
   end
-  
+
   module Helpers
     require 'capr/helpers/shared'
     require 'capr/helpers/config'
@@ -25,17 +25,15 @@ module Capr
   module Git
     require 'capr/git/pull'
     require 'capr/git/clone'
-    require 'capr/git/fetch'
-    require 'capr/git/rebase'
     require 'capr/git/record_refs'
     require 'capr/git/reset_refs'
   end
-  
+
   module Httpc
     require 'capr/httpc/forward'
     require 'capr/httpc/ping'
   end
-  
+
   module Httpd
     require 'capr/httpd/forward'
     require 'capr/httpd/proxy_ping'
@@ -51,7 +49,7 @@ module Capr
     require 'capr/cli/caprd'
     require 'capr/cli/capr'
   end
-  
+
   require 'capr/config'
   require 'capr/node'
 

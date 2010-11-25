@@ -7,17 +7,19 @@ class Capr::Git::Clone < Capr::Do::Action(:start)
   define_callback :message
 
   def initialize(url, options={})
-    @url, @bare, @branch = url, (options[:bare] || false), (options[:branch] || 'master')
+    @url, @mirror, @branch = url, (options[:mirror] || false), (options[:branch] || 'master')
   end
 
   def start
-    if @bare
+    if @mirror
       path = git_dir(@url)
     else
       path = work_tree(@url, @branch)
     end
-    
-    cmd  = exec('git', 'clone', ('--bare' if @bare), url, path)
+
+    cmd = exec('git', 'clone', ('--mirror' if @mirror),
+                              (['--branch', @branch] if !@mirror and @branch),
+                                url, path)
 
     cmd.callback do
       fire_message(

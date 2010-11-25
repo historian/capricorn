@@ -6,7 +6,7 @@ class Capr::CLI::Capr
   class_use Opts::ErrorHandler
   class_use Opts::Environment, 'CAPRD_'
   class_use Opts::ManHelp,
-    :path    => File.expand_path('../../../man', __FILE__),
+    :path    => File.expand_path('../../../../man', __FILE__),
     :default => 'capr.1'
 
   option   'node', :type => :string, :required => true
@@ -18,7 +18,7 @@ class Capr::CLI::Capr
 
     EM.run do
       action = Capr::Httpc::Forward.new(node, repo, branches)
-      
+
       action.on_message do |m|
         if m['success']
           shell.status('Info', m['message'], :green)
@@ -26,7 +26,7 @@ class Capr::CLI::Capr
           shell.status('Error', m['message'], :red)
         end
       end
-      
+
       action.callback { EM.stop_event_loop }
       action.errback  {
         shell.status('Error', "failed to ping #{node}", :red)
@@ -34,6 +34,10 @@ class Capr::CLI::Capr
       }
       action.call
     end
+  end
+
+  def help(env, args)
+    env['opts.man_help'].exec(env, ['capr'] + args)
   end
 
 end

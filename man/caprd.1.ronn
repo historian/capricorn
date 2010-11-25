@@ -27,4 +27,4 @@ Run the capricorn server.
 
 ## SEE ALSO
 
-[capricorn(7)](capricorn.7)
+capricorn(7), capr(1)

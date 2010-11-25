@@ -1,4 +1,4 @@
-class Capr::Git::Pull < Capr::Do::Action(:start)
+class Capr::Git::RecordRefs < Capr::Do::Action(:start)
 
   include Capr::Helpers::Shell
   include Capr::Helpers::Config
@@ -6,14 +6,16 @@ class Capr::Git::Pull < Capr::Do::Action(:start)
 
   define_callback :message
 
-  def initialize(url)
-    @url = url
+  def initialize(url, options={})
+    @url, @branch = url, options[:branch]
   end
 
   def start
-    git_dir = git_dir(@url)
-    cmd = exec('git', '--git-dir', git_dir,
-                      'branch', '--no-color', '--no-abbrev')
+    cmd = exec('git', 'branch', '--verbose',
+                                '--no-color',
+                                '--no-abbrev',
+                                '-a',
+                                :pwd => work_tree(@url, @branch))
 
     cmd.callback do
       refs = {}
@@ -23,10 +25,10 @@ class Capr::Git::Pull < Capr::Do::Action(:start)
         if line.size >= 2
           name = line[0]
           sha1 = line[1]
-          refs[name] = sha1
+          refs[name] = sha1 unless name == 'remotes/origin/HEAD'
         end
       end
-      
+
       succeed(refs)
     end
 
