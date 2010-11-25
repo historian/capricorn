@@ -1,4 +1,4 @@
-module Capr::SharedHelpers
+module Capr::Helpers::Shared
 
   def repo_path_for_url(url)
     File.expand_path(dirname_for_url(url), self.config.repo_root)

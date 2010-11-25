@@ -1,4 +1,4 @@
-module Capr::ConfigHelpers
+module Capr::Helpers::Config
   
   def self.included(base)
     if Class === base

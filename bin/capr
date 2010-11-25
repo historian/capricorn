@@ -8,4 +8,4 @@ rescue LoadError
   require 'capr'
 end
 
-Capr::CLI::Caprd.new.call({}, ARGV)
+Capr::CLI::Capr.new.call({}, ARGV)
