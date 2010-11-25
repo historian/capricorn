@@ -66,7 +66,7 @@
 
   <ol class='man-decor man-head man head'>
     <li class='tl'>capricorn(7)</li>
-    <li class='tc'>Capricorn 2.0.11</li>
+    <li class='tc'>Capricorn 3.0.0</li>
     <li class='tr'>capricorn(7)</li>
   </ol>
 
@@ -80,18 +80,18 @@
 <p>Install with Rubygems:</p>
 
 <pre><code>$ [sudo] gem install capricorn
-$ capricornd cluster start
+$ caprd setup --root=/usr/local/capr --name=node-001 --config=git@github.com:me/capr-config.git
+$ caprd run --root=/usr/local/capr
 </code></pre>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
-<p><a href="capricornctl.1">capricornctl(1)</a>,
-<a href="capricornd.1">capricornd(1)</a></p>
+<p><a href="caprd.1">caprd(1)</a></p>
 
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Simon Menke</li>
-    <li class='tc'>October 2010</li>
+    <li class='tc'>November 2010</li>
     <li class='tr'>capricorn(7)</li>
   </ol>
 
