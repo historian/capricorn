@@ -1,0 +1,25 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "CAPRICORN" "7" "November 2010" "Simon Menke" "Capricorn 3.0.0"
+.
+.SH "NAME"
+\fBcapricorn\fR \- semi automatic deployment of rails applications
+.
+.SH "INSTALL"
+Install with Rubygems:
+.
+.IP "" 4
+.
+.nf
+
+$ [sudo] gem install capricorn
+$ caprd setup \-\-root=/usr/local/capr \-\-name=node\-001 \-\-config=git@github\.com:me/capr\-config\.git
+$ caprd run \-\-root=/usr/local/capr
+.
+.fi
+.
+.IP "" 0
+.
+.SH "SEE ALSO"
+caprd(1) \fIcaprd\.1\fR

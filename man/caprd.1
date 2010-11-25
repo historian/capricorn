@@ -1,0 +1,42 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "CAPRD" "1" "November 2010" "Simon Menke" "Capricorn 3.0.0"
+.
+.SH "NAME"
+\fBcaprd\fR \- the capricorn server
+.
+.SH "SYNOPSIS"
+\fBcaprd\fR \fBsetup\fR \fB\-\-root\fR=\fIROOT\fR \fB\-\-name\fR=\fINAME\fR \fB\-\-config\fR=\fIREPO\fR
+.
+.br
+\fBcaprd\fR \fBrun\fR \fB\-\-root\fR=\fIROOT\fR
+.
+.SH "OPTIONS"
+.
+.TP
+\fB\-\-root\fR=\fIROOT\fR
+Path to the root of the node\. This is the directory containing the data used by this node\.
+.
+.TP
+\fB\-\-name\fR=\fINAME\fR
+The name of the new node\.
+.
+.TP
+\fB\-\-config\fR=\fIREPO\fR
+The URL to the configuration repository\. This must be a Git repository and the local node should be able to access it without requiring a password (ie\. use the SSH transport with a public key file)\.
+.
+.SH "COMMANDS"
+\fBsetup\fR
+.
+.br
+Setup the directory structure and write the bootstrapper config\.
+.
+.P
+\fBrun\fR
+.
+.br
+Run the capricorn server\.
+.
+.SH "SEE ALSO"
+capricorn(7) \fIcapricorn\.7\fR

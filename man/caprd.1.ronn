@@ -1,0 +1,30 @@
+caprd(1) -- the capricorn server
+================================
+
+## SYNOPSIS
+
+`caprd` `setup` `--root`=<ROOT> `--name`=<NAME> `--config`=<REPO><br>
+`caprd` `run` `--root`=<ROOT>
+
+## OPTIONS
+
+  * `--root`=<ROOT>:
+    Path to the root of the node. This is the directory containing the data used by this node.
+
+  * `--name`=<NAME>:
+    The name of the new node.
+
+  * `--config`=<REPO>:
+    The URL to the configuration repository. This must be a Git repository and the local node should be able to access it without requiring a password (ie. use the SSH transport with a public key file).
+
+## COMMANDS
+
+`setup`<br>
+Setup the directory structure and write the bootstrapper config.
+
+`run`<br>
+Run the capricorn server.
+
+## SEE ALSO
+
+[capricorn(7)](capricorn.7)
