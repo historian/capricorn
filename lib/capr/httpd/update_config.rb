@@ -11,9 +11,9 @@ class Capr::Httpd::UpdateConfig < Capr::Do::Action(:get_repo)
     action    = nil
 
     if File.directory?(repo_path)
-      action = Capr::Git::Pull.new(repo_path, repo_url, 'master')
+      action = Capr::Git::Pull.new(repo_url, 'master')
     else
-      action = Capr::Git::Clone.new(repo_path, repo_url)
+      action = Capr::Git::Clone.new(repo_url, :branch => 'master')
     end
 
     action.on_message &method(:fire_message)

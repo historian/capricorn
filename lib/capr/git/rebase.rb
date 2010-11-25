@@ -1,16 +1,21 @@
 class Capr::Git::Rebase < Capr::Do::Action(:start)
 
   include Capr::Helpers::Shell
+  include Capr::Helpers::Config
+  include Capr::Helpers::Shared
 
   define_callback :message
 
-  def initialize(path, local_branch, remote_branch)
-    @path, @local_branch, @remote_branch = path, local_branch, remote_branch
+  def initialize(url, local_branch, remote_branch)
+    @url, @local_branch, @remote_branch = url, local_branch, remote_branch
   end
 
   def start
-    cmd = exec('git', '--git-dir', @path, '--work-tree', File.dirname(@path),
-                 'rebase', @remote_branch, @local_branch)
+    git_dir   = git_dir(@url)
+    work_tree = work_tree(@url, @local_branch)
+    cmd = exec('git', '--git-dir',   git_dir,
+                      '--work-tree', work_tree,
+                      'rebase', @remote_branch, @local_branch)
 
     cmd.callback do
       fire_message(cmd.output)

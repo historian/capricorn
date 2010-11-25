@@ -27,6 +27,8 @@ module Capr
     require 'capr/git/clone'
     require 'capr/git/fetch'
     require 'capr/git/rebase'
+    require 'capr/git/record_refs'
+    require 'capr/git/reset_refs'
   end
   
   module Httpc

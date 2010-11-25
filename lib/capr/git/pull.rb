@@ -1,16 +1,20 @@
 class Capr::Git::Pull < Capr::Do::Action(:start)
 
   include Capr::Helpers::Shell
+  include Capr::Helpers::Config
+  include Capr::Helpers::Shared
 
   define_callback :message
 
-  def initialize(path, url, branch)
-    @path, @url, @branch = path, url, branch
+  def initialize(url, branch)
+    @url, @branch = url, branch
   end
 
   def start
-    cmd = exec('git', '--git-dir', File.join(@path, '.git'),
-                      '--work-tree', '..',
+    git_dir   = git_dir(@url)
+    work_tree = work_tree(@url, @branch)
+    cmd = exec('git', '--git-dir',   git_dir,
+                      '--work-tree', work_tree,
                       'pull', @url, @branch)
 
     cmd.callback do

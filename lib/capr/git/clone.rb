@@ -1,15 +1,23 @@
 class Capr::Git::Clone < Capr::Do::Action(:start)
 
   include Capr::Helpers::Shell
+  include Capr::Helpers::Config
+  include Capr::Helpers::Shared
 
   define_callback :message
 
-  def initialize(path, url, bare=false)
-    @path, @url, @bare = path, url, bare
+  def initialize(url, options={})
+    @url, @bare, @branch = url, (options[:bare] || false), (options[:branch] || 'master')
   end
 
   def start
-    cmd = exec('git', 'clone', ('--bare' if @bare), url, repo_path)
+    if @bare
+      path = git_dir(@url)
+    else
+      path = work_tree(@url, @branch)
+    end
+    
+    cmd  = exec('git', 'clone', ('--bare' if @bare), url, path)
 
     cmd.callback do
       fire_message(

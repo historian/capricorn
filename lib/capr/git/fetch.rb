@@ -1,16 +1,19 @@
 class Capr::Git::Fetch < Capr::Do::Action(:start)
 
   include Capr::Helpers::Shell
+  include Capr::Helpers::Config
+  include Capr::Helpers::Shared
 
   define_callback :message
 
-  def initialize(path, url, refspec=nil)
-    @path, @url = path, url
+  def initialize(url, refspec=nil)
+    @url = url
     @refspec = refspec # || "+refs/heads/*:refs/heads/*"
   end
 
   def start
-    cmd = exec('git', '--git-dir', @path, 'fetch', @url, @refspec)
+    path = git_dir(url)
+    cmd  = exec('git', '--git-dir', path, 'fetch', @url, @refspec)
 
     cmd.callback do
       fire_message(
