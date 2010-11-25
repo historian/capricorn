@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+begin
+  require 'capr'
+rescue LoadError
+  require 'rubygems'
+  $:.unshift(File.expand_path('../../lib', __FILE__))
+  require 'capr'
+end
+
+Capr::CaprdCLI.new.call({}, ARGV)

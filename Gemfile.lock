@@ -1,0 +1,55 @@
+PATH
+  remote: .
+  specs:
+    capr (0.0.1)
+      cramp
+      em-http-request
+      eventmachine
+      opts
+      usher
+      yajl-ruby
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    activemodel (3.0.3)
+      activesupport (= 3.0.3)
+      builder (~> 2.1.2)
+      i18n (~> 0.4)
+    activesupport (3.0.3)
+    addressable (2.2.2)
+    arel (0.3.3)
+      activesupport (>= 3.0.0.beta)
+    builder (2.1.2)
+    cramp (0.11)
+      activemodel (~> 3.0.0.beta3)
+      activesupport (~> 3.0.0.beta3)
+      arel (= 0.3.3)
+      eventmachine (~> 0.12.10)
+      mysqlplus (~> 0.1.1)
+      rack (~> 1.1.0)
+    em-http-request (0.2.15)
+      addressable (>= 2.0.0)
+      eventmachine (>= 0.12.9)
+    eventmachine (0.12.10)
+    fuzzyhash (0.0.11)
+    i18n (0.4.2)
+    mysqlplus (0.1.2)
+    opts (0.0.1)
+    rack (1.1.0)
+    usher (0.8.3)
+      fuzzyhash (>= 0.0.11)
+    yajl-ruby (0.7.8)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler (>= 1.0.0)
+  capr!
+  cramp
+  em-http-request
+  eventmachine
+  opts
+  usher
+  yajl-ruby
