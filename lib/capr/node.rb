@@ -23,7 +23,6 @@ class Capr::Node
 
   def dispatcher
     @routes = Usher::Interface.for(:rack) do
-      add('/forward').to(Capr::CGI::Forward)
       add('/ping').to(Capr::CGI::Ping)
     end
   end

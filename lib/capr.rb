@@ -35,13 +35,12 @@ module Capr
   end
 
   module Httpd
-    require 'capr/httpd/forward'
+    require 'capr/httpd/ping'
     require 'capr/httpd/proxy_ping'
     require 'capr/httpd/update_config'
   end
 
   module CGI
-    require 'capr/cgi/forward'
     require 'capr/cgi/ping'
   end
 

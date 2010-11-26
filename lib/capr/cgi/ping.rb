@@ -5,6 +5,8 @@ class Capr::CGI::Ping < Cramp::Controller::Action
   keep_connection_alive :every => 10
 
   def validate_params
+    @forward = !!request.params['forward']
+
     repo = request.params['repository']
     unless repo
       error(522, Yajl::Encoder.encode(
@@ -42,17 +44,13 @@ class Capr::CGI::Ping < Cramp::Controller::Action
   end
 
   def receive_ping
-    render Yajl::Encoder.encode(
-      :success => true,
-      :message => "Updating #{@url} on #{Capr::NODE.config.node_name} ...",
-      :verbose => "...")
-    EM.add_timer(5) do
-      render Yajl::Encoder.encode(
-        :success => true,
-        :message => "Updated #{@url} on #{Capr::NODE.config.node_name}",
-        :verbose => "...")
-      finish
+    action = Capr::Httpd::Ping.new(@forward, @url, @branches)
+    action.on_message do |message|
+      render Yajl::Encoder.encode(message)
     end
+    action.callback &method(:finish)
+    action.errback  &method(:finish)
+    action.call
   end
 
 end

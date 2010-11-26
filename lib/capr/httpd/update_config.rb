@@ -42,7 +42,7 @@ class Capr::Httpd::UpdateConfig < Capr::Do::Action(:record_refs)
 
   def reset_config
     config.reset!
-    succeed
+    succeed(@refs)
   end
 
   def revert

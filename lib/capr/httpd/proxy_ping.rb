@@ -1,9 +1,12 @@
 class Capr::Httpd::ProxyPing < Capr::Do::Action(:ping_node)
 
+  include Capr::Helpers::Config
+
   define_callback :message
 
   def initialize(nodes, repo, branches)
     @nodes, @repo, @branches = nodes.dup, repo, branches
+    @nodes.delete(config.local_node['hostname'])
   end
 
   def ping_node

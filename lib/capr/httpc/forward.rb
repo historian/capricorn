@@ -12,11 +12,13 @@ class Capr::Httpc::Forward < Capr::Do::Action(:start)
   end
 
   def start
-    url  = "http://#{@hostname}/forward"
-    
+    url  = "http://#{@hostname}/ping"
+
     http = EM::HttpRequest.new(url).post(
       :head => {"Content-Type" => "application/x-www-form-urlencoded"},
-      :body => {'repository' => { 'url' => @repo, 'branches' => @branches }})
+      :body => {
+        'forward'    => 'true',
+        'repository' => { 'url' => @repo, 'branches' => @branches }})
 
     http.stream do |chunk|
       begin

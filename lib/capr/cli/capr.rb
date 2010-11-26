@@ -4,7 +4,7 @@ class Capr::CLI::Capr
 
   class_use Opts::Shell
   class_use Opts::ErrorHandler
-  class_use Opts::Environment, 'CAPRD_'
+  class_use Opts::Environment, 'CAPR_'
   class_use Opts::ManHelp,
     :path    => File.expand_path('../../../../man', __FILE__),
     :default => 'capr.1'
