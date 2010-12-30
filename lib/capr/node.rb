@@ -12,7 +12,7 @@ class Capr::Node
   end
 
   def run
-    Rack::Handler::Thin.run self, :Port => config.port
+    Rack::Handler::Thin.run self, :Port => config.node_port
   end
 
   def call(env)
@@ -24,6 +24,7 @@ class Capr::Node
   def dispatcher
     @routes = Usher::Interface.for(:rack) do
       add('/ping').to(Capr::CGI::Ping)
+      add('/').to(Capr::CGI::Status)
     end
   end
 

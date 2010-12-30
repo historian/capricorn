@@ -43,14 +43,78 @@ class Capr::CGI::Ping < Cramp::Controller::Action
     halt(status, {'Content-Type' => 'application/json'}, body)
   end
 
+  def render(msg)
+    super Yajl::Encoder.encode(msg)
+  end
+
+  def log(level, message)
+    render { "type" => "log", 'type' => level.to_s, 'message' => message }
+  end
+
   def receive_ping
-    action = Capr::Httpd::Ping.new(@forward, @url, @branches)
-    action.on_message do |message|
-      render Yajl::Encoder.encode(message)
+    stack = Stack.new do
+      finish
     end
-    action.callback &method(:finish)
-    action.errback  &method(:finish)
-    action.call
+
+    stack.push method(:update_repository)
+
+    if @url == config.config_repo
+      stack.push(method(:update_config))
+    else
+      stack.push(method(:update_applications))
+    end
+
+    stack.run
+  end
+
+  def update_repository
+    @repo_path = config.repo_path(@url)
+    if File.directory?(@repo_path)
+      cmd = Shellwords.join([
+        'git', '--git-dir', @repo_path + '/.git', '--work-tree', @repo_path,
+        'pull', @url, @repo_path])
+      EM.system(cmd) do |output, status|
+    else
+      cmd = Shellwords.join(['git', 'clone', @url, @repo_path])
+      EM.system(cmd) do |output, status|
+        log(:info, output)
+        if status != 0
+          FileUtil.rm_rf(@repo_path)
+          yield(false)
+        else
+          yield(true)
+        end
+      end
+    end
+  end
+
+  class Stack
+
+    def initialize(&callback)
+      @callback = callback
+      @actions = []
+    end
+
+    def push(action)
+      @actions << action
+    end
+
+    def run
+      action = @actions.shift
+      if action
+        action.call do |succes|
+          if success
+            EM.next_tick { self.run }
+          else
+            @actions = []
+            EM.next_tick { self.run }
+          end
+        }
+      else
+        @callback.call
+      end
+    end
+
   end
 
 end

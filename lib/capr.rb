@@ -42,6 +42,7 @@ module Capr
 
   module CGI
     require 'capr/cgi/ping'
+    require 'capr/cgi/status'
   end
 
   module CLI

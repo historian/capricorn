@@ -1,15 +1,24 @@
 class Capr::Config
 
-  include Capr::Helpers::Shared
-
   attr_reader :node_root
 
   def initialize(node_root)
     @node_root = File.expand_path(node_root)
   end
 
-  def local_node_bootstrapper_config
-    @local_node_bootstrapper_config ||= begin
+  def reset!
+    (instance_variables - ['@node_root']).each do |ivar|
+      instance_variable_set(ivar, nil)
+    end
+
+    self
+  end
+
+  # =======================
+  # = Bootstrapper config =
+  # =======================
+  def bootstrapper_config
+    @bootstrapper_config ||= begin
       path = File.join(node_root, '.config')
       if File.file?(path)
         parts = File.read(path).split("\n")
@@ -25,69 +34,37 @@ class Capr::Config
   end
 
   def config_repo
-    local_node_bootstrapper_config['repo']
-  end
-
-  def config_repo_path
-    @config_repo_path ||= begin
-      File.join(self.node_root, 'config')
-    end
+    bootstrapper_config['repo']
   end
 
   def node_name
-    local_node_bootstrapper_config['name']
+    bootstrapper_config['name']
   end
 
-  def local_node
-    @local_node ||= begin
-      self.nodes[self.node_name]
+  # =================
+  # = Normal Config =
+  # =================
+  def path_for_repo(repo)
+    File.expand_path(repo.gsub(/[.:_\/-]+/, '_'), node_root)
+  end
+
+  def config_file
+    @config_file ||= Hash.new do |h, f|
+      path = File.join(path_for_repo(config_repo), f)
+      h[f] = YAML.load_file(f)
     end
   end
 
-  def port
-    @port ||= begin
-      parts = (self.local_node['hostname'] || '').split(':', 2)
-      (parts[1] || 8181).to_i
-    end
+  def node_hostname
+    config_file[File.join(node_name, '_node.yml')]['hostname']
   end
 
-  def nodes
-    @nodes ||= begin
-      repo  = config_repo_path
-      paths = Dir.glob(File.expand_path('*/_node.yml', repo))
-
-      paths.inject({}) do |m, path|
-        name = File.basename(File.dirname(path))
-        m[name] = YAML.load_file(path)
-        m
-      end
-    end
+  def node_host
+    node_hostname.split(':', 2)[0]
   end
 
-  def node_hostnames
-    @node_hostnames ||= begin
-      self.nodes.map { |(n, c)| c['hostname'] }
-    end
-  end
-
-  def repo_root
-    @repo_root ||= begin
-      File.expand_path('repos', self.node_root)
-    end
-  end
-
-  def checkout_root
-    @checkout_root ||= begin
-      File.expand_path('checkouts', self.node_root)
-    end
-  end
-
-  def reset!
-    @nodes = @node_hostnames = @repo_root = @checkout_root = @local_node_bootstrapper_config = @local_node = @port = @config_repo_path = nil
-  end
-
-  def config
-    self
+  def node_port
+    (node_hostname.split(':', 2)[1] || 8181).to_i
   end
 
 end
