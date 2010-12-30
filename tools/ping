@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# params:
+# - remote
+# - branches
+# - prefix
+
+# export CAPR_CONFIG_PATH="$CAPR_PREFIX/etc/capricorn/config"
+export CAPR_CONFIG_PATH="."
+export $( capr-config node-001/be.urbancapital.json )
+
+RELEASES=/Users/simon/Sandbox/etc-capr/releases
+REPOS=/Users/simon/Sandbox/etc-capr/repos
+
+for BRANCH in $( echo $CAPR_BRANCHES | tr ":" "\n" )
+do
+  echo "Updating $CAPR_REMOTE#$BRANCH"
+  capr-exec /code/update --remote=$CAPR_REMOTE --releases=$RELEASES --repos=$REPOS --branch=$BRANCH
+done
+

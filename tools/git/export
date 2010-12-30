@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# params:
+# - target
+# - repo
+# - branch
+
+
+SHA=$( git --git-dir=$CAPR_REPO log -n1 --pretty=format:%H $CAPR_BRANCH )
+TARGET=$CAPR_TARGET/$SHA
+
+if [ -d $TARGET ]
+then
+  echo "This commit is already exported."
+  exit 1
+fi
+
+mkdir -p $TARGET
+
+git --git-dir=$CAPR_REPO archive $CAPR_BRANCH | tar -x -C $TARGET
+
+echo $SHA > $TARGET/REVISION

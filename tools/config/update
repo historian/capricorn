@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# params:
+# - remote
+# - prefix
+
+TARGET="$CAPR_PREFIX/etc/capricorn/config"
+
+capr-lock $CAPR_REMOTE
+capr-lock $TARGET
+
+mkdir -p $( dirname $TARGET )
+
+capr-exec /git/update --remote=$CAPR_REMOTE --target=$TARGET --branch=master

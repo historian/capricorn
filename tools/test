@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# REMOTE=/Users/simon/Sandbox/repos/capr-config.git
+# BRANCHES=master
+
+REMOTE=git://office.mrhenry.be/amalthea/client_amalthea.git
+BRANCHES=master:env/staging:env/production
+
+capr-exec /ping --remote=$REMOTE --branches=$BRANCHES

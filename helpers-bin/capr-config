@@ -1,0 +1,77 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'yajl'
+
+class Hash
+  def rmerge(other_hash)
+    r = {}
+    merge(other_hash) do |key, oldval, newval|
+      r[key] = oldval.class == self.class ? oldval.rmerge(newval) : newval
+    end
+  end
+
+  def to_env_hash
+    env = {}
+
+    keys.each do |key|
+      value = self[key]
+      case value
+      when Hash
+        value.to_env_hash.each do |k,v|
+          env_key = "#{key}_#{k}"
+          env[env_key] = v
+        end
+
+      when Array
+        value = value.join(':')
+        env[key] = value
+
+      else
+        env[key] = value.to_s
+      end
+    end
+
+    env
+  end
+
+  def to_env
+    env = to_env_hash
+    env.keys.sort.collect do |k|
+      v = env[k]
+      k = ('CAPR_'+k).gsub(/[^a-zA-Z0-9]+/, '_').upcase
+      v = v.inspect
+      "#{k}=#{v}"
+    end.join("\n")
+  end
+end
+
+if ARGV[0] == 'json'
+  format = 'json'
+  ARGV.shift
+else
+  format = 'env'
+end
+
+root = File.expand_path(ENV['CAPR_CONFIG_PATH'])
+
+env = ARGV.inject({}) do |a, file|
+  path = File.expand_path(file, root)
+  if File.file?(path)
+    b = Yajl::Parser.parse(File.read(path))
+    if Hash === b
+      a.rmerge(b)
+    else
+      a
+    end
+  else
+    a
+  end
+end
+
+case format
+when 'json'
+  puts Yajl::Encoder.encode(env)
+when 'env'
+  puts env.to_env
+end

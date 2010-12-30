@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# params:
+# - remote
+# - releases
+# - repos
+# - branch
+
+REPO_NAME=$( echo $CAPR_REMOTE | sed s/[^a-zA-Z0-9]/_/g )
+REPO="$CAPR_REPOS/$REPO_NAME.git"
+TARGET="$CAPR_RELEASES/$REPO_NAME/$CAPR_BRANCH"
+
+capr-lock $REPO
+capr-lock $TARGET
+
+mkdir -p $( dirname $REPO )
+mkdir -p $( dirname $TARGET )
+
+capr-exec \
+  /git/update-bare      \
+  --remote=$CAPR_REMOTE \
+  --target=$REPO        \
+  --branch=$CAPR_BRANCH
+
+capr-exec /git/export --repo=$REPO --target=$TARGET --branch=$CAPR_BRANCH

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# params:
+# - target
+# - remote
+# - branch
+
+if [ -d $CAPR_TARGET ]
+then
+  cd $CAPR_TARGET
+  git checkout $CAPR_BRANCH
+  git pull $CAPR_REMOTE $CAPR_BRANCH
+else
+  git clone --branch $CAPR_BRANCH $CAPR_REMOTE $CAPR_TARGET
+fi

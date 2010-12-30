@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+$stdout.sync = true
+
+name = ARGV[0]
+puts "\033\033\033l#{name}"
+
+case $stdin.gets.chomp
+when "\033\033\033l\006" then exit 0
+else exit 1
+end

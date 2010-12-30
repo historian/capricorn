@@ -1,0 +1,62 @@
+#!/usr/bin/env ruby
+
+require 'uri'
+require 'cgi'
+
+$stdout.sync = true
+
+uri    = ARGV.shift
+params = {}
+while arg = ARGV.shift
+  case arg
+  when /^[-][-]([a-z][a-z0-9_.-]+)$/i
+    key = $1
+
+    if ARGV.first and ARGV.first !~ /^[-][-]([a-z][a-z0-9_.-]+)/i
+      value = ARGV.shift
+    else
+      value = 'true'
+    end
+
+    case value
+    when /^\"(.+)\"$/
+      value = $1
+    when /^\'(.+)\'$/
+      value = $1
+    end
+
+    params[key] = value
+
+  when /^[-][-]([a-z][a-z0-9_.-]+)[=](.+)$/i
+    key, value = $1, $2
+
+    case value
+    when /^\"(.+)\"$/
+      value = $1
+    when /^\'(.+)\'$/
+      value = $1
+    end
+
+    params[key] = value
+
+  else
+    $stderr.puts "Invalid argument: #{arg.inspect}"
+    exit 1
+
+  end
+end
+
+params = params.map do |key, value|
+  "#{CGI::escape(key)}=#{CGI::escape(value)}"
+end.join('&')
+
+command = URI::Generic.build([nil, nil, nil, nil, nil, uri, nil, params, nil]).to_s
+
+puts "\033\033\033e#{command}"
+
+loop do
+  case $stdin.gets.chomp
+  when "\033\033\033e\025" then exit 1
+  when "\033\033\033e\004" then exit 0
+  end
+end

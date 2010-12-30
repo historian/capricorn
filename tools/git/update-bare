@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# params:
+# - target
+# - remote
+# - branch
+
+if [ -d $CAPR_TARGET ]
+then
+  git --git-dir=$CAPR_TARGET fetch -u -f -p $CAPR_REMOTE $CAPR_BRANCH:$CAPR_BRANCH
+else
+  cd $( dirname $CAPR_TARGET )
+  git clone --bare --mirror $CAPR_REMOTE $( basename $CAPR_TARGET )
+fi
